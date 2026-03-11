@@ -79,6 +79,12 @@ Before finishing:
 3. Check pattern matches for exhaustiveness
 4. Check that view/update/init stay consistent
 
+## Commit messages
+- After approved file changes, suggest a git commit message that reflects all changes since the last commit.
+- Base the suggestion on the current diff against `HEAD`, not only the most recent edit.
+- If the working tree contains unrelated changes, say so before suggesting a commit message.
+- Prefer short imperative commit messages.
+
 ## Priorities
 - Clarity over cleverness
 - Small, readable modules
