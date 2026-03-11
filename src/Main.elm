@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Browser.Events
-import Element exposing (Element, centerX, centerY, column, el, fill, height, layout, padding, paddingXY, row, spacing, text, width)
+import Element exposing (Element, centerX, centerY, column, el, fill, height, layout, padding, paddingXY, px, row, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -15,7 +15,15 @@ import View.Theme as Theme
 
 
 type alias Model =
-    Robot.Robot
+    { robot : Robot.Robot
+    , history : List Command
+    }
+
+
+type Command
+    = MoveForwardCommand
+    | TurnLeftCommand
+    | TurnRightCommand
 
 
 type Msg
@@ -28,7 +36,7 @@ type Msg
 main : Program () Model Msg
 main =
     Browser.element
-        { init = \_ -> ( Robot.initialRobot, Cmd.none )
+        { init = \_ -> ( initModel, Cmd.none )
         , update = update
         , view = view
         , subscriptions = subscriptions
@@ -39,16 +47,23 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         MoveForward ->
-            ( Robot.moveForward model, Cmd.none )
+            ( applyCommand MoveForwardCommand model, Cmd.none )
 
         TurnLeft ->
-            ( Robot.turnLeft model, Cmd.none )
+            ( applyCommand TurnLeftCommand model, Cmd.none )
 
         TurnRight ->
-            ( Robot.turnRight model, Cmd.none )
+            ( applyCommand TurnRightCommand model, Cmd.none )
 
         KeyPressed key ->
             ( applyKey key model, Cmd.none )
+
+
+initModel : Model
+initModel =
+    { robot = Robot.initialRobot
+    , history = []
+    }
 
 
 subscriptions : Model -> Sub Msg
@@ -61,16 +76,37 @@ applyKey : String -> Model -> Model
 applyKey key model =
     case key of
         "ArrowUp" ->
-            Robot.moveForward model
+            applyCommand MoveForwardCommand model
 
         "ArrowLeft" ->
-            Robot.turnLeft model
+            applyCommand TurnLeftCommand model
 
         "ArrowRight" ->
-            Robot.turnRight model
+            applyCommand TurnRightCommand model
 
         _ ->
             model
+
+
+applyCommand : Command -> Model -> Model
+applyCommand command model =
+    { model
+        | robot = updateRobot command model.robot
+        , history = command :: model.history
+    }
+
+
+updateRobot : Command -> Robot.Robot -> Robot.Robot
+updateRobot command robot =
+    case command of
+        MoveForwardCommand ->
+            Robot.moveForward robot
+
+        TurnLeftCommand ->
+            Robot.turnLeft robot
+
+        TurnRightCommand ->
+            Robot.turnRight robot
 
 
 view : Model -> Html.Html Msg
@@ -81,7 +117,7 @@ view model =
 
 
 content : Model -> Element Msg
-content robot =
+content model =
     column
         [ width fill
         , height fill
@@ -99,8 +135,9 @@ content robot =
             [ el [ centerX, Font.size 14, Font.color Theme.detailText ] (text "5x5 Robot Grid")
             , el [ centerX, Font.size 34 ] (text "Bellroy Robot")
             ]
-        , Grid.board robot
+        , Grid.board model.robot
         , controls
+        , historyView model.history
         ]
 
 
@@ -130,3 +167,73 @@ controlButton label msg =
         { onPress = Just msg
         , label = text label
         }
+
+
+historyView : List Command -> Element Msg
+historyView history =
+    column
+        [ width (px 340)
+        , centerX
+        , spacing 10
+        ]
+        [ el [ Font.size 14, Font.color Theme.detailText ] (text "Command History")
+        , case history of
+            latest :: rest ->
+                column
+                    [ width fill
+                    , spacing 8
+                    ]
+                    (historyItem True latest :: List.map (historyItem False) (List.take 5 rest))
+
+            [] ->
+                el
+                    [ width fill
+                    , Background.color Theme.panelBackground
+                    , Border.rounded 16
+                    , Border.width 1
+                    , Border.color Theme.panelBorder
+                    , padding 14
+                    , Font.size 14
+                    , Font.color Theme.detailText
+                    ]
+                    (text "No commands yet")
+        ]
+
+
+historyItem : Bool -> Command -> Element Msg
+historyItem isLatest command =
+    el
+        [ width fill
+        , Background.color
+            (if isLatest then
+                Theme.buttonBackground
+
+             else
+                Theme.panelBackground
+            )
+        , Border.rounded 16
+        , Border.width 1
+        , Border.color Theme.panelBorder
+        , paddingXY 14 12
+        ]
+        (text
+            (if isLatest then
+                "Latest: " ++ commandLabel command
+
+             else
+                commandLabel command
+            )
+        )
+
+
+commandLabel : Command -> String
+commandLabel command =
+    case command of
+        MoveForwardCommand ->
+            "Move Forward"
+
+        TurnLeftCommand ->
+            "Turn Left"
+
+        TurnRightCommand ->
+            "Turn Right"
