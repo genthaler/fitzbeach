@@ -23,6 +23,12 @@
 - `index.html`: minimal HTML shell for Parcel
 - `package.json`: JS tooling only
 
+## Documentation
+
+- Keep `README.md` aligned with the current app behaviour, setup steps, and architecture notes.
+- When a change affects user-visible features, controls, setup, or project structure, update `README.md` if needed.
+- Do not describe planned features in `README.md` as if they already exist.
+
 ## Working Rules
 
 - Prefer small, focused changes.
