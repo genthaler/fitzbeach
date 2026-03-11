@@ -1,0 +1,13 @@
+{
+  "name": "bellroy",
+  "private": true,
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "@parcel/transformer-elm": "^2.16.4",
+    "elm": "^0.19.1-6",
+    "parcel": "^2.15.4"
+  }
+}
