@@ -87,25 +87,25 @@ robotMarker robot =
         , centerY
         , spacing 4
         ]
-        [ el [ centerX, Font.size 24, Font.color Theme.robotMarkerText ] (text (directionLabel robot.facing))
+        [ el [ centerX, Font.size 24, Font.color Theme.robotMarkerText ] (text (directionSymbol robot.facing))
         , el [ centerX, Font.size 11, Font.color Theme.robotSubtleText ] (text "ROBOT")
         ]
 
 
-directionLabel : Robot.Direction -> String
-directionLabel direction =
+directionSymbol : Robot.Direction -> String
+directionSymbol direction =
     case direction of
         Robot.North ->
-            "N"
+            "↑"
 
         Robot.East ->
-            "E"
+            "→"
 
         Robot.South ->
-            "S"
+            "↓"
 
         Robot.West ->
-            "W"
+            "←"
 
 
 directionName : Robot.Direction -> String
