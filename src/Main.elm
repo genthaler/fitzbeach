@@ -30,6 +30,7 @@ type Msg
     = MoveForward
     | TurnLeft
     | TurnRight
+    | Reset
     | KeyPressed String
 
 
@@ -54,6 +55,9 @@ update msg model =
 
         TurnRight ->
             ( applyCommand TurnRightCommand model, Cmd.none )
+
+        Reset ->
+            ( initModel, Cmd.none )
 
         KeyPressed key ->
             ( applyKey key model, Cmd.none )
@@ -150,6 +154,7 @@ controls =
         [ controlButton "Move Forward" MoveForward
         , controlButton "Turn Left" TurnLeft
         , controlButton "Turn Right" TurnRight
+        , controlButton "Reset" Reset
         ]
 
 
