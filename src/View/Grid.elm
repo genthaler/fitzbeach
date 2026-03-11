@@ -1,6 +1,6 @@
 module View.Grid exposing (board)
 
-import Element exposing (Element, centerX, centerY, column, el, fill, height, none, px, rgb255, row, spacing, text, width)
+import Element exposing (Element, centerX, centerY, column, el, fill, height, none, px, row, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -23,7 +23,7 @@ board robot =
         , el
             [ centerX
             , Font.size 13
-            , Font.color (rgb255 108 101 94)
+            , Font.color Theme.facingText
             ]
             (text ("Facing " ++ directionName robot.facing))
         ]

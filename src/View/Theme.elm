@@ -7,6 +7,7 @@ module View.Theme exposing
     , detailText
     , emptyCellBackground
     , emptyCellBorder
+    , facingText
     , panelBackground
     , panelBorder
     , robotAccent
@@ -30,6 +31,11 @@ bodyText =
 detailText : Color
 detailText =
     rgb255 122 114 106
+
+
+facingText : Color
+facingText =
+    rgb255 108 101 94
 
 
 panelBackground : Color

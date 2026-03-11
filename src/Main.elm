@@ -78,18 +78,28 @@ subscriptions _ =
 
 applyKey : String -> Model -> Model
 applyKey key model =
+    case commandFromKey key of
+        Just command ->
+            applyCommand command model
+
+        Nothing ->
+            model
+
+
+commandFromKey : String -> Maybe Command
+commandFromKey key =
     case key of
         "ArrowUp" ->
-            applyCommand MoveForwardCommand model
+            Just MoveForwardCommand
 
         "ArrowLeft" ->
-            applyCommand TurnLeftCommand model
+            Just TurnLeftCommand
 
         "ArrowRight" ->
-            applyCommand TurnRightCommand model
+            Just TurnRightCommand
 
         _ ->
-            model
+            Nothing
 
 
 applyCommand : Command -> Model -> Model
@@ -117,11 +127,11 @@ view : Model -> Html.Html Msg
 view model =
     layout
         []
-        (content model)
+        (page model)
 
 
-content : Model -> Element Msg
-content model =
+page : Model -> Element Msg
+page model =
     column
         [ width fill
         , height fill
@@ -140,13 +150,13 @@ content model =
             , el [ centerX, Font.size 34 ] (text "Bellroy Robot")
             ]
         , Grid.board model.robot
-        , controls
-        , historyView model.history
+        , controlRow
+        , commandHistory model.history
         ]
 
 
-controls : Element Msg
-controls =
+controlRow : Element Msg
+controlRow =
     row
         [ centerX
         , spacing 12
@@ -174,8 +184,8 @@ controlButton label msg =
         }
 
 
-historyView : List Command -> Element Msg
-historyView history =
+commandHistory : List Command -> Element Msg
+commandHistory history =
     column
         [ width (px 340)
         , centerX
