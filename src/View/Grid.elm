@@ -88,7 +88,7 @@ robotMarker robot =
         , spacing 4
         ]
         [ el [ centerX, Font.size 24, Font.color Theme.robotMarkerText ] (text (directionSymbol robot.facing))
-        , el [ centerX, Font.size 14, Font.color Theme.robotSubtleText ] (text "🤖")
+        , el [ centerX, Font.size 28, Font.color Theme.robotSubtleText ] (text "🤖")
         ]
 
 
