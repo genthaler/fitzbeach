@@ -90,6 +90,7 @@ Before finishing:
 - Base the suggestion on the current diff against `HEAD`, not only the most recent edit.
 - If the working tree contains unrelated changes, say so before suggesting a commit message.
 - Prefer short imperative commit messages.
+- Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.
 
 ## Priorities
 - Clarity over cleverness
