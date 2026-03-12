@@ -106,3 +106,156 @@ Before finishing:
 - Handle edge cases explicitly
 - Avoid overengineering
 - Make it easy for a reviewer to follow the flow
+
+## UI Style Guide
+
+This project intentionally follows a design style of calm, refined, minimal, and human.  
+The UI should feel like a premium product page rather than a dashboard or demo app.
+
+When making UI changes, maintain the following rules.
+
+---
+
+### Core principles
+
+1. **Calm over clever**
+2. **Whitespace over density**
+3. **Subtlety over decoration**
+4. **Clarity over novelty**
+5. **Consistency over variety**
+
+If unsure between two approaches, choose the **simpler and more restrained** option.
+
+---
+
+### Colour
+
+Prefer warm neutral tones.
+
+Good:
+- off-white
+- stone
+- sand
+- light grey
+- charcoal
+- muted earth tones
+
+Avoid:
+- bright colours
+- saturated accents
+- loud gradients
+- dark “developer dashboard” themes
+
+Backgrounds should feel **soft and warm**, not stark.
+
+---
+
+### Typography
+
+Typography should feel **editorial and composed**.
+
+Rules:
+- modest heading sizes
+- minimal weight variation
+- comfortable line spacing
+- avoid loud typography
+
+Avoid:
+- oversized headings
+- heavy font weights everywhere
+- compressed UI text blocks
+
+---
+
+### Spacing
+
+Whitespace is a defining part of the aesthetic.
+
+Rules:
+- prefer generous spacing
+- keep layout breathable
+- align elements cleanly
+- maintain consistent spacing rhythms
+
+Avoid:
+- cramped layouts
+- dense UI blocks
+- tightly packed controls
+
+---
+
+### Components
+
+UI components should feel **quiet and tactile**.
+
+Buttons:
+- understated
+- soft borders or fills
+- not overly rounded
+- no bright colours
+
+Panels/cards:
+- minimal containers
+- subtle separation
+- avoid heavy shadows
+
+Inputs:
+- clean and accessible
+- not visually heavy
+
+---
+
+### Motion
+
+Motion should be **rare and subtle**.
+
+Allowed:
+- small hover changes
+- gentle transitions
+
+Avoid:
+- bouncing animation
+- flashy motion
+- decorative transitions
+
+---
+
+### Accessibility
+
+Always maintain:
+
+- keyboard navigation
+- visible focus states
+- readable contrast
+- clear interactive controls
+
+Never sacrifice usability for aesthetics.
+
+---
+
+### Implementation rules
+
+When editing UI code:
+
+- keep styling consistent with existing elements
+- reuse existing spacing and layout patterns
+- prefer simple layout logic
+- avoid adding new styling systems or frameworks
+- do not introduce flashy UI styles
+
+Optimise for **readability, calmness, and polish**.
+
+---
+
+### AI agent instructions
+
+If modifying UI:
+
+- preserve the existing aesthetic
+- keep visual changes minimal
+- do not introduce bright colours or heavy styling
+- avoid dashboard-style interfaces
+- favour whitespace and restraint
+- assume the UI will be reviewed for design taste
+
+Prefer solutions that are **simpler, quieter, and more refined**.

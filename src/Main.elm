@@ -147,7 +147,7 @@ page model =
             , spacing 8
             ]
             [ el [ centerX, Font.size 14, Font.color Theme.detailText ] (text "5x5 Robot Grid")
-            , el [ centerX, Font.size 34 ] (text "Robot")
+            , el [ centerX, Font.size 30 ] (text "Robot")
             ]
         , Grid.board model.robot
         , controlRow
@@ -172,7 +172,7 @@ controlButton : String -> Msg -> Element Msg
 controlButton label msg =
     Input.button
         [ Background.color Theme.buttonBackground
-        , Border.rounded 999
+        , Border.rounded 16
         , Border.width 1
         , Border.color Theme.buttonBorder
         , paddingXY 18 12
@@ -203,13 +203,13 @@ commandHistory history =
             [] ->
                 el
                     [ width fill
-                    , Background.color Theme.panelBackground
+                    , Background.color Theme.buttonBackground
                     , Border.rounded 16
                     , Border.width 1
-                    , Border.color Theme.panelBorder
-                    , padding 14
+                    , Border.color Theme.buttonBorder
+                    , paddingXY 18 12
                     , Font.size 14
-                    , Font.color Theme.detailText
+                    , Font.color Theme.buttonText
                     ]
                     (text "No commands yet")
         ]
@@ -224,12 +224,14 @@ historyItem isLatest command =
                 Theme.buttonBackground
 
              else
-                Theme.panelBackground
+                Theme.buttonBackground
             )
         , Border.rounded 16
         , Border.width 1
-        , Border.color Theme.panelBorder
-        , paddingXY 14 12
+        , Border.color Theme.buttonBorder
+        , paddingXY 18 12
+        , Font.size 14
+        , Font.color Theme.buttonText
         ]
         (text
             (if isLatest then

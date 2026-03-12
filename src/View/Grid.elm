@@ -80,16 +80,27 @@ gridCell robot x y =
 
 robotMarker : Robot.Robot -> Element msg
 robotMarker robot =
-    column
+    el
         [ width fill
         , height fill
-        , centerX
-        , centerY
-        , spacing 4
+        , Element.padding 10
         ]
-        [ el [ centerX, Font.size 24, Font.color Theme.robotMarkerText ] (text (directionSymbol robot.facing))
-        , el [ centerX, Font.size 28, Font.color Theme.robotSubtleText ] (text "🤖")
-        ]
+        (el
+            [ width fill
+            , height fill
+            , Border.width 2
+            , Border.rounded 999
+            , Border.color Theme.robotMarkerText
+            ]
+            (el
+                [ centerX
+                , centerY
+                , Font.size 22
+                , Font.color Theme.robotMarkerText
+                ]
+                (text (directionSymbol robot.facing))
+            )
+        )
 
 
 directionSymbol : Robot.Direction -> String
