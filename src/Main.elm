@@ -146,9 +146,7 @@ page model =
             [ centerX
             , spacing 8
             ]
-            [ el [ centerX, Font.size 14, Font.color Theme.detailText ] (text "5x5 Robot Grid")
-            , el [ centerX, Font.size 30 ] (text "Robot")
-            ]
+            [ el [ centerX, Font.size 30 ] (text "Robot") ]
         , Grid.board model.robot
         , controlRow
         , commandHistory model.history
