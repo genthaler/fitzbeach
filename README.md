@@ -1,6 +1,6 @@
-# Bellroy Robot
+# Robot
 
-A small Elm application built as a Bellroy-style take-home exercise. It presents a robot on a 5x5 grid with simple movement controls, a restrained interface, and a deliberately small codebase.
+A small Elm application that presents a robot on a 5x5 grid with simple movement controls, a restrained interface, and a deliberately small codebase.
 
 ## Features
 

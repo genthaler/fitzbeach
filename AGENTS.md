@@ -2,7 +2,7 @@
 
 ## Project
 
-- Name: `bellroy`
+- Name: `fitzbeach`
 
 ## Stack
 - Elm
