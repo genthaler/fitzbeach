@@ -17,6 +17,7 @@ import View.Theme as Theme
 type alias Model =
     { robot : Robot.Robot
     , history : List Command
+    , previousRobots : List Robot.Robot
     }
 
 
@@ -30,6 +31,7 @@ type Msg
     = MoveForward
     | TurnLeft
     | TurnRight
+    | Undo
     | Reset
     | KeyPressed String
 
@@ -56,6 +58,9 @@ update msg model =
         TurnRight ->
             ( applyCommand TurnRightCommand model, Cmd.none )
 
+        Undo ->
+            ( undo model, Cmd.none )
+
         Reset ->
             ( initModel, Cmd.none )
 
@@ -67,6 +72,7 @@ initModel : Model
 initModel =
     { robot = Robot.initialRobot
     , history = []
+    , previousRobots = []
     }
 
 
@@ -107,7 +113,22 @@ applyCommand command model =
     { model
         | robot = updateRobot command model.robot
         , history = command :: model.history
+        , previousRobots = model.robot :: model.previousRobots
     }
+
+
+undo : Model -> Model
+undo model =
+    case ( model.previousRobots, model.history ) of
+        ( previousRobot :: restOfRobots, _ :: restOfHistory ) ->
+            { model
+                | robot = previousRobot
+                , history = restOfHistory
+                , previousRobots = restOfRobots
+            }
+
+        _ ->
+            model
 
 
 updateRobot : Command -> Robot.Robot -> Robot.Robot
@@ -159,15 +180,16 @@ controlRow =
         [ centerX
         , spacing 12
         ]
-        [ controlButton "Move Forward" MoveForward
-        , controlButton "Turn Left" TurnLeft
-        , controlButton "Turn Right" TurnRight
-        , controlButton "Reset" Reset
+        [ controlButton "Move Forward" (Just MoveForward)
+        , controlButton "Turn Left" (Just TurnLeft)
+        , controlButton "Turn Right" (Just TurnRight)
+        , controlButton "Undo" (Just Undo)
+        , controlButton "Reset" (Just Reset)
         ]
 
 
-controlButton : String -> Msg -> Element Msg
-controlButton label msg =
+controlButton : String -> Maybe Msg -> Element Msg
+controlButton label onPress =
     Input.button
         [ Background.color Theme.buttonBackground
         , Border.rounded 16
@@ -177,7 +199,7 @@ controlButton label msg =
         , Font.size 14
         , Font.color Theme.buttonText
         ]
-        { onPress = Just msg
+        { onPress = onPress
         , label = text label
         }
 

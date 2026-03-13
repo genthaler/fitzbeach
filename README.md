@@ -6,7 +6,7 @@ A small Elm application that presents a robot on a 5x5 grid with simple movement
 
 - 5x5 robot grid rendered with `elm-ui`
 - Robot movement constrained to the grid bounds
-- Button controls for move, turn left, turn right, and reset
+- Button controls for move, turn left, turn right, undo, and reset
 - Keyboard controls for up, left, and right arrow keys
 - In-memory command history with the most recent action highlighted
 
