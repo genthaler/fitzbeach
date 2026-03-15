@@ -7,6 +7,7 @@ A small Elm application that presents a robot on a 5x5 grid with simple movement
 - 5x5 robot grid rendered with `elm-ui`
 - Robot movement constrained to the grid bounds
 - Button controls for move, turn left, turn right, undo, and reset
+- Single theme toggle with sun and moon icon states
 - Keyboard controls for up, left, and right arrow keys
 - In-memory command history with the most recent action highlighted
 
@@ -43,7 +44,7 @@ npm run build
 
 ## Design notes
 
-The interface aims for a calm, warm, low-noise presentation. The palette uses soft neutrals with a darker accent for the robot itself. Spacing, borders, and controls are intentionally understated to keep the interaction readable without feeling bare.
+The interface aims for a calm, low-noise presentation. The default light theme uses soft neutrals with a darker accent for the robot itself, and the dark theme follows the same restrained structure. Spacing, borders, and controls are intentionally understated to keep the interaction readable without feeling bare.
 
 ## Architecture notes
 

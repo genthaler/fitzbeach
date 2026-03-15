@@ -8,44 +8,44 @@ import Robot
 import View.Theme as Theme
 
 
-board : Robot.Robot -> Element msg
-board robot =
+board : Theme.Palette -> Robot.Robot -> Element msg
+board colors robot =
     column
         [ centerX
         , spacing 18
         , Element.padding 24
-        , Background.color Theme.panelBackground
+        , Background.color colors.panelBackground
         , Border.width 1
         , Border.rounded 28
-        , Border.color Theme.panelBorder
+        , Border.color colors.panelBorder
         ]
-        [ grid robot
+        [ grid colors robot
         , el
             [ centerX
             , Font.size 13
-            , Font.color Theme.facingText
+            , Font.color colors.facingText
             ]
             (text ("Facing " ++ directionName robot.facing))
         ]
 
 
-grid : Robot.Robot -> Element msg
-grid robot =
+grid : Theme.Palette -> Robot.Robot -> Element msg
+grid colors robot =
     column
         [ centerX
         , spacing 10
         ]
-        (List.map (gridRow robot) [ 4, 3, 2, 1, 0 ])
+        (List.map (gridRow colors robot) [ 4, 3, 2, 1, 0 ])
 
 
-gridRow : Robot.Robot -> Int -> Element msg
-gridRow robot y =
+gridRow : Theme.Palette -> Robot.Robot -> Int -> Element msg
+gridRow colors robot y =
     row [ spacing 10 ]
-        (List.map (\x -> gridCell robot x y) [ 0, 1, 2, 3, 4 ])
+        (List.map (\x -> gridCell colors robot x y) [ 0, 1, 2, 3, 4 ])
 
 
-gridCell : Robot.Robot -> Int -> Int -> Element msg
-gridCell robot x y =
+gridCell : Theme.Palette -> Robot.Robot -> Int -> Int -> Element msg
+gridCell colors robot x y =
     let
         isRobot =
             robot.x == x && robot.y == y
@@ -57,29 +57,29 @@ gridCell robot x y =
         , Border.rounded 14
         , Border.color
             (if isRobot then
-                Theme.robotAccent
+                colors.robotAccent
 
              else
-                Theme.emptyCellBorder
+                colors.emptyCellBorder
             )
         , Background.color
             (if isRobot then
-                Theme.robotAccent
+                colors.robotAccent
 
              else
-                Theme.emptyCellBackground
+                colors.emptyCellBackground
             )
         ]
         (if isRobot then
-            robotMarker robot
+            robotMarker colors robot
 
          else
             none
         )
 
 
-robotMarker : Robot.Robot -> Element msg
-robotMarker robot =
+robotMarker : Theme.Palette -> Robot.Robot -> Element msg
+robotMarker colors robot =
     el
         [ width fill
         , height fill
@@ -90,13 +90,13 @@ robotMarker robot =
             , height fill
             , Border.width 2
             , Border.rounded 999
-            , Border.color Theme.robotMarkerText
+            , Border.color colors.robotMarkerText
             ]
             (el
                 [ centerX
                 , centerY
                 , Font.size 22
-                , Font.color Theme.robotMarkerText
+                , Font.color colors.robotMarkerText
                 ]
                 (text (directionSymbol robot.facing))
             )
