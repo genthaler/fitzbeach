@@ -7,6 +7,7 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import Element.Region as Region
 import Html
 import Json.Decode as Decode
 import Robot
@@ -200,6 +201,7 @@ themeToggleButton colors activeMode =
         , Border.width 1
         , Border.color colors.buttonBorder
         , paddingXY 16 12
+        , Region.description (themeToggleDescription nextMode)
         ]
         { onPress = Just (SetTheme nextMode)
         , label = themeToggleIcon colors nextMode
@@ -214,6 +216,16 @@ toggleThemeMode mode =
 
         Theme.Dark ->
             Theme.Light
+
+
+themeToggleDescription : Theme.Mode -> String
+themeToggleDescription mode =
+    case mode of
+        Theme.Light ->
+            "Switch to light theme"
+
+        Theme.Dark ->
+            "Switch to dark theme"
 
 
 themeToggleIcon : Theme.Palette -> Theme.Mode -> Element Msg
