@@ -52,6 +52,7 @@
 ## Elm conventions
 - Follow The Elm Architecture
 - Prefer explicit types on top-level definitions
+- Prefer types and state models that make invalid state unrepresentable, instead of relying on runtime checks
 - Prefer small pure helper functions
 - Reuse existing Msg, Model, and update patterns before introducing new ones
 - Reuse existing helper functions
