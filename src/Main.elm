@@ -1,4 +1,17 @@
-module Main exposing (main)
+module Main exposing
+    ( Command(..)
+    , Model
+    , Msg(..)
+    , applyCommand
+    , applyKey
+    , commandFromKey
+    , initModel
+    , main
+    , themeToggleDescription
+    , toggleThemeMode
+    , undo
+    , update
+    )
 
 import Browser
 import Browser.Events

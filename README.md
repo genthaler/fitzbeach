@@ -42,6 +42,12 @@ Create a production build:
 npm run build
 ```
 
+Run the unit tests:
+
+```bash
+npm test
+```
+
 ## Design notes
 
 The interface aims for a calm, low-noise presentation. The default light theme uses soft neutrals with a darker accent for the robot itself, and the dark theme follows the same restrained structure. Spacing, borders, and controls are intentionally understated to keep the interaction readable without feeling bare.
@@ -52,6 +58,7 @@ The interface aims for a calm, low-noise presentation. The default light theme u
 - `src/Main.elm` owns application state, user input, and UI composition.
 - `src/View/Grid.elm` contains the grid and board rendering.
 - `src/View/Theme.elm` centralises the small shared color palette.
+- `tests/` contains focused Elm unit tests for robot movement, update behavior, and theme helpers.
 
 The boundary between domain and UI is deliberate: movement logic stays in the domain module, while the app layer handles input and presentation concerns such as command history.
 

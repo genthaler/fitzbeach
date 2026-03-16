@@ -84,6 +84,7 @@ Before finishing:
 2. Check imports
 3. Check pattern matches for exhaustiveness
 4. Check that view/update/init stay consistent
+5. Run relevant automated checks when available. If tests exist, they should pass before closing the task or suggesting a commit. If a check cannot be run, state that clearly and explain why.
 
 ## Commit messages
 - After approved file changes, suggest a git commit message that reflects all changes since the last commit.

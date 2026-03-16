@@ -2,12 +2,14 @@
   "name": "fitzbeach",
   "private": true,
   "scripts": {
+    "test": "elm-test",
     "dev": "parcel index.html",
     "build": "parcel build index.html"
   },
   "devDependencies": {
     "@parcel/transformer-elm": "^2.16.4",
     "elm": "^0.19.1-6",
+    "elm-test": "^0.19.1-revision17",
     "parcel": "^2.15.4"
   }
 }
