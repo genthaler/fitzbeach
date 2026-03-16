@@ -25,7 +25,7 @@ board colors robot =
             , Font.size 13
             , Font.color colors.facingText
             ]
-            (text ("Facing " ++ directionName robot.facing))
+            (text ("Facing " ++ directionName (Robot.facing robot)))
         ]
 
 
@@ -48,7 +48,7 @@ gridCell : Theme.Palette -> Robot.Robot -> Int -> Int -> Element msg
 gridCell colors robot x y =
     let
         isRobot =
-            robot.x == x && robot.y == y
+            Robot.x robot == x && Robot.y robot == y
     in
     el
         [ width (px 68)
@@ -98,7 +98,7 @@ robotMarker colors robot =
                 , Font.size 22
                 , Font.color colors.robotMarkerText
                 ]
-                (text (directionSymbol robot.facing))
+                (text (directionSymbol (Robot.facing robot)))
             )
         )
 

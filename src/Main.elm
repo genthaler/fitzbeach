@@ -1,9 +1,9 @@
 module Main exposing
     ( Command(..)
+    , HistoryEntry
     , Model
     , Msg(..)
     , applyCommand
-    , applyKey
     , commandFromKey
     , initModel
     , main
@@ -32,9 +32,14 @@ import View.Theme as Theme
 
 type alias Model =
     { robot : Robot.Robot
-    , history : List Command
-    , previousRobots : List Robot.Robot
+    , history : List HistoryEntry
     , themeMode : Theme.Mode
+    }
+
+
+type alias HistoryEntry =
+    { command : Command
+    , previousRobot : Robot.Robot
     }
 
 
@@ -50,8 +55,9 @@ type Msg
     | TurnRight
     | Undo
     | Reset
+    | KeyboardCommand Command
+    | IgnoreKeyPress
     | SetTheme Theme.Mode
-    | KeyPressed String
 
 
 main : Program () Model Msg
@@ -76,6 +82,12 @@ update msg model =
         TurnRight ->
             ( applyCommand TurnRightCommand model, Cmd.none )
 
+        KeyboardCommand command ->
+            ( applyCommand command model, Cmd.none )
+
+        IgnoreKeyPress ->
+            ( model, Cmd.none )
+
         Undo ->
             ( undo model, Cmd.none )
 
@@ -85,15 +97,11 @@ update msg model =
         SetTheme mode ->
             ( { model | themeMode = mode }, Cmd.none )
 
-        KeyPressed key ->
-            ( applyKey key model, Cmd.none )
-
 
 initModel : Model
 initModel =
     { robot = Robot.initialRobot
     , history = []
-    , previousRobots = []
     , themeMode = Theme.Light
     }
 
@@ -101,17 +109,17 @@ initModel =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Browser.Events.onKeyDown
-        (Decode.map KeyPressed (Decode.field "key" Decode.string))
+        (Decode.map keyPressToMsg (Decode.field "key" Decode.string))
 
 
-applyKey : String -> Model -> Model
-applyKey key model =
+keyPressToMsg : String -> Msg
+keyPressToMsg key =
     case commandFromKey key of
         Just command ->
-            applyCommand command model
+            KeyboardCommand command
 
         Nothing ->
-            model
+            IgnoreKeyPress
 
 
 commandFromKey : String -> Maybe Command
@@ -134,19 +142,21 @@ applyCommand : Command -> Model -> Model
 applyCommand command model =
     { model
         | robot = updateRobot command model.robot
-        , history = command :: model.history
-        , previousRobots = model.robot :: model.previousRobots
+        , history =
+            { command = command
+            , previousRobot = model.robot
+            }
+                :: model.history
     }
 
 
 undo : Model -> Model
 undo model =
-    case ( model.previousRobots, model.history ) of
-        ( previousRobot :: restOfRobots, _ :: restOfHistory ) ->
+    case model.history of
+        latestEntry :: restOfHistory ->
             { model
-                | robot = previousRobot
+                | robot = latestEntry.previousRobot
                 , history = restOfHistory
-                , previousRobots = restOfRobots
             }
 
         _ ->
@@ -197,7 +207,7 @@ page model =
         , themeToggleButton colors model.themeMode
         , Grid.board colors model.robot
         , controlRow colors
-        , commandHistory colors model.history
+        , commandHistory colors (List.map .command model.history)
         ]
 
 

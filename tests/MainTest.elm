@@ -1,8 +1,8 @@
 module MainTest exposing (tests)
 
 import Expect
-import Main exposing (Command(..), Msg(..), applyCommand, applyKey, commandFromKey, initModel, themeToggleDescription, toggleThemeMode, undo, update)
-import Robot exposing (Direction(..))
+import Main exposing (Command(..), Msg(..), applyCommand, commandFromKey, initModel, themeToggleDescription, toggleThemeMode, undo, update)
+import Robot exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, y)
 import Test exposing (Test, describe, test)
 import View.Theme as Theme
 
@@ -17,10 +17,10 @@ tests =
                         applyCommand MoveForwardCommand initModel
                 in
                 Expect.all
-                    [ \_ -> Expect.equal 1 updatedModel.robot.y
-                    , \_ -> Expect.equal North updatedModel.robot.facing
-                    , \_ -> Expect.equal [ MoveForwardCommand ] updatedModel.history
-                    , \_ -> Expect.equal [ initModel.robot ] updatedModel.previousRobots
+                    [ \_ -> Expect.equal 1 (y updatedModel.robot)
+                    , \_ -> Expect.equal North (facing updatedModel.robot)
+                    , \_ -> Expect.equal [ MoveForwardCommand ] (List.map .command updatedModel.history)
+                    , \_ -> Expect.equal [ initModel.robot ] (List.map .previousRobot updatedModel.history)
                     ]
                     ()
         , test "applyCommand TurnLeft records the previous robot" <|
@@ -30,9 +30,9 @@ tests =
                         applyCommand TurnLeftCommand initModel
                 in
                 Expect.all
-                    [ \_ -> Expect.equal West updatedModel.robot.facing
-                    , \_ -> Expect.equal [ TurnLeftCommand ] updatedModel.history
-                    , \_ -> Expect.equal [ initModel.robot ] updatedModel.previousRobots
+                    [ \_ -> Expect.equal West (facing updatedModel.robot)
+                    , \_ -> Expect.equal [ TurnLeftCommand ] (List.map .command updatedModel.history)
+                    , \_ -> Expect.equal [ initModel.robot ] (List.map .previousRobot updatedModel.history)
                     ]
                     ()
         , test "applyCommand TurnRight records the previous robot" <|
@@ -42,9 +42,9 @@ tests =
                         applyCommand TurnRightCommand initModel
                 in
                 Expect.all
-                    [ \_ -> Expect.equal East updatedModel.robot.facing
-                    , \_ -> Expect.equal [ TurnRightCommand ] updatedModel.history
-                    , \_ -> Expect.equal [ initModel.robot ] updatedModel.previousRobots
+                    [ \_ -> Expect.equal East (facing updatedModel.robot)
+                    , \_ -> Expect.equal [ TurnRightCommand ] (List.map .command updatedModel.history)
+                    , \_ -> Expect.equal [ initModel.robot ] (List.map .previousRobot updatedModel.history)
                     ]
                     ()
         , test "undo restores the previous robot and removes the latest history item" <|
@@ -59,9 +59,9 @@ tests =
                         undo movedModel
                 in
                 Expect.all
-                    [ \_ -> Expect.equal { x = 0, y = 1, facing = North } undoneModel.robot
-                    , \_ -> Expect.equal [ MoveForwardCommand ] undoneModel.history
-                    , \_ -> Expect.equal [ initModel.robot ] undoneModel.previousRobots
+                    [ \_ -> Expect.equal (robot 0 1 North) undoneModel.robot
+                    , \_ -> Expect.equal [ MoveForwardCommand ] (List.map .command undoneModel.history)
+                    , \_ -> Expect.equal [ initModel.robot ] (List.map .previousRobot undoneModel.history)
                     ]
                     ()
         , test "undo with empty history is a no-op" <|
@@ -93,27 +93,16 @@ tests =
                     [ \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal movedModel.robot updatedModel.robot
                     , \_ -> Expect.equal movedModel.history updatedModel.history
-                    , \_ -> Expect.equal movedModel.previousRobots updatedModel.previousRobots
                     ]
                     ()
-        , test "applyKey ArrowUp matches MoveForwardCommand" <|
+        , test "keyboard command message applies a command without raw key strings" <|
             \_ ->
                 Expect.equal
                     (applyCommand MoveForwardCommand initModel)
-                    (applyKey "ArrowUp" initModel)
-        , test "applyKey ArrowLeft matches TurnLeftCommand" <|
+                    (Tuple.first (update (KeyboardCommand MoveForwardCommand) initModel))
+        , test "ignored key presses are no-ops" <|
             \_ ->
-                Expect.equal
-                    (applyCommand TurnLeftCommand initModel)
-                    (applyKey "ArrowLeft" initModel)
-        , test "applyKey ArrowRight matches TurnRightCommand" <|
-            \_ ->
-                Expect.equal
-                    (applyCommand TurnRightCommand initModel)
-                    (applyKey "ArrowRight" initModel)
-        , test "applyKey ignores unknown keys" <|
-            \_ ->
-                Expect.equal initModel (applyKey "Enter" initModel)
+                Expect.equal initModel (Tuple.first (update IgnoreKeyPress initModel))
         , test "commandFromKey maps supported keys and rejects others" <|
             \_ ->
                 Expect.all
@@ -138,3 +127,9 @@ tests =
                     ]
                     ()
         ]
+
+
+robot : Int -> Int -> Direction -> Robot
+robot xCoordinate yCoordinate direction =
+    fromCoordinates xCoordinate yCoordinate direction
+        |> Maybe.withDefault initialRobot
