@@ -11,7 +11,7 @@
 
 ## Goals
 - Keep this project minimal and easy to iterate on
-- Preserve compileability at all times when possible
+- Preserve compilability at all times when possible
 - Prefer small, local changes
 - Keep the existing architecture unless explicitly asked to change it
 - Do not invent new patterns where existing project patterns already exist
@@ -59,7 +59,7 @@
 - Avoid unnecessary renaming
 - Keep imports tidy and minimal
 - Do not introduce placeholder implementations
-- Update all call sikeytes
+- Update all affected call sites
 
 ## UI conventions
 - This project uses elm-ui
