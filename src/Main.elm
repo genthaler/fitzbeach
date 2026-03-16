@@ -238,23 +238,29 @@ siteHeader : Theme.Palette -> Page -> Theme.Mode -> Element Msg
 siteHeader colors currentPage themeMode =
     row
         [ width fill
-        , spacing 32
+        , centerY
         , paddingEach { top = 8, right = 0, bottom = 8, left = 0 }
         ]
-        [ el
-            [ Font.size 20
-            , Font.semiBold
+        [ row
+            [ spacing 32
             , centerY
             ]
-            (text "Fitzbeach")
-        , row
-            [ spacing 24
-            , centerY
+            [ el
+                [ Font.size 20
+                , Font.semiBold
+                , centerY
+                ]
+                (text "Fitzbeach")
+            , row
+                [ spacing 24
+                , centerY
+                ]
+                [ menuButton colors currentPage MotorcyclePage "Motorcycle"
+                , menuButton colors currentPage RobotPage "Robot"
+                ]
             ]
-            [ menuButton colors currentPage MotorcyclePage "Motorcycle"
-            , menuButton colors currentPage RobotPage "Robot"
-            ]
-        , el [ Element.alignRight, centerY ] (themeToggleButton colors themeMode)
+        , el [ width fill ] Element.none
+        , themeToggleButton colors themeMode
         ]
 
 
@@ -338,8 +344,7 @@ themeToggleButton colors activeMode =
             toggleThemeMode activeMode
     in
     Input.button
-        [ centerX
-        , Background.color colors.buttonBackground
+        [ Background.color colors.buttonBackground
         , Border.rounded 18
         , Border.width 1
         , Border.color colors.buttonBorder
