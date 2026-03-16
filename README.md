@@ -1,14 +1,15 @@
-# Robot
+# Fitzbeach
 
-A small Elm application that presents a robot on a 5x5 grid with simple movement controls, a restrained interface, and a deliberately small codebase.
+A small Elm application with a restrained main menu and two pages: a blank `Motorcycle` landing page and a `Robot` page with the existing 5x5 robot game.
 
 ## Features
 
+- Minimal main navigation with `Motorcycle` and `Robot` pages
+- Blank `Motorcycle` landing page
 - 5x5 robot grid rendered with `elm-ui`
 - Robot movement constrained to the grid bounds
 - Button controls for move, turn left, turn right, undo, and reset
-- Single theme toggle with sun and moon icon states
-- Keyboard controls for up, left, and right arrow keys
+- Keyboard controls for up, left, and right arrow keys on the `Robot` page
 - In-memory command history with the most recent action highlighted
 
 ## Tech stack
@@ -55,10 +56,10 @@ The interface aims for a calm, low-noise presentation. The default light theme u
 ## Architecture notes
 
 - `src/Robot.elm` contains the robot domain model and movement rules.
-- `src/Main.elm` owns application state, user input, and UI composition.
+- `src/Main.elm` owns application state, page selection, user input, and UI composition.
 - `src/View/Grid.elm` contains the grid and board rendering.
-- `src/View/Theme.elm` centralises the small shared color palette.
-- `tests/` contains focused Elm unit tests for robot movement, update behavior, and theme helpers.
+- `src/View/Theme.elm` centralises the shared color palette.
+- `tests/` contains focused Elm unit tests for robot movement, update behavior, page selection, and theme helpers.
 
 The boundary between domain and UI is deliberate: movement logic stays in the domain module, while the app layer handles input and presentation concerns such as command history.
 

@@ -1,7 +1,7 @@
 module MainTest exposing (tests)
 
 import Expect
-import Main exposing (Command(..), Msg(..), applyCommand, canApplyCommand, commandFromKey, initModel, themeToggleDescription, toggleThemeMode, undo, update)
+import Main exposing (Command(..), Msg(..), Page(..), applyCommand, canApplyCommand, commandFromKey, initModel, themeToggleDescription, toggleThemeMode, undo, update)
 import Robot exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, y)
 import Test exposing (Test, describe, test)
 import View.Theme as Theme
@@ -118,6 +118,23 @@ tests =
                     [ \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal movedModel.robot updatedModel.robot
                     , \_ -> Expect.equal movedModel.history updatedModel.history
+                    , \_ -> Expect.equal movedModel.currentPage updatedModel.currentPage
+                    ]
+                    ()
+        , test "update SelectPage changes only the current page" <|
+            \_ ->
+                let
+                    movedModel =
+                        applyCommand MoveForwardCommand initModel
+
+                    ( updatedModel, _ ) =
+                        update (SelectPage RobotPage) movedModel
+                in
+                Expect.all
+                    [ \_ -> Expect.equal RobotPage updatedModel.currentPage
+                    , \_ -> Expect.equal movedModel.robot updatedModel.robot
+                    , \_ -> Expect.equal movedModel.history updatedModel.history
+                    , \_ -> Expect.equal movedModel.themeMode updatedModel.themeMode
                     ]
                     ()
         , test "keyboard command message applies a command without raw key strings" <|
@@ -151,6 +168,9 @@ tests =
                     , \_ -> Expect.equal "Switch to dark theme" (themeToggleDescription Theme.Dark)
                     ]
                     ()
+        , test "initModel starts on the motorcycle page" <|
+            \_ ->
+                Expect.equal MotorcyclePage initModel.currentPage
         ]
 
 

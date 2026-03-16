@@ -3,6 +3,7 @@ module Main exposing
     , HistoryEntry
     , Model
     , Msg(..)
+    , Page(..)
     , applyCommand
     , canApplyCommand
     , commandFromKey
@@ -16,7 +17,7 @@ module Main exposing
 
 import Browser
 import Browser.Events
-import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, html, htmlAttribute, layout, padding, paddingXY, px, row, spacing, text, toRgb, width)
+import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, html, htmlAttribute, layout, padding, paddingEach, paddingXY, px, row, spacing, text, toRgb, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -36,6 +37,7 @@ type alias Model =
     { robot : Robot.Robot
     , history : List HistoryEntry
     , themeMode : Theme.Mode
+    , currentPage : Page
     }
 
 
@@ -51,6 +53,11 @@ type Command
     | TurnRightCommand
 
 
+type Page
+    = MotorcyclePage
+    | RobotPage
+
+
 type Msg
     = MoveForward
     | TurnLeft
@@ -60,6 +67,7 @@ type Msg
     | KeyboardCommand Command
     | IgnoreKeyPress
     | SetTheme Theme.Mode
+    | SelectPage Page
 
 
 main : Program () Model Msg
@@ -99,19 +107,28 @@ update msg model =
         SetTheme mode ->
             ( { model | themeMode = mode }, Cmd.none )
 
+        SelectPage selectedPage ->
+            ( { model | currentPage = selectedPage }, Cmd.none )
+
 
 initModel : Model
 initModel =
     { robot = Robot.initialRobot
     , history = []
     , themeMode = Theme.Light
+    , currentPage = MotorcyclePage
     }
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Browser.Events.onKeyDown
-        (Decode.map keyPressToMsg (Decode.field "key" Decode.string))
+subscriptions model =
+    case model.currentPage of
+        RobotPage ->
+            Browser.Events.onKeyDown
+                (Decode.map keyPressToMsg (Decode.field "key" Decode.string))
+
+        MotorcyclePage ->
+            Sub.none
 
 
 keyPressToMsg : String -> Msg
@@ -209,17 +226,104 @@ page model =
         , height fill
         , Background.color colors.appBackground
         , Font.color colors.bodyText
-        , centerX
-        , centerY
-        , spacing 28
+        , spacing 40
         , padding 40
         ]
-        [ column
-            [ centerX
-            , spacing 8
+        [ siteHeader colors model.currentPage
+        , pageBody colors model
+        ]
+
+
+siteHeader : Theme.Palette -> Page -> Element Msg
+siteHeader colors currentPage =
+    row
+        [ width fill
+        , spacing 32
+        , paddingEach { top = 8, right = 0, bottom = 8, left = 0 }
+        ]
+        [ el
+            [ Font.size 20
+            , Font.semiBold
+            , centerY
             ]
-            [ el [ centerX, Font.size 30 ] (text "Robot") ]
-        , themeToggleButton colors model.themeMode
+            (text "Fitzbeach")
+        , row
+            [ spacing 24
+            , centerY
+            ]
+            [ menuButton colors currentPage MotorcyclePage "Motorcycle"
+            , menuButton colors currentPage RobotPage "Robot"
+            ]
+        ]
+
+
+menuButton : Theme.Palette -> Page -> Page -> String -> Element Msg
+menuButton colors currentPage targetPage label =
+    Input.button
+        [ Background.color colors.appBackground
+        , Border.widthEach
+            { top = 0, right = 0, bottom = 1, left = 0 }
+        , Border.color
+            (if currentPage == targetPage then
+                colors.bodyText
+
+             else
+                colors.panelBorder
+            )
+        , paddingEach { top = 6, right = 0, bottom = 8, left = 0 }
+        , Font.size 15
+        , Font.color
+            (if currentPage == targetPage then
+                colors.bodyText
+
+             else
+                colors.detailText
+            )
+        ]
+        { onPress = Just (SelectPage targetPage)
+        , label = text label
+        }
+
+
+pageBody : Theme.Palette -> Model -> Element Msg
+pageBody colors model =
+    case model.currentPage of
+        MotorcyclePage ->
+            motorcyclePage colors
+
+        RobotPage ->
+            robotPage colors model
+
+
+motorcyclePage : Theme.Palette -> Element Msg
+motorcyclePage colors =
+    column
+        [ width fill
+        , spacing 20
+        , paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
+        ]
+        [ el [ Font.size 36 ] (text "Motorcycle")
+        , el
+            [ width fill
+            , height fill
+            , Background.color colors.panelBackground
+            , Border.width 1
+            , Border.color colors.panelBorder
+            ]
+            Element.none
+        ]
+
+
+robotPage : Theme.Palette -> Model -> Element Msg
+robotPage colors model =
+    column
+        [ width fill
+        , spacing 28
+        , paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
+        ]
+        [ column
+            [ spacing 8 ]
+            [ el [ Font.size 36 ] (text "Robot") ]
         , Grid.board colors model.robot
         , controlRow colors model.robot
         , commandHistory colors (List.map .command model.history)
