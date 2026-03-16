@@ -17,7 +17,7 @@ module Main exposing
 
 import Browser
 import Browser.Events
-import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, html, htmlAttribute, layout, padding, paddingEach, paddingXY, px, row, spacing, text, toRgb, width)
+import Element exposing (Element, alignRight, alpha, centerX, centerY, column, el, fill, height, html, htmlAttribute, layout, padding, paddingEach, paddingXY, px, row, spacing, text, toRgb, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -229,13 +229,13 @@ page model =
         , spacing 40
         , padding 40
         ]
-        [ siteHeader colors model.currentPage
+        [ siteHeader colors model.currentPage model.themeMode
         , pageBody colors model
         ]
 
 
-siteHeader : Theme.Palette -> Page -> Element Msg
-siteHeader colors currentPage =
+siteHeader : Theme.Palette -> Page -> Theme.Mode -> Element Msg
+siteHeader colors currentPage themeMode =
     row
         [ width fill
         , spacing 32
@@ -254,6 +254,7 @@ siteHeader colors currentPage =
             [ menuButton colors currentPage MotorcyclePage "Motorcycle"
             , menuButton colors currentPage RobotPage "Robot"
             ]
+        , el [ Element.alignRight, centerY ] (themeToggleButton colors themeMode)
         ]
 
 
@@ -536,7 +537,8 @@ controlRow colors robot =
         [ centerX
         , spacing 12
         ]
-        [ controlButton colors "Move Forward"
+        [ controlButton colors
+            "Move Forward"
             (if canApplyCommand MoveForwardCommand robot then
                 Just MoveForward
 
