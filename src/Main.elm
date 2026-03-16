@@ -238,7 +238,6 @@ siteHeader : Theme.Palette -> Page -> Theme.Mode -> Element Msg
 siteHeader colors currentPage themeMode =
     row
         [ width fill
-        , centerY
         , paddingEach { top = 8, right = 0, bottom = 8, left = 0 }
         ]
         [ row
