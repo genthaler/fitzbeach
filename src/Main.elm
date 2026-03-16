@@ -140,14 +140,22 @@ commandFromKey key =
 
 applyCommand : Command -> Model -> Model
 applyCommand command model =
-    { model
-        | robot = updateRobot command model.robot
-        , history =
-            { command = command
-            , previousRobot = model.robot
-            }
-                :: model.history
-    }
+    let
+        updatedRobot =
+            updateRobot command model.robot
+    in
+    if updatedRobot == model.robot then
+        model
+
+    else
+        { model
+            | robot = updatedRobot
+            , history =
+                { command = command
+                , previousRobot = model.robot
+                }
+                    :: model.history
+        }
 
 
 undo : Model -> Model

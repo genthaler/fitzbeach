@@ -23,6 +23,20 @@ tests =
                     , \_ -> Expect.equal [ initModel.robot ] (List.map .previousRobot updatedModel.history)
                     ]
                     ()
+        , test "applyCommand ignores a blocked move at the wall" <|
+            \_ ->
+                let
+                    edgeModel =
+                        { initModel | robot = robot 0 4 North }
+
+                    updatedModel =
+                        applyCommand MoveForwardCommand edgeModel
+                in
+                Expect.all
+                    [ \_ -> Expect.equal edgeModel.robot updatedModel.robot
+                    , \_ -> Expect.equal [] updatedModel.history
+                    ]
+                    ()
         , test "applyCommand TurnLeft records the previous robot" <|
             \_ ->
                 let
