@@ -1,7 +1,7 @@
 module MainTest exposing (tests)
 
 import Expect
-import Main exposing (Command(..), Msg(..), applyCommand, commandFromKey, initModel, themeToggleDescription, toggleThemeMode, undo, update)
+import Main exposing (Command(..), Msg(..), applyCommand, canApplyCommand, commandFromKey, initModel, themeToggleDescription, toggleThemeMode, undo, update)
 import Robot exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, y)
 import Test exposing (Test, describe, test)
 import View.Theme as Theme
@@ -35,6 +35,17 @@ tests =
                 Expect.all
                     [ \_ -> Expect.equal edgeModel.robot updatedModel.robot
                     , \_ -> Expect.equal [] updatedModel.history
+                    ]
+                    ()
+        , test "canApplyCommand rejects blocked forward moves at the wall" <|
+            \_ ->
+                Expect.equal False (canApplyCommand MoveForwardCommand (robot 0 4 North))
+        , test "canApplyCommand allows valid forward moves and turns" <|
+            \_ ->
+                Expect.all
+                    [ \_ -> Expect.equal True (canApplyCommand MoveForwardCommand initModel.robot)
+                    , \_ -> Expect.equal True (canApplyCommand TurnLeftCommand initModel.robot)
+                    , \_ -> Expect.equal True (canApplyCommand TurnRightCommand initModel.robot)
                     ]
                     ()
         , test "applyCommand TurnLeft records the previous robot" <|

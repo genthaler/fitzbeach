@@ -4,6 +4,7 @@ module Main exposing
     , Model
     , Msg(..)
     , applyCommand
+    , canApplyCommand
     , commandFromKey
     , initModel
     , main
@@ -15,13 +16,14 @@ module Main exposing
 
 import Browser
 import Browser.Events
-import Element exposing (Element, centerX, centerY, column, el, fill, height, html, layout, padding, paddingXY, px, row, spacing, text, toRgb, width)
+import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, html, htmlAttribute, layout, padding, paddingXY, px, row, spacing, text, toRgb, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Element.Region as Region
 import Html
+import Html.Attributes as HtmlAttributes
 import Json.Decode as Decode
 import Robot
 import Svg exposing (circle, line, path, svg)
@@ -158,6 +160,11 @@ applyCommand command model =
         }
 
 
+canApplyCommand : Command -> Robot.Robot -> Bool
+canApplyCommand command robot =
+    updateRobot command robot /= robot
+
+
 undo : Model -> Model
 undo model =
     case model.history of
@@ -214,7 +221,7 @@ page model =
             [ el [ centerX, Font.size 30 ] (text "Robot") ]
         , themeToggleButton colors model.themeMode
         , Grid.board colors model.robot
-        , controlRow colors
+        , controlRow colors model.robot
         , commandHistory colors (List.map .command model.history)
         ]
 
@@ -419,13 +426,19 @@ cssColor color =
         ++ ")"
 
 
-controlRow : Theme.Palette -> Element Msg
-controlRow colors =
+controlRow : Theme.Palette -> Robot.Robot -> Element Msg
+controlRow colors robot =
     row
         [ centerX
         , spacing 12
         ]
-        [ controlButton colors "Move Forward" (Just MoveForward)
+        [ controlButton colors "Move Forward"
+            (if canApplyCommand MoveForwardCommand robot then
+                Just MoveForward
+
+             else
+                Nothing
+            )
         , controlButton colors "Turn Left" (Just TurnLeft)
         , controlButton colors "Turn Right" (Just TurnRight)
         , controlButton colors "Undo" (Just Undo)
@@ -436,14 +449,29 @@ controlRow colors =
 controlButton : Theme.Palette -> String -> Maybe Msg -> Element Msg
 controlButton colors label onPress =
     Input.button
-        [ Background.color colors.buttonBackground
-        , Border.rounded 16
-        , Border.width 1
-        , Border.color colors.buttonBorder
-        , paddingXY 18 12
-        , Font.size 14
-        , Font.color colors.buttonText
-        ]
+        (case onPress of
+            Just _ ->
+                [ Background.color colors.buttonBackground
+                , Border.rounded 16
+                , Border.width 1
+                , Border.color colors.buttonBorder
+                , paddingXY 18 12
+                , Font.size 14
+                , Font.color colors.buttonText
+                ]
+
+            Nothing ->
+                [ Background.color colors.buttonBackground
+                , Border.rounded 16
+                , Border.width 1
+                , Border.color colors.buttonBorder
+                , paddingXY 18 12
+                , Font.size 14
+                , Font.color colors.detailText
+                , alpha 0.65
+                , htmlAttribute (HtmlAttributes.disabled True)
+                ]
+        )
         { onPress = onPress
         , label = text label
         }
