@@ -5,7 +5,7 @@ A small Elm application with a restrained main menu and two pages: a blank `Moto
 ## Features
 
 - Minimal main navigation with `Motorcycle` and `Robot` pages
-- Blank `Motorcycle` landing page
+- `Motorcycle` landing page with a restrained product-style panel grid
 - 5x5 robot grid rendered with `elm-ui`
 - Robot movement constrained to the grid bounds
 - Button controls for move, turn left, turn right, undo, and reset
@@ -51,7 +51,7 @@ npm test
 
 ## Design notes
 
-The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. Spacing, borders, and controls are intentionally understated to keep the interaction readable without feeling bare.
+The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. The Motorcycle page uses a quiet product-panel grid inspired by Bellroy collection layouts, while spacing, borders, and controls remain intentionally understated to keep the interaction readable without feeling bare.
 
 ## Architecture notes
 

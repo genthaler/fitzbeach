@@ -17,7 +17,7 @@ module Main exposing
 
 import Browser
 import Browser.Events
-import Element exposing (Element, alignRight, alpha, centerX, centerY, column, el, fill, height, html, htmlAttribute, layout, padding, paddingEach, paddingXY, px, row, spacing, text, toRgb, width)
+import Element exposing (Element, alignBottom, alignRight, alpha, centerX, centerY, column, el, fill, fillPortion, height, html, htmlAttribute, layout, minimum, padding, paddingEach, paddingXY, paragraph, px, row, spacing, text, toRgb, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -305,18 +305,15 @@ motorcyclePage : Theme.Palette -> Element Msg
 motorcyclePage colors =
     column
         [ width fill
-        , spacing 20
+        , spacing 28
         , paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
         [ pageHeading colors "Motorcycle"
-        , el
+        , wrappedRow
             [ width fill
-            , height fill
-            , Background.color colors.panelBackground
-            , Border.width 1
-            , Border.color colors.panelBorder
+            , spacing 20
             ]
-            Element.none
+            (List.map (motorcyclePanel colors) motorcyclePanels)
         ]
 
 
@@ -347,6 +344,90 @@ pageHeading colors label =
             , Background.color colors.panelBorder
             ]
             Element.none
+        ]
+
+
+type alias MotorcyclePanel =
+    { eyebrow : String
+    , title : String
+    , body : String
+    , footer : String
+    }
+
+
+motorcyclePanels : List MotorcyclePanel
+motorcyclePanels =
+    [ { eyebrow = "Transit"
+      , title = "Fast access, quiet structure"
+      , body = "Panels echo a product-grid rhythm: generous spacing, calm hierarchy and surfaces that feel considered rather than promotional."
+      , footer = "Compact essentials"
+      }
+    , { eyebrow = "Materials"
+      , title = "Soft utility without visual noise"
+      , body = "A restrained shell, fine border lines and low-contrast detail text keep the layout feeling premium while leaving room for future imagery."
+      , footer = "Light, durable, adaptable"
+      }
+    , { eyebrow = "Carry"
+      , title = "Built for a few clear stories"
+      , body = "Each card gives one concise message, similar to a collection page where the product family is explained through simple, confident panels."
+      , footer = "Everyday travel use"
+      }
+    , { eyebrow = "Packing"
+      , title = "Whitespace does the heavy lifting"
+      , body = "Instead of dense controls or feature dumps, the cards rely on spacing, proportion and alignment to feel composed."
+      , footer = "Organised without bulk"
+      }
+    ]
+
+
+motorcyclePanel : Theme.Palette -> MotorcyclePanel -> Element Msg
+motorcyclePanel colors panel =
+    column
+        [ width (minimum 260 (fillPortion 1))
+        , spacing 28
+        , padding 28
+        , Background.color colors.panelBackground
+        , Border.width 1
+        , Border.rounded 24
+        , Border.color colors.panelBorder
+        ]
+        [ column
+            [ spacing 12 ]
+            [ el
+                [ Font.size 13
+                , Font.color colors.detailText
+                ]
+                (text panel.eyebrow)
+            , paragraph
+                [ Font.size 26
+                , Font.color colors.bodyText
+                , Font.semiBold
+                , width fill
+                ]
+                [ text panel.title ]
+            , paragraph
+                [ Font.size 15
+                , Font.color colors.detailText
+                , width fill
+                , Element.spacing 6
+                ]
+                [ text panel.body ]
+            ]
+        , el
+            [ width fill
+            , height (px 160)
+            , Background.color colors.appBackground
+            , Border.width 1
+            , Border.rounded 18
+            , Border.color colors.panelBorder
+            ]
+            Element.none
+        , el
+            [ alignBottom
+            , Font.size 14
+            , Font.color colors.bodyText
+            ]
+            (text panel.footer)
         ]
 
 
