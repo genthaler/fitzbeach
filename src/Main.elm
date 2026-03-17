@@ -348,29 +348,29 @@ pageHeading colors label =
 
 
 type alias ProductPanel =
-    { eyebrow : String
-    , body : String
-    , footer : String
+    { name : String
+    , price : String
+    , description : String
     }
 
 
 productPanels : List ProductPanel
 productPanels =
-    [ { eyebrow = "Transit"
-      , body = "Panels echo a product-grid rhythm: generous spacing, calm hierarchy and surfaces that feel considered rather than promotional."
-      , footer = "Compact essentials"
+    [ { name = "Transit"
+      , price = "Panels echo a product-grid rhythm: generous spacing, calm hierarchy and surfaces that feel considered rather than promotional."
+      , description = "Compact essentials"
       }
-    , { eyebrow = "Materials"
-      , body = "A restrained shell, fine border lines and low-contrast detail text keep the layout feeling premium while leaving room for future imagery."
-      , footer = "Light, durable, adaptable"
+    , { name = "Materials"
+      , price = "A restrained shell, fine border lines and low-contrast detail text keep the layout feeling premium while leaving room for future imagery."
+      , description = "Light, durable, adaptable"
       }
-    , { eyebrow = "Carry"
-      , body = "Each card gives one concise message, similar to a collection page where the product family is explained through simple, confident panels."
-      , footer = "Everyday travel use"
+    , { name = "Carry"
+      , price = "Each card gives one concise message, similar to a collection page where the product family is explained through simple, confident panels."
+      , description = "Everyday travel use"
       }
-    , { eyebrow = "Packing"
-      , body = "Instead of dense controls or feature dumps, the cards rely on spacing, proportion and alignment to feel composed."
-      , footer = "Organised without bulk"
+    , { name = "Packing"
+      , price = "Instead of dense controls or feature dumps, the cards rely on spacing, proportion and alignment to feel composed."
+      , description = "Organised without bulk"
       }
     ]
 
@@ -400,20 +400,20 @@ productPanel colors panel =
             [ Font.size 14
             , Font.color colors.bodyText
             ]
-            (text panel.eyebrow)
+            (text panel.name)
         , paragraph
             [ Font.size 15
             , Font.color colors.detailText
             , width fill
             , Element.spacing 6
             ]
-            [ text panel.body ]
+            [ text panel.price ]
         , el
             [ alignBottom
             , Font.size 13
             , Font.color colors.detailText
             ]
-            (text panel.footer)
+            (text panel.description)
         ]
 
 
