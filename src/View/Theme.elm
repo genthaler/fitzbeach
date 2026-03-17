@@ -30,20 +30,20 @@ palette : Mode -> Palette
 palette mode =
     case mode of
         Light ->
-            { appBackground = rgb255 245 242 236
-            , bodyText = rgb255 44 42 39
-            , buttonBackground = rgb255 239 234 227
-            , buttonBorder = rgb255 206 198 188
-            , buttonText = rgb255 63 59 55
-            , detailText = rgb255 122 114 106
-            , emptyCellBackground = rgb255 247 244 238
-            , emptyCellBorder = rgb255 214 207 198
-            , facingText = rgb255 108 101 94
-            , panelBackground = rgb255 251 249 245
-            , panelBorder = rgb255 211 203 193
+            { appBackground = rgb255 255 255 255
+            , bodyText = rgb255 51 51 51
+            , buttonBackground = rgb255 247 247 247
+            , buttonBorder = rgb255 225 225 225
+            , buttonText = rgb255 51 51 51
+            , detailText = rgb255 112 112 112
+            , emptyCellBackground = rgb255 247 247 247
+            , emptyCellBorder = rgb255 225 225 225
+            , facingText = rgb255 112 112 112
+            , panelBackground = rgb255 247 247 247
+            , panelBorder = rgb255 225 225 225
             , robotAccent = rgb255 78 91 86
             , robotMarkerText = rgb255 248 245 240
-            , robotSubtleText = rgb255 218 212 204
+            , robotSubtleText = rgb255 225 225 225
             }
 
         Dark ->

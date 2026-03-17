@@ -51,7 +51,7 @@ npm test
 
 ## Design notes
 
-The interface aims for a calm, low-noise presentation. The default light theme uses soft neutrals with a darker accent for the robot itself, and the dark theme follows the same restrained structure. Spacing, borders, and controls are intentionally understated to keep the interaction readable without feeling bare.
+The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. Spacing, borders, and controls are intentionally understated to keep the interaction readable without feeling bare.
 
 ## Architecture notes
 

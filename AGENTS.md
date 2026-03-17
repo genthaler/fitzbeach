@@ -132,15 +132,13 @@ If unsure between two approaches, choose the **simpler and more restrained** opt
 
 ### Colour
 
-Prefer warm neutral tones.
+Prefer a restrained white and soft-grey palette for the default light theme.
 
 Good:
-- off-white
-- stone
-- sand
-- light grey
-- charcoal
-- muted earth tones
+- white for the main app background
+- very light grey for panels and quiet surfaces
+- dark grey for primary text
+- soft neutral greys for borders and secondary text
 
 Avoid:
 - bright colours
@@ -148,7 +146,7 @@ Avoid:
 - loud gradients
 - dark “developer dashboard” themes
 
-Backgrounds should feel **soft and warm**, not stark.
+Backgrounds should feel **clean and quiet**, not stark or heavy.
 
 ---
 
