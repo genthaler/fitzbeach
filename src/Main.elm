@@ -357,19 +357,19 @@ type alias ProductPanel =
 productPanels : List ProductPanel
 productPanels =
     [ { name = "Transit"
-      , price = "Panels echo a product-grid rhythm: generous spacing, calm hierarchy and surfaces that feel considered rather than promotional."
+      , price = "$89"
       , description = "Compact essentials"
       }
     , { name = "Materials"
-      , price = "A restrained shell, fine border lines and low-contrast detail text keep the layout feeling premium while leaving room for future imagery."
+      , price = "$129"
       , description = "Light, durable, adaptable"
       }
     , { name = "Carry"
-      , price = "Each card gives one concise message, similar to a collection page where the product family is explained through simple, confident panels."
+      , price = "$159"
       , description = "Everyday travel use"
       }
     , { name = "Packing"
-      , price = "Instead of dense controls or feature dumps, the cards rely on spacing, proportion and alignment to feel composed."
+      , price = "$199"
       , description = "Organised without bulk"
       }
     ]
