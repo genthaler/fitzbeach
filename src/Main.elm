@@ -378,7 +378,8 @@ productPanels =
 productPanel : Theme.Palette -> ProductPanel -> Element Msg
 productPanel colors panel =
     column
-        [ width (minimum 260 (fillPortion 1))
+        [ width (px 280)
+        , height (px 452)
         , spacing 28
         , padding 28
         , Background.color colors.panelBackground
@@ -386,12 +387,9 @@ productPanel colors panel =
         , Border.rounded 24
         , Border.color colors.panelBorder
         ]
-        [ column
-            [ spacing 12 ]
-            []
-        , el
+        [ el
             [ width fill
-            , height (px 160)
+            , height (px 236)
             , Background.color colors.appBackground
             , Border.width 1
             , Border.rounded 18
