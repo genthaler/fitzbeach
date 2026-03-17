@@ -388,12 +388,7 @@ productPanel colors panel =
         ]
         [ column
             [ spacing 12 ]
-            [ el
-                [ Font.size 13
-                , Font.color colors.detailText
-                ]
-                (text panel.eyebrow)
-            ]
+            []
         , el
             [ width fill
             , height (px 160)
@@ -403,6 +398,11 @@ productPanel colors panel =
             , Border.color colors.panelBorder
             ]
             Element.none
+        , el
+            [ Font.size 14
+            , Font.color colors.bodyText
+            ]
+            (text panel.eyebrow)
         , paragraph
             [ Font.size 15
             , Font.color colors.detailText
@@ -412,8 +412,8 @@ productPanel colors panel =
             [ text panel.body ]
         , el
             [ alignBottom
-            , Font.size 14
-            , Font.color colors.bodyText
+            , Font.size 13
+            , Font.color colors.detailText
             ]
             (text panel.footer)
         ]
