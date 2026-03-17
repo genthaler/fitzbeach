@@ -308,7 +308,7 @@ motorcyclePage colors =
         , spacing 20
         , paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
-        [ el [ Font.size 36 ] (text "Motorcycle")
+        [ pageHeading colors "Motorcycle"
         , el
             [ width fill
             , height fill
@@ -327,12 +327,26 @@ robotPage colors model =
         , spacing 28
         , paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
-        [ column
-            [ spacing 8 ]
-            [ el [ Font.size 36 ] (text "Robot") ]
+        [ pageHeading colors "Robot"
         , Grid.board colors model.robot
         , controlRow colors model.robot
         , commandHistory colors (List.map .command model.history)
+        ]
+
+
+pageHeading : Theme.Palette -> String -> Element Msg
+pageHeading colors label =
+    column
+        [ width fill
+        , spacing 8
+        ]
+        [ el [ Font.size 36 ] (text label)
+        , el
+            [ width fill
+            , height (px 1)
+            , Background.color colors.panelBorder
+            ]
+            Element.none
         ]
 
 
