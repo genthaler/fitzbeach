@@ -372,6 +372,46 @@ productPanels =
       , price = "$199"
       , description = "Organised without bulk"
       }
+    , { name = "Summit"
+      , price = "$69"
+      , description = "Slim carry for short city rides"
+      }
+    , { name = "Contour"
+      , price = "$79"
+      , description = "Compact storage with a refined shell"
+      }
+    , { name = "Drift"
+      , price = "$99"
+      , description = "Everyday capacity with quick access"
+      }
+    , { name = "Terrain"
+      , price = "$109"
+      , description = "Balanced organisation for longer hauls"
+      }
+    , { name = "Axis"
+      , price = "$119"
+      , description = "Structured carry with understated detailing"
+      }
+    , { name = "Range"
+      , price = "$139"
+      , description = "Versatile storage for mixed travel days"
+      }
+    , { name = "Nomad"
+      , price = "$149"
+      , description = "Lightweight packing with durable finishes"
+      }
+    , { name = "Vector"
+      , price = "$169"
+      , description = "Purposeful compartments in a calm form"
+      }
+    , { name = "Roam"
+      , price = "$179"
+      , description = "Expanded capacity without visual bulk"
+      }
+    , { name = "Passage"
+      , price = "$189"
+      , description = "Travel-ready layout with quiet utility"
+      }
     ]
 
 
