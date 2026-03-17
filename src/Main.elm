@@ -349,7 +349,6 @@ pageHeading colors label =
 
 type alias ProductPanel =
     { eyebrow : String
-    , title : String
     , body : String
     , footer : String
     }
@@ -358,22 +357,18 @@ type alias ProductPanel =
 productPanels : List ProductPanel
 productPanels =
     [ { eyebrow = "Transit"
-      , title = "Fast access, quiet structure"
       , body = "Panels echo a product-grid rhythm: generous spacing, calm hierarchy and surfaces that feel considered rather than promotional."
       , footer = "Compact essentials"
       }
     , { eyebrow = "Materials"
-      , title = "Soft utility without visual noise"
       , body = "A restrained shell, fine border lines and low-contrast detail text keep the layout feeling premium while leaving room for future imagery."
       , footer = "Light, durable, adaptable"
       }
     , { eyebrow = "Carry"
-      , title = "Built for a few clear stories"
       , body = "Each card gives one concise message, similar to a collection page where the product family is explained through simple, confident panels."
       , footer = "Everyday travel use"
       }
     , { eyebrow = "Packing"
-      , title = "Whitespace does the heavy lifting"
       , body = "Instead of dense controls or feature dumps, the cards rely on spacing, proportion and alignment to feel composed."
       , footer = "Organised without bulk"
       }
@@ -398,20 +393,6 @@ productPanel colors panel =
                 , Font.color colors.detailText
                 ]
                 (text panel.eyebrow)
-            , paragraph
-                [ Font.size 26
-                , Font.color colors.bodyText
-                , Font.semiBold
-                , width fill
-                ]
-                [ text panel.title ]
-            , paragraph
-                [ Font.size 15
-                , Font.color colors.detailText
-                , width fill
-                , Element.spacing 6
-                ]
-                [ text panel.body ]
             ]
         , el
             [ width fill
@@ -422,6 +403,13 @@ productPanel colors panel =
             , Border.color colors.panelBorder
             ]
             Element.none
+        , paragraph
+            [ Font.size 15
+            , Font.color colors.detailText
+            , width fill
+            , Element.spacing 6
+            ]
+            [ text panel.body ]
         , el
             [ alignBottom
             , Font.size 14
