@@ -313,7 +313,7 @@ motorcyclePage colors =
             [ width fill
             , spacing 20
             ]
-            (List.map (motorcyclePanel colors) motorcyclePanels)
+            (List.map (productPanel colors) productPanels)
         ]
 
 
@@ -347,7 +347,7 @@ pageHeading colors label =
         ]
 
 
-type alias MotorcyclePanel =
+type alias ProductPanel =
     { eyebrow : String
     , title : String
     , body : String
@@ -355,8 +355,8 @@ type alias MotorcyclePanel =
     }
 
 
-motorcyclePanels : List MotorcyclePanel
-motorcyclePanels =
+productPanels : List ProductPanel
+productPanels =
     [ { eyebrow = "Transit"
       , title = "Fast access, quiet structure"
       , body = "Panels echo a product-grid rhythm: generous spacing, calm hierarchy and surfaces that feel considered rather than promotional."
@@ -380,8 +380,8 @@ motorcyclePanels =
     ]
 
 
-motorcyclePanel : Theme.Palette -> MotorcyclePanel -> Element Msg
-motorcyclePanel colors panel =
+productPanel : Theme.Palette -> ProductPanel -> Element Msg
+productPanel colors panel =
     column
         [ width (minimum 260 (fillPortion 1))
         , spacing 28
