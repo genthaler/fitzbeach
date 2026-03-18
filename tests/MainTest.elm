@@ -35,4 +35,25 @@ tests =
                     , \_ -> Expect.equal [] fullyLoadedModel.motorcycleFeed.pendingProducts
                     ]
                     ()
+        , test "selecting the motorcycle page restarts the simulated product feed" <|
+            \_ ->
+                let
+                    advanceFeed =
+                        Tuple.first << update ReceiveNextProduct
+
+                    progressedModel =
+                        initModel
+                            |> advanceFeed
+                            |> advanceFeed
+                            |> (\model -> Tuple.first (update (SelectPage View.RobotPage) model))
+
+                    ( restartedModel, _ ) =
+                        update (SelectPage View.MotorcyclePage) progressedModel
+                in
+                Expect.all
+                    [ \_ -> Expect.equal View.MotorcyclePage restartedModel.currentPage
+                    , \_ -> Expect.equal [] restartedModel.motorcycleFeed.visibleProducts
+                    , \_ -> Expect.equal Motorcycle.Page.productPanels restartedModel.motorcycleFeed.pendingProducts
+                    ]
+                    ()
         ]

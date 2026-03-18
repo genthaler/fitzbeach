@@ -94,7 +94,17 @@ update msg model =
             ( { model | themeMode = mode }, Cmd.none )
 
         SelectPage selectedPage ->
-            ( { model | currentPage = selectedPage }, Cmd.none )
+            ( { model
+                | currentPage = selectedPage
+                , motorcycleFeed =
+                    if selectedPage == View.MotorcyclePage then
+                        initialMotorcycleFeed
+
+                    else
+                        model.motorcycleFeed
+              }
+            , Cmd.none
+            )
 
         ResizeViewport width height ->
             ( { model | viewport = { width = width, height = height } }, Cmd.none )
@@ -109,10 +119,7 @@ initModel =
     , history = []
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
-    , motorcycleFeed =
-        { visibleProducts = []
-        , pendingProducts = MotorcyclePage.productPanels
-        }
+    , motorcycleFeed = initialMotorcycleFeed
     , viewport = { width = 0, height = 0 }
     }
 
@@ -121,7 +128,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Browser.Events.onResize ResizeViewport
-        , if List.isEmpty model.motorcycleFeed.pendingProducts then
+        , if model.currentPage /= View.MotorcyclePage || List.isEmpty model.motorcycleFeed.pendingProducts then
             Sub.none
 
           else
@@ -156,6 +163,13 @@ receiveNextProduct feed =
 
         [] ->
             feed
+
+
+initialMotorcycleFeed : MotorcycleFeed
+initialMotorcycleFeed =
+    { visibleProducts = []
+    , pendingProducts = MotorcyclePage.productPanels
+    }
 
 
 view : Model -> Html.Html Msg
