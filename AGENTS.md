@@ -12,8 +12,12 @@ Use the local project skills for general Elm, `elm-review`, `elm-ui`, Parcel app
 ## Structure
 
 - `src/Main.elm`: Elm entry point and UI
+- `src/Book.elm`: ElmBook entry point for the component catalogue
+- `src/Book/`: ElmBook fixtures and chapters
 - `index.js`: boots the compiled Elm app into `#app`
 - `index.html`: minimal HTML shell for Parcel
+- `book.js`: boots the compiled ElmBook app into `#app`
+- `book.html`: minimal HTML shell for the ElmBook catalogue
 - `package.json`: JS tooling only
 
 ## Project Rules
@@ -22,13 +26,18 @@ Use the local project skills for general Elm, `elm-review`, `elm-ui`, Parcel app
 - Preserve compilability at all times when possible.
 - `index.js` should continue to initialise `Elm.Main`.
 - The app mounts into `<div id="app"></div>` in `index.html`.
+- `book.js` should continue to initialise `Elm.Book`.
+- The ElmBook catalogue mounts into `<div id="app"></div>` in `book.html`.
 - If Elm dependencies are added later, keep them intentional and minimal.
+- Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
 
 ## Commands
 
 - Install JS dependencies: `npm install`
 - Start dev server: `npm run dev`
+- Start ElmBook catalogue: `npm run book`
 - Build production bundle: `npm run build`
+- Build ElmBook catalogue: `npm run book:build`
 - Run tests: `npm test`
 - Run review checks: `npm run review`
 - Apply review autofixes: `npm run review:fix`

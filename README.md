@@ -11,7 +11,7 @@ A small Elm application with a restrained main menu and two pages: a blank `Moto
 - Button controls for move, turn left, turn right, undo, and reset
 - Keyboard controls for up, left, and right arrow keys on the `Robot` page
 - In-memory command history with the most recent action highlighted
-- ElmBook-powered component and page documentation
+- ElmBook-powered component and page documentation with the same palette as the main app
 
 ## Tech stack
 
@@ -92,11 +92,15 @@ npm run deploy
 
 The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. The Motorcycle page uses a quiet product-panel grid inspired by Bellroy collection layouts, while spacing, borders, and controls remain intentionally understated to keep the interaction readable without feeling bare.
 
+The ElmBook catalogue follows the same theme language. Its chrome uses the app palette rather than ElmBook's default blues, and the documented chapters render using the same light and dark theme state used by the main UI.
+
 ## Architecture notes
 
 - `src/Main.elm` owns application state, subscriptions, and top-level message routing.
 - `src/Book.elm` is a separate ElmBook entrypoint for documented UI examples.
 - `src/Book/` contains ElmBook fixtures and chapters.
+- `book.js` boots the compiled ElmBook app into `#app`.
+- `book.html` is the minimal HTML shell for the ElmBook catalogue.
 - `src/Motorcycle/Page.elm` contains the Motorcycle page UI.
 - `src/Robot/Model.elm` contains the robot domain model and movement rules.
 - `src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.
