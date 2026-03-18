@@ -15,5 +15,9 @@ chapter =
     ElmBook.Chapter.chapter "Motorcycle Panels"
         |> renderStatefulComponent
             (\state ->
-                Motorcycle.Page.view (Theme.palette state.themeMode)
+                Motorcycle.Page.view
+                    False
+                    (Theme.palette state.themeMode)
+                    Motorcycle.Page.productPanels
+                    False
             )

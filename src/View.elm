@@ -28,7 +28,11 @@ type alias Config msg =
 
 view :
     { a
-        | robot : Robot.Robot
+        | motorcycleFeed :
+            { visibleProducts : List MotorcyclePage.ProductPanel
+            , pendingProducts : List MotorcyclePage.ProductPanel
+            }
+        , robot : Robot.Robot
         , history : List RobotLogic.HistoryEntry
         , themeMode : Theme.Mode
         , currentPage : Page
@@ -44,7 +48,11 @@ view model config =
 
 page :
     { a
-        | robot : Robot.Robot
+        | motorcycleFeed :
+            { visibleProducts : List MotorcyclePage.ProductPanel
+            , pendingProducts : List MotorcyclePage.ProductPanel
+            }
+        , robot : Robot.Robot
         , history : List RobotLogic.HistoryEntry
         , themeMode : Theme.Mode
         , currentPage : Page
@@ -182,7 +190,11 @@ pageBody :
     -> Theme.Palette
     ->
         { a
-            | robot : Robot.Robot
+            | motorcycleFeed :
+                { visibleProducts : List MotorcyclePage.ProductPanel
+                , pendingProducts : List MotorcyclePage.ProductPanel
+                }
+            , robot : Robot.Robot
             , history : List RobotLogic.HistoryEntry
             , currentPage : Page
         }
@@ -191,7 +203,11 @@ pageBody :
 pageBody compactLayout colors model robotControls =
     case model.currentPage of
         MotorcyclePage ->
-            MotorcyclePage.view compactLayout colors
+            MotorcyclePage.view
+                compactLayout
+                colors
+                model.motorcycleFeed.visibleProducts
+                (not (List.isEmpty model.motorcycleFeed.pendingProducts))
 
         RobotPage ->
             Robot.View.page compactLayout colors model robotControls

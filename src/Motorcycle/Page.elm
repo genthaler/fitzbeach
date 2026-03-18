@@ -1,4 +1,4 @@
-module Motorcycle.Page exposing (ProductPanel, productPanel, view)
+module Motorcycle.Page exposing (ProductPanel, productPanel, productPanels, view)
 
 import Element exposing (Element, alignBottom, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background
@@ -7,15 +7,16 @@ import Element.Font as Font
 import View.Theme as Theme
 
 
-view : Bool -> Theme.Palette -> Element msg
-view compactLayout colors =
+view : Bool -> Theme.Palette -> List ProductPanel -> Bool -> Element msg
+view compactLayout colors products isLoading =
     column
         [ width fill
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
         [ pageHeading compactLayout colors "Motorcycle"
-        , productPanelLayout compactLayout colors
+        , loadingStatus colors products isLoading
+        , productPanelLayout compactLayout colors products
         ]
 
 
@@ -112,11 +113,36 @@ productPanels =
     ]
 
 
-productPanelLayout : Bool -> Theme.Palette -> Element msg
-productPanelLayout compactLayout colors =
+loadingStatus : Theme.Palette -> List ProductPanel -> Bool -> Element msg
+loadingStatus colors products isLoading =
+    let
+        totalCount =
+            List.length productPanels
+    in
+    el
+        [ Font.size 14
+        , Font.color colors.detailText
+        ]
+        (text
+            (if isLoading then
+                "Receiving products from server... "
+                    ++ String.fromInt (List.length products)
+                    ++ " of "
+                    ++ String.fromInt totalCount
+
+             else
+                "Collection loaded. "
+                    ++ String.fromInt totalCount
+                    ++ " products available."
+            )
+        )
+
+
+productPanelLayout : Bool -> Theme.Palette -> List ProductPanel -> Element msg
+productPanelLayout compactLayout colors products =
     let
         panels =
-            List.map (productPanel compactLayout colors) productPanels
+            List.map (productPanel compactLayout colors) products
     in
     if compactLayout then
         column

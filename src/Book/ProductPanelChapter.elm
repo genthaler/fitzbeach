@@ -16,6 +16,7 @@ chapter =
         |> renderStatefulComponent
             (\state ->
                 Motorcycle.Page.productPanel
+                    False
                     (Theme.palette state.themeMode)
                     samplePanel
             )

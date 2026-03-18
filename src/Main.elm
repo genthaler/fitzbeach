@@ -1,5 +1,6 @@
 module Main exposing
     ( Model
+    , MotorcycleFeed
     , Msg(..)
     , Viewport
     , initModel
@@ -11,8 +12,10 @@ import Browser
 import Browser.Events
 import Html
 import Json.Decode as Decode
+import Motorcycle.Page as MotorcyclePage
 import Robot.Logic as RobotLogic
 import Robot.Model as Robot
+import Time
 import View
 import View.Theme as Theme
 
@@ -22,6 +25,7 @@ type alias Model =
     , history : List RobotLogic.HistoryEntry
     , themeMode : Theme.Mode
     , currentPage : View.Page
+    , motorcycleFeed : MotorcycleFeed
     , viewport : Viewport
     }
 
@@ -37,11 +41,18 @@ type Msg
     | SetTheme Theme.Mode
     | SelectPage View.Page
     | ResizeViewport Int Int
+    | ReceiveNextProduct
 
 
 type alias Viewport =
     { width : Int
     , height : Int
+    }
+
+
+type alias MotorcycleFeed =
+    { visibleProducts : List MotorcyclePage.ProductPanel
+    , pendingProducts : List MotorcyclePage.ProductPanel
     }
 
 
@@ -88,6 +99,9 @@ update msg model =
         ResizeViewport width height ->
             ( { model | viewport = { width = width, height = height } }, Cmd.none )
 
+        ReceiveNextProduct ->
+            ( { model | motorcycleFeed = receiveNextProduct model.motorcycleFeed }, Cmd.none )
+
 
 initModel : Model
 initModel =
@@ -95,6 +109,10 @@ initModel =
     , history = []
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
+    , motorcycleFeed =
+        { visibleProducts = []
+        , pendingProducts = MotorcyclePage.productPanels
+        }
     , viewport = { width = 0, height = 0 }
     }
 
@@ -103,6 +121,11 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Browser.Events.onResize ResizeViewport
+        , if List.isEmpty model.motorcycleFeed.pendingProducts then
+            Sub.none
+
+          else
+            Time.every 250 (\_ -> ReceiveNextProduct)
         , case model.currentPage of
             View.RobotPage ->
                 Browser.Events.onKeyDown
@@ -121,6 +144,18 @@ keyPressToMsg key =
 
         Nothing ->
             IgnoreKeyPress
+
+
+receiveNextProduct : MotorcycleFeed -> MotorcycleFeed
+receiveNextProduct feed =
+    case feed.pendingProducts of
+        nextProduct :: remainingProducts ->
+            { visibleProducts = feed.visibleProducts ++ [ nextProduct ]
+            , pendingProducts = remainingProducts
+            }
+
+        [] ->
+            feed
 
 
 view : Model -> Html.Html Msg
