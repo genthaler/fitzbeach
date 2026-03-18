@@ -34,7 +34,7 @@ page compactLayout colors model controls =
         ]
         [ pageHeading compactLayout colors "Robot"
         , board compactLayout colors model.robot
-        , controlRow compactLayout colors model.robot controls
+        , controlRow colors model.robot controls
         , commandHistory colors (List.map .command model.history)
         ]
 
@@ -198,8 +198,8 @@ robotMarker compactLayout colors robot =
         )
 
 
-controlRow : Bool -> Theme.Palette -> Robot.Robot -> Controls msg -> Element msg
-controlRow compactLayout colors robot controls =
+controlRow : Theme.Palette -> Robot.Robot -> Controls msg -> Element msg
+controlRow colors robot controls =
     wrappedRow
         [ centerX
         , width fill

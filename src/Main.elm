@@ -1,6 +1,7 @@
 module Main exposing
     ( Model
     , Msg(..)
+    , Viewport
     , initModel
     , main
     , update
