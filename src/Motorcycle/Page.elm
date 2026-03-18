@@ -1,6 +1,6 @@
 module Motorcycle.Page exposing (ProductPanel, productPanel, view)
 
-import Element exposing (Element, alignBottom, column, el, fill, height, maximum, padding, paragraph, px, spacing, text, width, wrappedRow)
+import Element exposing (Element, alignBottom, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -15,11 +15,7 @@ view compactLayout colors =
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
         [ pageHeading compactLayout colors "Motorcycle"
-        , wrappedRow
-            [ width fill
-            , spacing 20
-            ]
-            (List.map (productPanel compactLayout colors) productPanels)
+        , productPanelLayout compactLayout colors
         ]
 
 
@@ -116,6 +112,27 @@ productPanels =
     ]
 
 
+productPanelLayout : Bool -> Theme.Palette -> Element msg
+productPanelLayout compactLayout colors =
+    let
+        panels =
+            List.map (productPanel compactLayout colors) productPanels
+    in
+    if compactLayout then
+        column
+            [ width fill
+            , spacing 20
+            ]
+            panels
+
+    else
+        wrappedRow
+            [ width fill
+            , spacing 20
+            ]
+            panels
+
+
 productPanel : Bool -> Theme.Palette -> ProductPanel -> Element msg
 productPanel compactLayout colors panel =
     let
@@ -132,9 +149,16 @@ productPanel compactLayout colors panel =
 
             else
                 236
+
+        panelWidth =
+            if compactLayout then
+                fill
+
+            else
+                px 280
     in
     column
-        [ width (maximum 320 fill)
+        [ width panelWidth
         , height (px panelHeight)
         , spacing 28
         , padding 28

@@ -202,7 +202,6 @@ controlRow : Theme.Palette -> Robot.Robot -> Controls msg -> Element msg
 controlRow colors robot controls =
     wrappedRow
         [ centerX
-        , width fill
         , spacing 12
         ]
         [ controlButton colors
