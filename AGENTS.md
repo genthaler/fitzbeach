@@ -7,7 +7,7 @@
 ## Scope
 
 This file defines repo-specific rules for `fitzbeach`.
-Use the local project skills for general Elm, `elm-ui`, Parcel app, README maintenance, and git workflow guidance.
+Use the local project skills for general Elm, `elm-review`, `elm-ui`, Parcel app, README maintenance, and git workflow guidance.
 
 ## Structure
 
@@ -29,6 +29,11 @@ Use the local project skills for general Elm, `elm-ui`, Parcel app, README maint
 - Install JS dependencies: `npm install`
 - Start dev server: `npm run dev`
 - Build production bundle: `npm run build`
+- Run tests: `npm test`
+- Run review checks: `npm run review`
+- Apply review autofixes: `npm run review:fix`
+- Run deploy prechecks and build: `npm run predeploy`
+- Publish `dist/` to GitHub Pages: `npm run deploy`
 
 ## UI Style Guide
 
@@ -151,3 +156,15 @@ Optimise for readability, calmness, and polish.
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
 2. Run relevant automated checks when available. If a check cannot be run, state that clearly and explain why.
+
+## Skills
+
+### Available local skills
+
+- `elm`: General Elm application and refactor work.
+- `elm-review`: `elm-review` runs, rule fixes, and review config maintenance.
+- `elm-ui`: `mdgriffith/elm-ui` layout and styling work.
+- `elm-ui-review`: Calm, minimal `elm-ui` presentation review.
+- `elm-parcel-app`: Parcel bootstrapping and Elm app integration.
+- `readme-sync`: Keep `README.md` aligned with app behavior and commands.
+- `git`: Git status, diff review, and commit message guidance.

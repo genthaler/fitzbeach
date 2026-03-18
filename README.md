@@ -49,6 +49,32 @@ Run the unit tests:
 npm test
 ```
 
+Run `elm-review`:
+
+```bash
+npm run review
+```
+
+Apply safe automatic review fixes:
+
+```bash
+npm run review:fix
+```
+
+Run the deploy checks and production build:
+
+```bash
+npm run predeploy
+```
+
+Publish the current `dist/` output to GitHub Pages:
+
+```bash
+npm run deploy
+```
+
+`npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first.
+
 ## Design notes
 
 The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. The Motorcycle page uses a quiet product-panel grid inspired by Bellroy collection layouts, while spacing, borders, and controls remain intentionally understated to keep the interaction readable without feeling bare.
