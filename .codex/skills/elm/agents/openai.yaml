@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elm Skill"
+  short_description: "Build and refactor Elm code"
+  default_prompt: "Modify this Elm project with small compiler-guided changes that follow the existing architecture and style."
