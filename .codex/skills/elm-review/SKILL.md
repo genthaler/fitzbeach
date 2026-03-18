@@ -23,6 +23,7 @@ Use alongside the `readme-sync` skill if review commands or contributor workflow
    - Prefer the project's wrapper script, usually `npm run review`.
    - Use auto-fix only when the task allows mechanical edits and the rule is safe to apply broadly.
 3. Fix violations with minimal churn.
+   - If the task allows mechanical edits, run `npm run review:fix` before applying manual fixes.
    - Prefer local edits over broad rewrites.
    - Preserve public APIs unless the task requires a change.
    - If a rule reveals dead code, remove the dead code and update callers or tests coherently.
@@ -56,6 +57,6 @@ Use alongside the `readme-sync` skill if review commands or contributor workflow
 Prefer the project's existing scripts over raw `elm-review` commands unless debugging a script problem.
 
 ## Final checks
-- `elm-review` passes, or any remaining failures are stated clearly.
+- `elm-review` passes before the task is complete, or any remaining failure is stated clearly as a blocker.
 - Elm code still compiles conceptually with the project's existing architecture and naming.
 - Any config change in `review/src/ReviewConfig.elm` is deliberate, narrow, and explained.
