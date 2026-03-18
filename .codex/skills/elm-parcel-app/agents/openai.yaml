@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elm Parcel App"
+  short_description: "Work on Elm + Parcel apps"
+  default_prompt: "Modify this Elm app while keeping the Parcel bootstrapping simple and the entrypoints consistent."

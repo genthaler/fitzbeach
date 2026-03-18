@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elm UI Review"
+  short_description: "Review elm-ui polish"
+  default_prompt: "Review this elm-ui interface for spacing, typography, calmness, and accessibility, then make the smallest worthwhile improvement."

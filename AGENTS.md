@@ -4,19 +4,10 @@
 
 - Name: `fitzbeach`
 
-## Stack
-- Elm
-- `mdgriffith/elm-ui`
-- Parcel
-
-## Project Scope
+## Scope
 
 This file defines repo-specific rules for `fitzbeach`.
-General Elm workflow, TEA refactoring habits, and `elm-ui` editing guidance should come from the active Elm skill.
-
-## Goals
-- Keep this project minimal and easy to iterate on
-- Preserve compilability at all times when possible
+Use the local project skills for general Elm, `elm-ui`, Parcel app, README maintenance, and git workflow guidance.
 
 ## Structure
 
@@ -25,15 +16,10 @@ General Elm workflow, TEA refactoring habits, and `elm-ui` editing guidance shou
 - `index.html`: minimal HTML shell for Parcel
 - `package.json`: JS tooling only
 
-## Documentation
+## Project Rules
 
-- Keep `README.md` aligned with the current app behaviour, setup steps, and architecture notes.
-- When a change affects user-visible features, controls, setup, or project structure, update `README.md` if needed.
-- Do not describe planned features in `README.md` as if they already exist.
-
-## Working Rules
-
-- Keep the Parcel setup simple.
+- Keep this project minimal and easy to iterate on.
+- Preserve compilability at all times when possible.
 - `index.js` should continue to initialise `Elm.Main`.
 - The app mounts into `<div id="app"></div>` in `index.html`.
 - If Elm dependencies are added later, keep them intentional and minimal.
@@ -165,12 +151,3 @@ Optimise for readability, calmness, and polish.
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
 2. Run relevant automated checks when available. If a check cannot be run, state that clearly and explain why.
-3. Update `README.md` when the change affects app behaviour, setup, controls, or structure.
-
-## Commit messages
-
-- After approved file changes, suggest a git commit message that reflects all changes since the last commit.
-- Base the suggestion on the current diff against `HEAD`, not only the most recent edit.
-- If the working tree contains unrelated changes, say so before suggesting a commit message.
-- Prefer short imperative commit messages.
-- Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.

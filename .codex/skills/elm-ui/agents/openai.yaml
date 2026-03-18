@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elm UI Skill"
+  short_description: "Edit elm-ui layouts"
+  default_prompt: "Update this Elm UI code with small consistent layout changes that reuse existing helpers and patterns."
