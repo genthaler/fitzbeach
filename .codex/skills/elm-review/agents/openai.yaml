@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elm Review"
+  short_description: "Run and fix elm-review"
+  default_prompt: "Run elm-review for this Elm project, apply the smallest coherent fixes, and re-validate with the project's review and test commands."
