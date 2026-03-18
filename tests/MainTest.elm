@@ -1,8 +1,9 @@
 module MainTest exposing (tests)
 
 import Expect
-import Main exposing (Command(..), Msg(..), Page(..), applyCommand, canApplyCommand, commandFromKey, initModel, themeToggleDescription, toggleThemeMode, undo, update)
-import Robot exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, y)
+import Main exposing (Msg(..), Page(..), initModel, themeToggleDescription, toggleThemeMode, update)
+import Robot.Logic exposing (Command(..), applyCommand, canApplyCommand, commandFromKey, undo)
+import Robot.Model exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, y)
 import Test exposing (Test, describe, test)
 import View.Theme as Theme
 

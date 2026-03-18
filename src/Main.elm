@@ -1,56 +1,39 @@
 module Main exposing
-    ( Command(..)
-    , HistoryEntry
-    , Model
+    ( Model
     , Msg(..)
     , Page(..)
-    , applyCommand
-    , canApplyCommand
-    , commandFromKey
     , initModel
     , main
     , themeToggleDescription
     , toggleThemeMode
-    , undo
     , update
     )
 
 import Browser
 import Browser.Events
-import Element exposing (Element, alignBottom, alignRight, alpha, centerX, centerY, column, el, fill, fillPortion, height, html, htmlAttribute, layout, minimum, padding, paddingEach, paddingXY, paragraph, px, row, spacing, text, toRgb, width, wrappedRow)
+import Element exposing (Element, alignRight, centerY, column, el, fill, height, html, layout, padding, paddingEach, paddingXY, px, row, spacing, text, toRgb, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Element.Region as Region
 import Html
-import Html.Attributes as HtmlAttributes
 import Json.Decode as Decode
-import Robot
+import Motorcycle.Page as MotorcyclePage
+import Robot.Logic as RobotLogic
+import Robot.Model as Robot
+import Robot.View as RobotView
 import Svg exposing (circle, line, path, svg)
 import Svg.Attributes as SvgAttributes
-import View.Grid as Grid
 import View.Theme as Theme
 
 
 type alias Model =
     { robot : Robot.Robot
-    , history : List HistoryEntry
+    , history : List RobotLogic.HistoryEntry
     , themeMode : Theme.Mode
     , currentPage : Page
     }
-
-
-type alias HistoryEntry =
-    { command : Command
-    , previousRobot : Robot.Robot
-    }
-
-
-type Command
-    = MoveForwardCommand
-    | TurnLeftCommand
-    | TurnRightCommand
 
 
 type Page
@@ -64,7 +47,7 @@ type Msg
     | TurnRight
     | Undo
     | Reset
-    | KeyboardCommand Command
+    | KeyboardCommand RobotLogic.Command
     | IgnoreKeyPress
     | SetTheme Theme.Mode
     | SelectPage Page
@@ -84,22 +67,22 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         MoveForward ->
-            ( applyCommand MoveForwardCommand model, Cmd.none )
+            ( RobotLogic.applyCommand RobotLogic.MoveForwardCommand model, Cmd.none )
 
         TurnLeft ->
-            ( applyCommand TurnLeftCommand model, Cmd.none )
+            ( RobotLogic.applyCommand RobotLogic.TurnLeftCommand model, Cmd.none )
 
         TurnRight ->
-            ( applyCommand TurnRightCommand model, Cmd.none )
+            ( RobotLogic.applyCommand RobotLogic.TurnRightCommand model, Cmd.none )
 
         KeyboardCommand command ->
-            ( applyCommand command model, Cmd.none )
+            ( RobotLogic.applyCommand command model, Cmd.none )
 
         IgnoreKeyPress ->
             ( model, Cmd.none )
 
         Undo ->
-            ( undo model, Cmd.none )
+            ( RobotLogic.undo model, Cmd.none )
 
         Reset ->
             ( initModel, Cmd.none )
@@ -133,79 +116,12 @@ subscriptions model =
 
 keyPressToMsg : String -> Msg
 keyPressToMsg key =
-    case commandFromKey key of
+    case RobotLogic.commandFromKey key of
         Just command ->
             KeyboardCommand command
 
         Nothing ->
             IgnoreKeyPress
-
-
-commandFromKey : String -> Maybe Command
-commandFromKey key =
-    case key of
-        "ArrowUp" ->
-            Just MoveForwardCommand
-
-        "ArrowLeft" ->
-            Just TurnLeftCommand
-
-        "ArrowRight" ->
-            Just TurnRightCommand
-
-        _ ->
-            Nothing
-
-
-applyCommand : Command -> Model -> Model
-applyCommand command model =
-    let
-        updatedRobot =
-            updateRobot command model.robot
-    in
-    if updatedRobot == model.robot then
-        model
-
-    else
-        { model
-            | robot = updatedRobot
-            , history =
-                { command = command
-                , previousRobot = model.robot
-                }
-                    :: model.history
-        }
-
-
-canApplyCommand : Command -> Robot.Robot -> Bool
-canApplyCommand command robot =
-    updateRobot command robot /= robot
-
-
-undo : Model -> Model
-undo model =
-    case model.history of
-        latestEntry :: restOfHistory ->
-            { model
-                | robot = latestEntry.previousRobot
-                , history = restOfHistory
-            }
-
-        _ ->
-            model
-
-
-updateRobot : Command -> Robot.Robot -> Robot.Robot
-updateRobot command robot =
-    case command of
-        MoveForwardCommand ->
-            Robot.moveForward robot
-
-        TurnLeftCommand ->
-            Robot.turnLeft robot
-
-        TurnRightCommand ->
-            Robot.turnRight robot
 
 
 view : Model -> Html.Html Msg
@@ -295,166 +211,17 @@ pageBody : Theme.Palette -> Model -> Element Msg
 pageBody colors model =
     case model.currentPage of
         MotorcyclePage ->
-            motorcyclePage colors
+            MotorcyclePage.view colors
 
         RobotPage ->
-            robotPage colors model
-
-
-motorcyclePage : Theme.Palette -> Element Msg
-motorcyclePage colors =
-    column
-        [ width fill
-        , spacing 28
-        , paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
-        ]
-        [ pageHeading colors "Motorcycle"
-        , wrappedRow
-            [ width fill
-            , spacing 20
-            ]
-            (List.map (productPanel colors) productPanels)
-        ]
-
-
-robotPage : Theme.Palette -> Model -> Element Msg
-robotPage colors model =
-    column
-        [ width fill
-        , spacing 28
-        , paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
-        ]
-        [ pageHeading colors "Robot"
-        , Grid.board colors model.robot
-        , controlRow colors model.robot
-        , commandHistory colors (List.map .command model.history)
-        ]
-
-
-pageHeading : Theme.Palette -> String -> Element Msg
-pageHeading colors label =
-    column
-        [ width fill
-        , spacing 8
-        ]
-        [ el [ Font.size 36 ] (text label)
-        , el
-            [ width fill
-            , height (px 1)
-            , Background.color colors.panelBorder
-            ]
-            Element.none
-        ]
-
-
-type alias ProductPanel =
-    { name : String
-    , price : String
-    , description : String
-    }
-
-
-productPanels : List ProductPanel
-productPanels =
-    [ { name = "Transit"
-      , price = "$89"
-      , description = "Compact essentials"
-      }
-    , { name = "Materials"
-      , price = "$129"
-      , description = "Light, durable, adaptable"
-      }
-    , { name = "Carry"
-      , price = "$159"
-      , description = "Everyday travel use"
-      }
-    , { name = "Packing"
-      , price = "$199"
-      , description = "Organised without bulk"
-      }
-    , { name = "Summit"
-      , price = "$69"
-      , description = "Slim carry for short city rides"
-      }
-    , { name = "Contour"
-      , price = "$79"
-      , description = "Compact storage with a refined shell"
-      }
-    , { name = "Drift"
-      , price = "$99"
-      , description = "Everyday capacity with quick access"
-      }
-    , { name = "Terrain"
-      , price = "$109"
-      , description = "Balanced organisation for longer hauls"
-      }
-    , { name = "Axis"
-      , price = "$119"
-      , description = "Structured carry with understated detailing"
-      }
-    , { name = "Range"
-      , price = "$139"
-      , description = "Versatile storage for mixed travel days"
-      }
-    , { name = "Nomad"
-      , price = "$149"
-      , description = "Lightweight packing with durable finishes"
-      }
-    , { name = "Vector"
-      , price = "$169"
-      , description = "Purposeful compartments in a calm form"
-      }
-    , { name = "Roam"
-      , price = "$179"
-      , description = "Expanded capacity without visual bulk"
-      }
-    , { name = "Passage"
-      , price = "$189"
-      , description = "Travel-ready layout with quiet utility"
-      }
-    ]
-
-
-productPanel : Theme.Palette -> ProductPanel -> Element Msg
-productPanel colors panel =
-    column
-        [ width (px 280)
-        , height (px 452)
-        , spacing 28
-        , padding 28
-        , Background.color colors.panelBackground
-        , Border.width 1
-        , Border.rounded 24
-        , Border.color colors.panelBorder
-        ]
-        [ el
-            [ width fill
-            , height (px 236)
-            , Background.color colors.appBackground
-            , Border.width 1
-            , Border.rounded 18
-            , Border.color colors.panelBorder
-            ]
-            Element.none
-        , el
-            [ Font.size 14
-            , Font.color colors.bodyText
-            ]
-            (text panel.name)
-        , paragraph
-            [ Font.size 15
-            , Font.color colors.detailText
-            , width fill
-            , Element.spacing 6
-            ]
-            [ text panel.price ]
-        , el
-            [ alignBottom
-            , Font.size 13
-            , Font.color colors.detailText
-            ]
-            (text panel.description)
-        ]
+            RobotView.page colors
+                model
+                { moveForward = MoveForward
+                , turnLeft = TurnLeft
+                , turnRight = TurnRight
+                , undo = Undo
+                , reset = Reset
+                }
 
 
 themeToggleButton : Theme.Palette -> Theme.Mode -> Element Msg
@@ -654,127 +421,3 @@ cssColor color =
         ++ ", "
         ++ String.fromFloat rgba.alpha
         ++ ")"
-
-
-controlRow : Theme.Palette -> Robot.Robot -> Element Msg
-controlRow colors robot =
-    row
-        [ centerX
-        , spacing 12
-        ]
-        [ controlButton colors
-            "Move Forward"
-            (if canApplyCommand MoveForwardCommand robot then
-                Just MoveForward
-
-             else
-                Nothing
-            )
-        , controlButton colors "Turn Left" (Just TurnLeft)
-        , controlButton colors "Turn Right" (Just TurnRight)
-        , controlButton colors "Undo" (Just Undo)
-        , controlButton colors "Reset" (Just Reset)
-        ]
-
-
-controlButton : Theme.Palette -> String -> Maybe Msg -> Element Msg
-controlButton colors label onPress =
-    Input.button
-        (case onPress of
-            Just _ ->
-                [ Background.color colors.buttonBackground
-                , Border.rounded 16
-                , Border.width 1
-                , Border.color colors.buttonBorder
-                , paddingXY 18 12
-                , Font.size 14
-                , Font.color colors.buttonText
-                ]
-
-            Nothing ->
-                [ Background.color colors.buttonBackground
-                , Border.rounded 16
-                , Border.width 1
-                , Border.color colors.buttonBorder
-                , paddingXY 18 12
-                , Font.size 14
-                , Font.color colors.detailText
-                , alpha 0.65
-                , htmlAttribute (HtmlAttributes.disabled True)
-                ]
-        )
-        { onPress = onPress
-        , label = text label
-        }
-
-
-commandHistory : Theme.Palette -> List Command -> Element Msg
-commandHistory colors history =
-    column
-        [ width (px 340)
-        , centerX
-        , spacing 10
-        ]
-        [ el [ Font.size 14, Font.color colors.detailText ] (text "Command History")
-        , case history of
-            latest :: rest ->
-                column
-                    [ width fill
-                    , spacing 8
-                    ]
-                    (historyItem colors True latest :: List.map (historyItem colors False) (List.take 5 rest))
-
-            [] ->
-                el
-                    [ width fill
-                    , Background.color colors.buttonBackground
-                    , Border.rounded 16
-                    , Border.width 1
-                    , Border.color colors.buttonBorder
-                    , paddingXY 18 12
-                    , Font.size 14
-                    , Font.color colors.buttonText
-                    ]
-                    (text "No commands yet")
-        ]
-
-
-historyItem : Theme.Palette -> Bool -> Command -> Element Msg
-historyItem colors isLatest command =
-    el
-        [ width fill
-        , Background.color
-            (if isLatest then
-                colors.buttonBackground
-
-             else
-                colors.buttonBackground
-            )
-        , Border.rounded 16
-        , Border.width 1
-        , Border.color colors.buttonBorder
-        , paddingXY 18 12
-        , Font.size 14
-        , Font.color colors.buttonText
-        ]
-        (text
-            (if isLatest then
-                "Latest: " ++ commandLabel command
-
-             else
-                commandLabel command
-            )
-        )
-
-
-commandLabel : Command -> String
-commandLabel command =
-    case command of
-        MoveForwardCommand ->
-            "Move Forward"
-
-        TurnLeftCommand ->
-            "Turn Left"
-
-        TurnRightCommand ->
-            "Turn Right"

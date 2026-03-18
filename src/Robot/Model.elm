@@ -1,7 +1,8 @@
-module Robot exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, moveForward, turnLeft, turnRight, x, y)
-
+module Robot.Model exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, moveForward, turnLeft, turnRight, x, y)
 
 -- The four directions the robot can face on the grid.
+
+
 type Direction
     = North
     | East
@@ -17,7 +18,10 @@ type Coordinate
     | Four
 
 
+
 -- A robot position on a 5x5 grid, including its facing direction.
+
+
 type Robot
     = Robot
         { x : Coordinate
@@ -26,7 +30,10 @@ type Robot
         }
 
 
+
 -- The default starting position for the robot.
+
+
 initialRobot : Robot
 initialRobot =
     Robot
@@ -50,7 +57,10 @@ fromCoordinates xCoordinate yCoordinate direction =
         (coordinateFromInt yCoordinate)
 
 
+
 -- Move one step forward without ever leaving the 0..4 grid.
+
+
 moveForward : Robot -> Robot
 moveForward robot =
     case robot of
@@ -69,7 +79,10 @@ moveForward robot =
                     Robot { state | x = decrement state.x }
 
 
+
 -- Rotate the robot 90 degrees counter-clockwise.
+
+
 turnLeft : Robot -> Robot
 turnLeft robot =
     case robot of
@@ -92,7 +105,10 @@ turnLeft robot =
                 }
 
 
+
 -- Rotate the robot 90 degrees clockwise.
+
+
 turnRight : Robot -> Robot
 turnRight robot =
     case robot of

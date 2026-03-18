@@ -1,7 +1,7 @@
 module RobotTest exposing (tests)
 
 import Expect
-import Robot exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, moveForward, turnLeft, turnRight, x, y)
+import Robot.Model exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, moveForward, turnLeft, turnRight, x, y)
 import Test exposing (Test, describe, test)
 
 
