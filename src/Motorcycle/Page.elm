@@ -125,7 +125,7 @@ loadingStatus colors products isLoading =
         ]
         (text
             (if isLoading then
-                "Receiving products from server... "
+                "Loading products... "
                     ++ String.fromInt (List.length products)
                     ++ " of "
                     ++ String.fromInt totalCount
