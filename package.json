@@ -2,14 +2,23 @@
   "name": "fitzbeach",
   "private": true,
   "scripts": {
+    "clean": "shx rm -rf .parcel-cache ./dist",
     "test": "elm-test",
     "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "prebuild": "npm run clean",
+    "build": "parcel build index.html",
+    "review": "elm-review",
+    "review:fix": "elm-review --fix-all-without-prompt",
+    "predeploy": "npm run test && npm run review && npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@parcel/transformer-elm": "^2.16.4",
     "elm": "^0.19.1-6",
+    "elm-review": "^2.13.3",
     "elm-test": "^0.19.1-revision17",
-    "parcel": "^2.15.4"
+    "gh-pages": "^5.0.0",
+    "parcel": "^2.15.4",
+    "shx": "^0.4.0"
   }
 }
