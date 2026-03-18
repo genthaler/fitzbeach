@@ -9,12 +9,14 @@
 - `mdgriffith/elm-ui`
 - Parcel
 
+## Project Scope
+
+This file defines repo-specific rules for `fitzbeach`.
+General Elm workflow, TEA refactoring habits, and `elm-ui` editing guidance should come from the active Elm skill.
+
 ## Goals
 - Keep this project minimal and easy to iterate on
 - Preserve compilability at all times when possible
-- Prefer small, local changes
-- Keep the existing architecture unless explicitly asked to change it
-- Do not invent new patterns where existing project patterns already exist
 
 ## Structure
 
@@ -31,11 +33,10 @@
 
 ## Working Rules
 
-- Prefer small, focused changes.
-- Do not add extra frameworks or runtime dependencies unless explicitly requested.
 - Keep the Parcel setup simple.
-- Keep the Elm app minimal and readable.
-- Use `elm-ui` for layout instead of raw HTML in Elm when adjusting the UI.
+- `index.js` should continue to initialise `Elm.Main`.
+- The app mounts into `<div id="app"></div>` in `index.html`.
+- If Elm dependencies are added later, keep them intentional and minimal.
 
 ## Commands
 
@@ -43,92 +44,20 @@
 - Start dev server: `npm run dev`
 - Build production bundle: `npm run build`
 
-## Notes
-
-- The app mounts into `<div id="app"></div>` in `index.html`.
-- `index.js` should continue to initialise `Elm.Main`.
-- If Elm dependencies are added later, keep them intentional and minimal.
-
-## Elm conventions
-- Follow The Elm Architecture
-- Prefer explicit types on top-level definitions
-- Prefer types and state models that make invalid state unrepresentable, instead of relying on runtime checks
-- Prefer small pure helper functions
-- Reuse existing Msg, Model, and update patterns before introducing new ones
-- Reuse existing helper functions
-- Do not remove fields or constructors unless required
-- Avoid unnecessary renaming
-- Keep imports tidy and minimal
-- Do not introduce placeholder implementations
-- Update all affected call sites
-
-## UI conventions
-- This project uses elm-ui
-- Prefer existing spacing, typography, and attribute helper patterns
-- Reuse existing view helpers before creating new ones
-
-## JSON conventions
-- Use explicit decoders and encoders
-- Match existing decoder style in the codebase
-- Prefer readable pipeline-style or map-style decoders consistent with nearby code
-- Do not silently make fields optional unless the API requires it
-
-## Refactoring rules
-- Make the smallest change that solves the task
-- Preserve public function names unless explicitly asked
-- When changing types, update all affected call sites
-- Prefer compiler-guided refactors
-
-## Safety checks
-Before finishing:
-1. Check for type mismatches
-2. Check imports
-3. Check pattern matches for exhaustiveness
-4. Check that view/update/init stay consistent
-5. Run relevant automated checks when available. If tests exist, they should pass before closing the task or suggesting a commit. If a check cannot be run, state that clearly and explain why.
-
-## Commit messages
-- After approved file changes, suggest a git commit message that reflects all changes since the last commit.
-- Base the suggestion on the current diff against `HEAD`, not only the most recent edit.
-- If the working tree contains unrelated changes, say so before suggesting a commit message.
-- Prefer short imperative commit messages.
-- Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.
-
-## Priorities
-- Clarity over cleverness
-- Small, readable modules
-- Predictable state transitions
-- Simple, polished UX
-- Strong type safety
-- Minimal dependencies
-
-## When implementing features
-- Prefer obvious code over abstract code
-- Keep naming concrete and descriptive
-- Handle edge cases explicitly
-- Avoid overengineering
-- Make it easy for a reviewer to follow the flow
-
 ## UI Style Guide
 
-This project intentionally follows a design style of calm, refined, minimal, and human.  
+This project intentionally follows a design style of calm, refined, minimal, and human.
 The UI should feel like a premium product page rather than a dashboard or demo app.
-
-When making UI changes, maintain the following rules.
-
----
 
 ### Core principles
 
-1. **Calm over clever**
-2. **Whitespace over density**
-3. **Subtlety over decoration**
-4. **Clarity over novelty**
-5. **Consistency over variety**
+1. Calm over clever
+2. Whitespace over density
+3. Subtlety over decoration
+4. Clarity over novelty
+5. Consistency over variety
 
-If unsure between two approaches, choose the **simpler and more restrained** option.
-
----
+If unsure between two approaches, choose the simpler and more restrained option.
 
 ### Colour
 
@@ -146,13 +75,11 @@ Avoid:
 - loud gradients
 - dark “developer dashboard” themes
 
-Backgrounds should feel **clean and quiet**, not stark or heavy.
-
----
+Backgrounds should feel clean and quiet, not stark or heavy.
 
 ### Typography
 
-Typography should feel **editorial and composed**.
+Typography should feel editorial and composed.
 
 Rules:
 - modest heading sizes
@@ -164,8 +91,6 @@ Avoid:
 - oversized headings
 - heavy font weights everywhere
 - compressed UI text blocks
-
----
 
 ### Spacing
 
@@ -182,11 +107,9 @@ Avoid:
 - dense UI blocks
 - tightly packed controls
 
----
-
 ### Components
 
-UI components should feel **quiet and tactile**.
+UI components should feel quiet and tactile.
 
 Buttons:
 - understated
@@ -203,11 +126,9 @@ Inputs:
 - clean and accessible
 - not visually heavy
 
----
-
 ### Motion
 
-Motion should be **rare and subtle**.
+Motion should be rare and subtle.
 
 Allowed:
 - small hover changes
@@ -218,12 +139,9 @@ Avoid:
 - flashy motion
 - decorative transitions
 
----
-
 ### Accessibility
 
 Always maintain:
-
 - keyboard navigation
 - visible focus states
 - readable contrast
@@ -231,31 +149,28 @@ Always maintain:
 
 Never sacrifice usability for aesthetics.
 
----
-
 ### Implementation rules
 
 When editing UI code:
-
 - keep styling consistent with existing elements
 - reuse existing spacing and layout patterns
 - prefer simple layout logic
 - avoid adding new styling systems or frameworks
 - do not introduce flashy UI styles
 
-Optimise for **readability, calmness, and polish**.
+Optimise for readability, calmness, and polish.
 
----
+## Safety checks
 
-### AI agent instructions
+Before finishing:
+1. Check that repo-specific structure and bootstrapping remain consistent.
+2. Run relevant automated checks when available. If a check cannot be run, state that clearly and explain why.
+3. Update `README.md` when the change affects app behaviour, setup, controls, or structure.
 
-If modifying UI:
+## Commit messages
 
-- preserve the existing aesthetic
-- keep visual changes minimal
-- do not introduce bright colours or heavy styling
-- avoid dashboard-style interfaces
-- favour whitespace and restraint
-- assume the UI will be reviewed for design taste
-
-Prefer solutions that are **simpler, quieter, and more refined**.
+- After approved file changes, suggest a git commit message that reflects all changes since the last commit.
+- Base the suggestion on the current diff against `HEAD`, not only the most recent edit.
+- If the working tree contains unrelated changes, say so before suggesting a commit message.
+- Prefer short imperative commit messages.
+- Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.
