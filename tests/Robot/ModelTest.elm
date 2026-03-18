@@ -1,4 +1,4 @@
-module RobotTest exposing (tests)
+module Robot.ModelTest exposing (tests)
 
 import Expect
 import Robot.Model exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, moveForward, turnLeft, turnRight, x, y)
@@ -7,7 +7,7 @@ import Test exposing (Test, describe, test)
 
 tests : Test
 tests =
-    describe "Robot"
+    describe "Robot.Model"
         [ test "initialRobot starts at the origin facing north" <|
             \_ ->
                 Expect.all

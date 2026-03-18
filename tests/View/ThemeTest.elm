@@ -1,4 +1,4 @@
-module ThemeTest exposing (tests)
+module View.ThemeTest exposing (tests)
 
 import Element exposing (toRgb)
 import Expect
