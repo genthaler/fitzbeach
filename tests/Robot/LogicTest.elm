@@ -111,7 +111,7 @@ tests =
                     , \_ -> Expect.equal Nothing (commandFromKey "ArrowDown")
                     ]
                     ()
-        , test "update Reset returns the initial model" <|
+        , test "update Reset clears robot state without leaving the current page or theme" <|
             \_ ->
                 let
                     dirtyModel =
@@ -119,11 +119,19 @@ tests =
                             |> applyCommand MoveForwardCommand
                             |> applyCommand TurnLeftCommand
                             |> (\model -> { model | themeMode = Theme.Dark })
+                            |> (\model -> { model | currentPage = View.RobotPage })
 
                     ( resetModel, _ ) =
                         update Reset dirtyModel
                 in
-                Expect.equal initModel resetModel
+                Expect.all
+                    [ \_ -> Expect.equal initialRobot resetModel.robot
+                    , \_ -> Expect.equal [] resetModel.history
+                    , \_ -> Expect.equal Theme.Dark resetModel.themeMode
+                    , \_ -> Expect.equal View.RobotPage resetModel.currentPage
+                    , \_ -> Expect.equal dirtyModel.viewport resetModel.viewport
+                    ]
+                    ()
         , test "update SetTheme changes only the theme mode" <|
             \_ ->
                 let

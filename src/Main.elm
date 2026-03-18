@@ -76,7 +76,7 @@ update msg model =
             ( RobotLogic.undo model, Cmd.none )
 
         Reset ->
-            ( initModel, Cmd.none )
+            ( { model | robot = Robot.initialRobot, history = [] }, Cmd.none )
 
         SetTheme mode ->
             ( { model | themeMode = mode }, Cmd.none )
