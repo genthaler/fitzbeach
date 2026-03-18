@@ -1,10 +1,11 @@
 module Robot.LogicTest exposing (tests)
 
 import Expect
-import Main exposing (Msg(..), Page(..), initModel, update)
+import Main exposing (Msg(..), initModel, update)
 import Robot.Logic exposing (Command(..), applyCommand, canApplyCommand, commandFromKey, undo)
 import Robot.Model exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, y)
 import Test exposing (Test, describe, test)
+import View
 import View.Theme as Theme
 
 
@@ -146,10 +147,10 @@ tests =
                         applyCommand MoveForwardCommand initModel
 
                     ( updatedModel, _ ) =
-                        update (SelectPage RobotPage) movedModel
+                        update (SelectPage View.RobotPage) movedModel
                 in
                 Expect.all
-                    [ \_ -> Expect.equal RobotPage updatedModel.currentPage
+                    [ \_ -> Expect.equal View.RobotPage updatedModel.currentPage
                     , \_ -> Expect.equal movedModel.robot updatedModel.robot
                     , \_ -> Expect.equal movedModel.history updatedModel.history
                     , \_ -> Expect.equal movedModel.themeMode updatedModel.themeMode

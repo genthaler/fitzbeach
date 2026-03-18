@@ -55,13 +55,14 @@ The interface aims for a calm, low-noise presentation. The default light theme u
 
 ## Architecture notes
 
-- `src/Main.elm` owns the shared application shell, page selection, theme state, and top-level message routing.
+- `src/Main.elm` owns application state, subscriptions, and top-level message routing.
 - `src/Motorcycle/Page.elm` contains the Motorcycle page UI.
 - `src/Robot/Model.elm` contains the robot domain model and movement rules.
 - `src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.
 - `src/Robot/View.elm` contains the robot page UI and board rendering.
+- `src/View.elm` contains the shared application shell and page-level view composition.
 - `src/View/Theme.elm` centralises the shared color palette.
-- `tests/` contains focused Elm unit tests for robot movement, robot command behavior, page selection, and theme helpers.
+- `tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 
 The boundary between domain and UI is deliberate: movement logic stays in the domain module, while the app layer handles input and presentation concerns such as command history.
 
