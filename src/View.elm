@@ -1,6 +1,6 @@
 module View exposing (Page(..), themeToggleDescription, toggleThemeMode, view)
 
-import Element exposing (Element, centerY, column, el, fill, height, layout, padding, paddingEach, row, spacing, text, width)
+import Element exposing (Element, centerX, centerY, column, el, fill, height, layout, maximum, paddingEach, paddingXY, row, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -32,6 +32,7 @@ view :
         , history : List RobotLogic.HistoryEntry
         , themeMode : Theme.Mode
         , currentPage : Page
+        , viewport : { width : Int, height : Int }
     }
     -> Config msg
     -> Html.Html msg
@@ -47,6 +48,7 @@ page :
         , history : List RobotLogic.HistoryEntry
         , themeMode : Theme.Mode
         , currentPage : Page
+        , viewport : { width : Int, height : Int }
     }
     -> Config msg
     -> Element msg
@@ -54,36 +56,62 @@ page model config =
     let
         colors =
             Theme.palette model.themeMode
+
+        compactLayout =
+            isCompact model.viewport.width
+
+        horizontalPadding =
+            if compactLayout then
+                20
+
+            else
+                40
+
+        verticalPadding =
+            if compactLayout then
+                24
+
+            else
+                40
     in
-    column
+    el
         [ width fill
         , height fill
         , Background.color colors.appBackground
         , Font.color colors.bodyText
-        , spacing 40
-        , padding 40
         ]
-        [ siteHeader colors model.currentPage model.themeMode config
-        , pageBody colors model config.robotControls
-        ]
-
-
-siteHeader : Theme.Palette -> Page -> Theme.Mode -> Config msg -> Element msg
-siteHeader colors currentPage themeMode config =
-    row
-        [ width fill
-        , paddingEach { top = 8, right = 0, bottom = 8, left = 0 }
-        ]
-        [ row
-            [ spacing 32
-            , centerY
+        (column
+            [ width (maximum 1180 fill)
+            , height fill
+            , centerX
+            , spacing 40
+            , paddingXY horizontalPadding verticalPadding
             ]
-            [ el
-                [ Font.size 20
-                , Font.semiBold
-                , centerY
+            [ siteHeader compactLayout colors model.currentPage model.themeMode config
+            , pageBody compactLayout colors model config.robotControls
+            ]
+        )
+
+
+siteHeader : Bool -> Theme.Palette -> Page -> Theme.Mode -> Config msg -> Element msg
+siteHeader compactLayout colors currentPage themeMode config =
+    if compactLayout then
+        column
+            [ width fill
+            , spacing 20
+            , paddingEach { top = 8, right = 0, bottom = 8, left = 0 }
+            ]
+            [ row
+                [ width fill ]
+                [ el
+                    [ Font.size 20
+                    , Font.semiBold
+                    , centerY
+                    ]
+                    (text "Fitzbeach")
+                , el [ width fill ] Element.none
+                , ThemeToggle.view colors themeMode (config.setTheme (ThemeToggle.toggleThemeMode themeMode))
                 ]
-                (text "Fitzbeach")
             , row
                 [ spacing 24
                 , centerY
@@ -92,9 +120,33 @@ siteHeader colors currentPage themeMode config =
                 , menuButton colors currentPage RobotPage "Robot" config
                 ]
             ]
-        , el [ width fill ] Element.none
-        , ThemeToggle.view colors themeMode (config.setTheme (ThemeToggle.toggleThemeMode themeMode))
-        ]
+
+    else
+        row
+            [ width fill
+            , paddingEach { top = 8, right = 0, bottom = 8, left = 0 }
+            ]
+            [ row
+                [ spacing 32
+                , centerY
+                ]
+                [ el
+                    [ Font.size 20
+                    , Font.semiBold
+                    , centerY
+                    ]
+                    (text "Fitzbeach")
+                , row
+                    [ spacing 24
+                    , centerY
+                    ]
+                    [ menuButton colors currentPage MotorcyclePage "Motorcycle" config
+                    , menuButton colors currentPage RobotPage "Robot" config
+                    ]
+                ]
+            , el [ width fill ] Element.none
+            , ThemeToggle.view colors themeMode (config.setTheme (ThemeToggle.toggleThemeMode themeMode))
+            ]
 
 
 menuButton : Theme.Palette -> Page -> Page -> String -> Config msg -> Element msg
@@ -126,7 +178,8 @@ menuButton colors currentPage targetPage label config =
 
 
 pageBody :
-    Theme.Palette
+    Bool
+    -> Theme.Palette
     ->
         { a
             | robot : Robot.Robot
@@ -135,13 +188,18 @@ pageBody :
         }
     -> Robot.View.Controls msg
     -> Element msg
-pageBody colors model robotControls =
+pageBody compactLayout colors model robotControls =
     case model.currentPage of
         MotorcyclePage ->
-            MotorcyclePage.view colors
+            MotorcyclePage.view compactLayout colors
 
         RobotPage ->
-            Robot.View.page colors model robotControls
+            Robot.View.page compactLayout colors model robotControls
+
+
+isCompact : Int -> Bool
+isCompact viewportWidth =
+    viewportWidth /= 0 && viewportWidth < 760
 
 
 toggleThemeMode : Theme.Mode -> Theme.Mode

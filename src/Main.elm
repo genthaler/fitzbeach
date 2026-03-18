@@ -21,6 +21,7 @@ type alias Model =
     , history : List RobotLogic.HistoryEntry
     , themeMode : Theme.Mode
     , currentPage : View.Page
+    , viewport : Viewport
     }
 
 
@@ -34,6 +35,13 @@ type Msg
     | IgnoreKeyPress
     | SetTheme Theme.Mode
     | SelectPage View.Page
+    | ResizeViewport Int Int
+
+
+type alias Viewport =
+    { width : Int
+    , height : Int
+    }
 
 
 main : Program () Model Msg
@@ -76,6 +84,9 @@ update msg model =
         SelectPage selectedPage ->
             ( { model | currentPage = selectedPage }, Cmd.none )
 
+        ResizeViewport width height ->
+            ( { model | viewport = { width = width, height = height } }, Cmd.none )
+
 
 initModel : Model
 initModel =
@@ -83,18 +94,22 @@ initModel =
     , history = []
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
+    , viewport = { width = 0, height = 0 }
     }
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    case model.currentPage of
-        View.RobotPage ->
-            Browser.Events.onKeyDown
-                (Decode.map keyPressToMsg (Decode.field "key" Decode.string))
+    Sub.batch
+        [ Browser.Events.onResize ResizeViewport
+        , case model.currentPage of
+            View.RobotPage ->
+                Browser.Events.onKeyDown
+                    (Decode.map keyPressToMsg (Decode.field "key" Decode.string))
 
-        View.MotorcyclePage ->
-            Sub.none
+            View.MotorcyclePage ->
+                Sub.none
+        ]
 
 
 keyPressToMsg : String -> Msg

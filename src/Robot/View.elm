@@ -1,6 +1,6 @@
 module Robot.View exposing (Controls, page)
 
-import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, none, paddingXY, px, row, spacing, text, width)
+import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, maximum, none, paddingXY, px, row, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -21,30 +21,40 @@ type alias Controls msg =
 
 
 page :
-    Theme.Palette
+    Bool
+    -> Theme.Palette
     -> { a | robot : Robot.Robot, history : List Logic.HistoryEntry }
     -> Controls msg
     -> Element msg
-page colors model controls =
+page compactLayout colors model controls =
     column
         [ width fill
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
-        [ pageHeading colors "Robot"
-        , board colors model.robot
-        , controlRow colors model.robot controls
+        [ pageHeading compactLayout colors "Robot"
+        , board compactLayout colors model.robot
+        , controlRow compactLayout colors model.robot controls
         , commandHistory colors (List.map .command model.history)
         ]
 
 
-pageHeading : Theme.Palette -> String -> Element msg
-pageHeading colors labelText =
+pageHeading : Bool -> Theme.Palette -> String -> Element msg
+pageHeading compactLayout colors labelText =
     column
         [ width fill
         , spacing 8
         ]
-        [ el [ Font.size 36 ] (text labelText)
+        [ el
+            [ Font.size
+                (if compactLayout then
+                    30
+
+                 else
+                    36
+                )
+            ]
+            (text labelText)
         , el
             [ width fill
             , height (px 1)
@@ -54,18 +64,24 @@ pageHeading colors labelText =
         ]
 
 
-board : Theme.Palette -> Robot.Robot -> Element msg
-board colors robot =
+board : Bool -> Theme.Palette -> Robot.Robot -> Element msg
+board compactLayout colors robot =
     column
         [ centerX
         , spacing 18
-        , Element.padding 24
+        , Element.padding
+            (if compactLayout then
+                16
+
+             else
+                24
+            )
         , Background.color colors.panelBackground
         , Border.width 1
         , Border.rounded 28
         , Border.color colors.panelBorder
         ]
-        [ grid colors robot
+        [ grid compactLayout colors robot
         , el
             [ centerX
             , Font.size 13
@@ -75,30 +91,51 @@ board colors robot =
         ]
 
 
-grid : Theme.Palette -> Robot.Robot -> Element msg
-grid colors robot =
+grid : Bool -> Theme.Palette -> Robot.Robot -> Element msg
+grid compactLayout colors robot =
     column
         [ centerX
-        , spacing 10
+        , spacing
+            (if compactLayout then
+                8
+
+             else
+                10
+            )
         ]
-        (List.map (gridRow colors robot) [ 4, 3, 2, 1, 0 ])
+        (List.map (gridRow compactLayout colors robot) [ 4, 3, 2, 1, 0 ])
 
 
-gridRow : Theme.Palette -> Robot.Robot -> Int -> Element msg
-gridRow colors robot yCoordinate =
-    row [ spacing 10 ]
-        (List.map (\xCoordinate -> gridCell colors robot xCoordinate yCoordinate) [ 0, 1, 2, 3, 4 ])
+gridRow : Bool -> Theme.Palette -> Robot.Robot -> Int -> Element msg
+gridRow compactLayout colors robot yCoordinate =
+    row
+        [ spacing
+            (if compactLayout then
+                8
+
+             else
+                10
+            )
+        ]
+        (List.map (\xCoordinate -> gridCell compactLayout colors robot xCoordinate yCoordinate) [ 0, 1, 2, 3, 4 ])
 
 
-gridCell : Theme.Palette -> Robot.Robot -> Int -> Int -> Element msg
-gridCell colors robot xCoordinate yCoordinate =
+gridCell : Bool -> Theme.Palette -> Robot.Robot -> Int -> Int -> Element msg
+gridCell compactLayout colors robot xCoordinate yCoordinate =
     let
         isRobot =
             Robot.x robot == xCoordinate && Robot.y robot == yCoordinate
+
+        cellSize =
+            if compactLayout then
+                48
+
+            else
+                68
     in
     el
-        [ width (px 68)
-        , height (px 68)
+        [ width (px cellSize)
+        , height (px cellSize)
         , Border.width 1
         , Border.rounded 14
         , Border.color
@@ -117,19 +154,25 @@ gridCell colors robot xCoordinate yCoordinate =
             )
         ]
         (if isRobot then
-            robotMarker colors robot
+            robotMarker compactLayout colors robot
 
          else
             none
         )
 
 
-robotMarker : Theme.Palette -> Robot.Robot -> Element msg
-robotMarker colors robot =
+robotMarker : Bool -> Theme.Palette -> Robot.Robot -> Element msg
+robotMarker compactLayout colors robot =
     el
         [ width fill
         , height fill
-        , Element.padding 10
+        , Element.padding
+            (if compactLayout then
+                8
+
+             else
+                10
+            )
         ]
         (el
             [ width fill
@@ -141,7 +184,13 @@ robotMarker colors robot =
             (el
                 [ centerX
                 , centerY
-                , Font.size 22
+                , Font.size
+                    (if compactLayout then
+                        18
+
+                     else
+                        22
+                    )
                 , Font.color colors.robotMarkerText
                 ]
                 (text (directionSymbol (Robot.facing robot)))
@@ -149,10 +198,11 @@ robotMarker colors robot =
         )
 
 
-controlRow : Theme.Palette -> Robot.Robot -> Controls msg -> Element msg
-controlRow colors robot controls =
-    row
+controlRow : Bool -> Theme.Palette -> Robot.Robot -> Controls msg -> Element msg
+controlRow compactLayout colors robot controls =
+    wrappedRow
         [ centerX
+        , width fill
         , spacing 12
         ]
         [ controlButton colors
@@ -204,7 +254,7 @@ controlButton colors labelText onPress =
 commandHistory : Theme.Palette -> List Logic.Command -> Element msg
 commandHistory colors history =
     column
-        [ width (px 340)
+        [ width (maximum 340 fill)
         , centerX
         , spacing 10
         ]

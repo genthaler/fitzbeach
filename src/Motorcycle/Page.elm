@@ -1,35 +1,44 @@
 module Motorcycle.Page exposing (ProductPanel, productPanel, view)
 
-import Element exposing (Element, alignBottom, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
+import Element exposing (Element, alignBottom, column, el, fill, height, maximum, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import View.Theme as Theme
 
 
-view : Theme.Palette -> Element msg
-view colors =
+view : Bool -> Theme.Palette -> Element msg
+view compactLayout colors =
     column
         [ width fill
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
-        [ pageHeading colors "Motorcycle"
+        [ pageHeading compactLayout colors "Motorcycle"
         , wrappedRow
             [ width fill
             , spacing 20
             ]
-            (List.map (productPanel colors) productPanels)
+            (List.map (productPanel compactLayout colors) productPanels)
         ]
 
 
-pageHeading : Theme.Palette -> String -> Element msg
-pageHeading colors labelText =
+pageHeading : Bool -> Theme.Palette -> String -> Element msg
+pageHeading compactLayout colors labelText =
     column
         [ width fill
         , spacing 8
         ]
-        [ el [ Font.size 36 ] (text labelText)
+        [ el
+            [ Font.size
+                (if compactLayout then
+                    30
+
+                 else
+                    36
+                )
+            ]
+            (text labelText)
         , el
             [ width fill
             , height (px 1)
@@ -107,11 +116,26 @@ productPanels =
     ]
 
 
-productPanel : Theme.Palette -> ProductPanel -> Element msg
-productPanel colors panel =
+productPanel : Bool -> Theme.Palette -> ProductPanel -> Element msg
+productPanel compactLayout colors panel =
+    let
+        panelHeight =
+            if compactLayout then
+                396
+
+            else
+                452
+
+        imageHeight =
+            if compactLayout then
+                188
+
+            else
+                236
+    in
     column
-        [ width (px 280)
-        , height (px 452)
+        [ width (maximum 320 fill)
+        , height (px panelHeight)
         , spacing 28
         , padding 28
         , Background.color colors.panelBackground
@@ -121,7 +145,7 @@ productPanel colors panel =
         ]
         [ el
             [ width fill
-            , height (px 236)
+            , height (px imageHeight)
             , Background.color colors.appBackground
             , Border.width 1
             , Border.rounded 18
