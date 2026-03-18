@@ -1,4 +1,4 @@
-module Motorcycle.Page exposing (ProductPanel, productPanel, productPanels, view)
+module Motorcycle.Page exposing (Product, productPanel, products, view)
 
 import Element exposing (Element, alignBottom, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background
@@ -7,16 +7,16 @@ import Element.Font as Font
 import View.Theme as Theme
 
 
-view : Bool -> Theme.Palette -> List ProductPanel -> Bool -> Element msg
-view compactLayout colors products isLoading =
+view : Bool -> Theme.Palette -> List Product -> Bool -> Element msg
+view compactLayout colors loadedProducts isLoading =
     column
         [ width fill
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
         [ pageHeading compactLayout colors "Motorcycle"
-        , loadingStatus colors products isLoading
-        , productPanelLayout compactLayout colors products
+        , loadingStatus colors loadedProducts isLoading
+        , productPanelLayout compactLayout colors loadedProducts
         ]
 
 
@@ -45,15 +45,15 @@ pageHeading compactLayout colors labelText =
         ]
 
 
-type alias ProductPanel =
+type alias Product =
     { name : String
     , price : String
     , description : String
     }
 
 
-productPanels : List ProductPanel
-productPanels =
+products : List Product
+products =
     [ { name = "Transit"
       , price = "$89"
       , description = "Compact essentials"
@@ -113,11 +113,11 @@ productPanels =
     ]
 
 
-loadingStatus : Theme.Palette -> List ProductPanel -> Bool -> Element msg
-loadingStatus colors products isLoading =
+loadingStatus : Theme.Palette -> List Product -> Bool -> Element msg
+loadingStatus colors loadedProducts isLoading =
     let
         totalCount =
-            List.length productPanels
+            List.length products
     in
     el
         [ Font.size 14
@@ -126,7 +126,7 @@ loadingStatus colors products isLoading =
         (text
             (if isLoading then
                 "Loading products... "
-                    ++ String.fromInt (List.length products)
+                    ++ String.fromInt (List.length loadedProducts)
                     ++ " of "
                     ++ String.fromInt totalCount
 
@@ -138,11 +138,11 @@ loadingStatus colors products isLoading =
         )
 
 
-productPanelLayout : Bool -> Theme.Palette -> List ProductPanel -> Element msg
-productPanelLayout compactLayout colors products =
+productPanelLayout : Bool -> Theme.Palette -> List Product -> Element msg
+productPanelLayout compactLayout colors loadedProducts =
     let
         panels =
-            List.map (productPanel compactLayout colors) products
+            List.map (productPanel compactLayout colors) loadedProducts
     in
     if compactLayout then
         column
@@ -159,7 +159,7 @@ productPanelLayout compactLayout colors products =
             panels
 
 
-productPanel : Bool -> Theme.Palette -> ProductPanel -> Element msg
+productPanel : Bool -> Theme.Palette -> Product -> Element msg
 productPanel compactLayout colors panel =
     let
         panelHeight =

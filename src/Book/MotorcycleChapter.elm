@@ -18,6 +18,6 @@ chapter =
                 Motorcycle.Page.view
                     False
                     (Theme.palette state.themeMode)
-                    Motorcycle.Page.productPanels
+                    Motorcycle.Page.products
                     False
             )

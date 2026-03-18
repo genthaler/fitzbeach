@@ -22,7 +22,7 @@ chapter =
             )
 
 
-samplePanel : Motorcycle.Page.ProductPanel
+samplePanel : Motorcycle.Page.Product
 samplePanel =
     { name = "Transit"
     , price = "$89"

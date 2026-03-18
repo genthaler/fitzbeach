@@ -29,8 +29,8 @@ type alias Config msg =
 view :
     { a
         | motorcycleFeed :
-            { visibleProducts : List MotorcyclePage.ProductPanel
-            , pendingProducts : List MotorcyclePage.ProductPanel
+            { visibleProducts : List MotorcyclePage.Product
+            , pendingProducts : List MotorcyclePage.Product
             }
         , robot : Robot.Robot
         , history : List RobotLogic.HistoryEntry
@@ -49,8 +49,8 @@ view model config =
 page :
     { a
         | motorcycleFeed :
-            { visibleProducts : List MotorcyclePage.ProductPanel
-            , pendingProducts : List MotorcyclePage.ProductPanel
+            { visibleProducts : List MotorcyclePage.Product
+            , pendingProducts : List MotorcyclePage.Product
             }
         , robot : Robot.Robot
         , history : List RobotLogic.HistoryEntry
@@ -191,8 +191,8 @@ pageBody :
     ->
         { a
             | motorcycleFeed :
-                { visibleProducts : List MotorcyclePage.ProductPanel
-                , pendingProducts : List MotorcyclePage.ProductPanel
+                { visibleProducts : List MotorcyclePage.Product
+                , pendingProducts : List MotorcyclePage.Product
                 }
             , robot : Robot.Robot
             , history : List RobotLogic.HistoryEntry

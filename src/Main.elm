@@ -51,8 +51,8 @@ type alias Viewport =
 
 
 type alias MotorcycleFeed =
-    { visibleProducts : List MotorcyclePage.ProductPanel
-    , pendingProducts : List MotorcyclePage.ProductPanel
+    { visibleProducts : List MotorcyclePage.Product
+    , pendingProducts : List MotorcyclePage.Product
     }
 
 
@@ -168,7 +168,7 @@ receiveNextProduct feed =
 initialMotorcycleFeed : MotorcycleFeed
 initialMotorcycleFeed =
     { visibleProducts = []
-    , pendingProducts = MotorcyclePage.productPanels
+    , pendingProducts = MotorcyclePage.products
     }
 
 
