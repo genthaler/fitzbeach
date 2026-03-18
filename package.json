@@ -2,6 +2,8 @@
   "name": "fitzbeach",
   "private": true,
   "scripts": {
+    "book": "parcel book.html",
+    "book:build": "parcel build book.html --dist-dir dist-book",
     "clean": "shx rm -rf .parcel-cache ./dist",
     "test": "elm-test",
     "dev": "parcel index.html",

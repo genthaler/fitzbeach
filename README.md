@@ -11,6 +11,7 @@ A small Elm application with a restrained main menu and two pages: a blank `Moto
 - Button controls for move, turn left, turn right, undo, and reset
 - Keyboard controls for up, left, and right arrow keys on the `Robot` page
 - In-memory command history with the most recent action highlighted
+- ElmBook-powered component and page documentation
 
 ## Tech stack
 
@@ -37,10 +38,22 @@ Start the development server:
 npm run dev
 ```
 
+Start the ElmBook documentation app:
+
+```bash
+npm run book
+```
+
 Create a production build:
 
 ```bash
 npm run build
+```
+
+Create a production ElmBook build:
+
+```bash
+npm run book:build
 ```
 
 Run the unit tests:
@@ -82,11 +95,14 @@ The interface aims for a calm, low-noise presentation. The default light theme u
 ## Architecture notes
 
 - `src/Main.elm` owns application state, subscriptions, and top-level message routing.
+- `src/Book.elm` is a separate ElmBook entrypoint for documented UI examples.
+- `src/Book/` contains ElmBook fixtures and chapters.
 - `src/Motorcycle/Page.elm` contains the Motorcycle page UI.
 - `src/Robot/Model.elm` contains the robot domain model and movement rules.
 - `src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.
 - `src/Robot/View.elm` contains the robot page UI and board rendering.
 - `src/View.elm` contains the shared application shell and page-level view composition.
+- `src/View/ThemeToggle.elm` contains the reusable theme toggle component shared by the app and ElmBook.
 - `src/View/Theme.elm` centralises the shared color palette.
 - `tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 
