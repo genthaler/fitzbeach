@@ -12,6 +12,10 @@ description: "Use when tasks involve Elm applications or libraries, especially T
 
 For `elm-ui` layout and styling work, also use the `elm-ui` skill when available.
 
+## When not to use
+- Pure styling or layout review without meaningful Elm logic changes.
+- Bundler or bootstrapping work where the `elm-parcel-app` skill is a better fit.
+
 ## Workflow
 1. Inspect the project shape first.
    - Read `elm.json` and the relevant Elm modules.
@@ -20,10 +24,15 @@ For `elm-ui` layout and styling work, also use the `elm-ui` skill when available
    - Prefer explicit top-level type annotations.
    - Make invalid state unrepresentable when changing models or messages.
    - Reuse existing `Msg`, `Model`, `init`, `update`, and `view` patterns before adding new ones.
-3. For JSON work, use explicit decoders and encoders.
+3. Use compiler-guided iteration.
+   - Make one meaningful type or API change at a time.
+   - Recompile before expanding the refactor so errors stay local and easy to resolve.
+4. Keep logic readable.
+   - Prefer small pure helpers over growing inline conditionals in `view` and `update`.
+5. For JSON work, use explicit decoders and encoders.
    - Match the decoder style used nearby.
    - Do not silently make fields optional unless the API requires it.
-4. Validate after meaningful edits.
+6. Validate after meaningful edits.
    - Run the smallest relevant check first, usually the Elm build or the project's standard build command.
    - Fix compiler warnings or errors before expanding the change.
 
@@ -37,6 +46,7 @@ Use the checks that exist in the current project. Prefer the smallest command th
 ## TEA expectations
 - Keep state transitions predictable and local.
 - Update all affected call sites when changing a type.
+- Update all branches when changing a custom type.
 - Check pattern matches for exhaustiveness.
 - Keep `init`, `update`, subscriptions, and `view` consistent.
 
