@@ -2,6 +2,7 @@ module Book exposing (SharedState, main)
 
 import Book.Fixtures
 import Book.MotorcycleChapter
+import Book.ProductPanelChapter
 import Book.RobotChapter
 import Book.ThemeChapter
 import Element exposing (toRgb)
@@ -45,7 +46,9 @@ main =
             ]
         |> withChapterGroups
             [ ( "Foundations"
-              , [ Book.ThemeChapter.chapter ]
+              , [ Book.ThemeChapter.chapter
+                , Book.ProductPanelChapter.chapter
+                ]
               )
             , ( "Pages"
               , [ Book.MotorcycleChapter.chapter
