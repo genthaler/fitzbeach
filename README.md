@@ -6,7 +6,7 @@ A small Elm application with a restrained main menu and two pages: a `Motorcycle
 
 - Minimal main navigation with `Motorcycle` and `Robot` pages
 - Responsive shell layout that adapts navigation, spacing, and page composition for narrower screens
-- `Motorcycle` landing page with a restrained product-style panel grid that simulates products arriving from a remote server at roughly four items per second
+- `Motorcycle` landing page with a restrained product-style panel grid that simulates products arriving over time
 - 5x5 robot grid rendered with `elm-ui`
 - Robot movement constrained to the grid bounds
 - Button controls for move, turn left, turn right, undo, and reset
