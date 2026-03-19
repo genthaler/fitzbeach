@@ -24,6 +24,7 @@ description: "Use when working with git status and diffs, especially when sugges
    - Suggest the commit message without assuming files should be staged or committed.
 4. Prefer short imperative commit messages.
 5. Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.
+   - If you would normally default to Conventional Commits like `feat:`, `fix:`, or `refactor:`, override that habit here and use the initial-cap prefixes above instead.
 
 ## Expectations
 - Base the suggestion on the full current diff against `HEAD`, not only the most recent edit.
