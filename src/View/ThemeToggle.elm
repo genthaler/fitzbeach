@@ -9,7 +9,7 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Input as Input
 import Element.Region as Region
-import Svg exposing (circle, line, path, svg)
+import Svg exposing (circle, defs, line, mask, rect, svg)
 import Svg.Attributes as SvgAttributes
 import View.Theme as Theme
 
@@ -180,9 +180,45 @@ moonSvg fillColor =
         , SvgAttributes.height "24"
         , SvgAttributes.fill "none"
         ]
-        [ path
-            [ SvgAttributes.d "M14.3 2.7C10 3.5 6.75 7.28 6.75 11.8C6.75 16.9 10.9 21.05 16 21.05C17.26 21.05 18.47 20.8 19.57 20.33C17.96 20.08 16.45 19.31 15.27 18.13C11.84 14.7 11.52 9.28 14.3 2.7Z"
+        [ defs []
+            [ mask
+                [ SvgAttributes.id "theme-toggle-moon-mask"
+                , SvgAttributes.maskUnits "userSpaceOnUse"
+                , SvgAttributes.x "0"
+                , SvgAttributes.y "0"
+                , SvgAttributes.width "24"
+                , SvgAttributes.height "24"
+                ]
+                [ rect
+                    [ SvgAttributes.x "0"
+                    , SvgAttributes.y "0"
+                    , SvgAttributes.width "24"
+                    , SvgAttributes.height "24"
+                    , SvgAttributes.fill "black"
+                    ]
+                    []
+                , circle
+                    [ SvgAttributes.cx "12"
+                    , SvgAttributes.cy "12"
+                    , SvgAttributes.r "8"
+                    , SvgAttributes.fill "white"
+                    ]
+                    []
+                , circle
+                    [ SvgAttributes.cx "15.25"
+                    , SvgAttributes.cy "9.75"
+                    , SvgAttributes.r "8"
+                    , SvgAttributes.fill "black"
+                    ]
+                    []
+                ]
+            ]
+        , circle
+            [ SvgAttributes.cx "12"
+            , SvgAttributes.cy "12"
+            , SvgAttributes.r "8"
             , SvgAttributes.fill fillColor
+            , SvgAttributes.mask "url(#theme-toggle-moon-mask)"
             ]
             []
         ]
