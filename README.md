@@ -27,6 +27,14 @@ Prerequisites:
 - Node.js
 - npm
 
+Optional Nix setup:
+
+```bash
+nix develop
+```
+
+The dev shell provides pinned versions of Node.js, Elm, `elm-test`, and `elm-review`. The existing npm workflow stays the same inside the shell.
+
 Install dependencies:
 
 ```bash
