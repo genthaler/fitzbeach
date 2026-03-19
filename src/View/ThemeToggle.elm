@@ -212,22 +212,52 @@ moonSvg fillColor =
             "white"
 
         moonCenterX =
-            "11.25"
+            11.25
 
         moonCenterY =
-            "12"
+            12
 
         moonRadius =
-            "8.5"
+            8.5
+
+        shadowOffsetX =
+            4.75
+
+        shadowOffsetY =
+            -2.5
+
+        shadowRadiusMultiplier =
+            1
 
         shadowCenterX =
-            "16"
+            moonCenterX + shadowOffsetX
 
         shadowCenterY =
-            "9.5"
+            moonCenterY + shadowOffsetY
 
         shadowRadius =
-            "8.5"
+            moonRadius * shadowRadiusMultiplier
+
+        coordinateValue value =
+            String.fromFloat value
+
+        moonCenterXValue =
+            coordinateValue moonCenterX
+
+        moonCenterYValue =
+            coordinateValue moonCenterY
+
+        moonRadiusValue =
+            coordinateValue moonRadius
+
+        shadowCenterXValue =
+            coordinateValue shadowCenterX
+
+        shadowCenterYValue =
+            coordinateValue shadowCenterY
+
+        shadowRadiusValue =
+            coordinateValue shadowRadius
     in
     svg
         [ SvgAttributes.viewBox viewBox
@@ -253,25 +283,25 @@ moonSvg fillColor =
                     ]
                     []
                 , circle
-                    [ SvgAttributes.cx moonCenterX
-                    , SvgAttributes.cy moonCenterY
-                    , SvgAttributes.r moonRadius
+                    [ SvgAttributes.cx moonCenterXValue
+                    , SvgAttributes.cy moonCenterYValue
+                    , SvgAttributes.r moonRadiusValue
                     , SvgAttributes.fill visibleMoonFill
                     ]
                     []
                 , circle
-                    [ SvgAttributes.cx shadowCenterX
-                    , SvgAttributes.cy shadowCenterY
-                    , SvgAttributes.r shadowRadius
+                    [ SvgAttributes.cx shadowCenterXValue
+                    , SvgAttributes.cy shadowCenterYValue
+                    , SvgAttributes.r shadowRadiusValue
                     , SvgAttributes.fill maskBackgroundFill
                     ]
                     []
                 ]
             ]
         , circle
-            [ SvgAttributes.cx moonCenterX
-            , SvgAttributes.cy moonCenterY
-            , SvgAttributes.r moonRadius
+            [ SvgAttributes.cx moonCenterXValue
+            , SvgAttributes.cy moonCenterYValue
+            , SvgAttributes.r moonRadiusValue
             , SvgAttributes.fill fillColor
             , SvgAttributes.mask maskReference
             ]
