@@ -9,10 +9,11 @@
     "dev": "parcel index.html",
     "prebuild": "npm run clean",
     "build": "parcel build index.html",
+    "build:pages": "parcel build index.html --public-url /fitzbeach/",
     "review": "elm-review",
     "review:fix": "elm-review --fix-all-without-prompt",
     "verify": "npm test && npm run review && npm run book:build",
-    "predeploy": "npm run verify && npm run build",
+    "predeploy": "npm run verify && npm run build:pages",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {

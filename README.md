@@ -65,6 +65,12 @@ Create a production build:
 npm run build
 ```
 
+Create a GitHub Pages production build with the repo path prefix:
+
+```bash
+npm run build:pages
+```
+
 Create a production ElmBook build:
 
 ```bash
@@ -110,7 +116,7 @@ npm run deploy
 ```
 
 `npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first. ElmBook validation is separate: run `nix develop -c npm run verify` before considering shared UI work complete.
-`npm run deploy` uses `gh-pages -d dist` and relies on `predeploy` to run `npm run verify` and then the production app build first.
+`npm run deploy` uses `gh-pages -d dist` and relies on `predeploy` to run `npm run verify` and then `npm run build:pages`, so the deployed app uses the `/fitzbeach/` GitHub Pages path prefix.
 
 ## Design notes
 
