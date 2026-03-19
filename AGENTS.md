@@ -166,7 +166,7 @@ Optimise for readability, calmness, and polish.
 
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
-2. Run `npm run verify` successfully before considering the task complete. If it cannot be run, state that clearly and explain why.
+2. Run `nix develop -c npm run verify` successfully before considering the task complete. Direct intermediate `npm` or other commands are allowed. If the Nix-based verification cannot be run, state that clearly and explain why.
 3. After the task is complete, commit the changes.
 
 ## Skills

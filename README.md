@@ -33,7 +33,11 @@ Optional Nix setup:
 nix develop
 ```
 
-The dev shell provides pinned versions of Node.js, Elm, `elm-test`, and `elm-review`. The existing npm workflow stays the same inside the shell.
+The dev shell provides pinned versions of Node.js, Elm, `elm-test`, and `elm-review`. Direct `npm` commands remain available for intermediate work, but the required final verification step for this repo is:
+
+```bash
+nix develop -c npm run verify
+```
 
 If you use `direnv`, this repo also includes an `.envrc` so entering the directory can load the flake shell automatically after `direnv allow`.
 
@@ -70,10 +74,10 @@ npm run book:build
 Run the full verification suite:
 
 ```bash
-npm run verify
+nix develop -c npm run verify
 ```
 
-`npm run verify` runs `npm test`, `npm run review`, and `npm run book:build`.
+That command runs `npm test`, `npm run review`, and `npm run book:build` inside the pinned Nix shell.
 
 Run the unit tests:
 
@@ -105,7 +109,7 @@ Publish the current `dist/` output to GitHub Pages:
 npm run deploy
 ```
 
-`npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first. ElmBook validation is separate: run `npm run book:build` before considering shared UI work complete.
+`npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first. ElmBook validation is separate: run `nix develop -c npm run verify` before considering shared UI work complete.
 `npm run deploy` uses `gh-pages -d dist` and relies on `predeploy` to run `npm run verify` and then the production app build first.
 
 ## Design notes
