@@ -131,13 +131,14 @@ sunSvg strokeColor =
 
         ray x1 y1 x2 y2 =
             line
-                ([ SvgAttributes.x1 x1
-                 , SvgAttributes.y1 y1
-                 , SvgAttributes.x2 x2
-                 , SvgAttributes.y2 y2
-                 ]
-                    ++ rayAttributes strokeColor
-                )
+                [ SvgAttributes.x1 x1
+                , SvgAttributes.y1 y1
+                , SvgAttributes.x2 x2
+                , SvgAttributes.y2 y2
+                , SvgAttributes.stroke strokeColor
+                , SvgAttributes.strokeWidth "2"
+                , SvgAttributes.strokeLinecap "round"
+                ]
                 []
     in
     svg
@@ -240,14 +241,6 @@ moonSvg fillColor =
             ]
             []
         ]
-
-
-rayAttributes : String -> List (Svg.Attribute msg)
-rayAttributes strokeColor =
-    [ SvgAttributes.stroke strokeColor
-    , SvgAttributes.strokeWidth "2"
-    , SvgAttributes.strokeLinecap "round"
-    ]
 
 
 cssColor : Element.Color -> String
