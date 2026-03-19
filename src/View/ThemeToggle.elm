@@ -68,14 +68,19 @@ themeToggleIconSize =
     24
 
 
+themeToggleIconViewBox : String
+themeToggleIconViewBox =
+    "0 0 "
+        ++ String.fromInt themeToggleIconSize
+        ++ " "
+        ++ String.fromInt themeToggleIconSize
+
+
 sunIcon : Theme.Palette -> Element msg
 sunIcon colors =
     let
         strokeColor =
             cssColor colors.buttonText
-
-        viewBox =
-            "0 0 24 24"
 
         transparentFill =
             "none"
@@ -150,7 +155,7 @@ sunIcon colors =
         ]
         (html
             (svg
-                [ SvgAttributes.viewBox viewBox
+                [ SvgAttributes.viewBox themeToggleIconViewBox
                 , SvgAttributes.width (String.fromInt themeToggleIconSize)
                 , SvgAttributes.height (String.fromInt themeToggleIconSize)
                 , SvgAttributes.fill transparentFill
@@ -174,9 +179,6 @@ moonIcon colors =
     let
         fillColor =
             cssColor colors.buttonText
-
-        viewBox =
-            "0 0 24 24"
 
         transparentFill =
             "none"
@@ -232,7 +234,7 @@ moonIcon colors =
         ]
         (html
             (svg
-                [ SvgAttributes.viewBox viewBox
+                [ SvgAttributes.viewBox themeToggleIconViewBox
                 , SvgAttributes.width (String.fromInt themeToggleIconSize)
                 , SvgAttributes.height (String.fromInt themeToggleIconSize)
                 , SvgAttributes.fill transparentFill
