@@ -35,6 +35,8 @@ nix develop
 
 The dev shell provides pinned versions of Node.js, Elm, `elm-test`, and `elm-review`. The existing npm workflow stays the same inside the shell.
 
+If you use `direnv`, this repo also includes an `.envrc` so entering the directory can load the flake shell automatically after `direnv allow`.
+
 Install dependencies:
 
 ```bash
