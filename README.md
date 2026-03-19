@@ -2,6 +2,8 @@
 
 A small Elm application with a restrained main menu and two pages: a `Motorcycle` product-style landing page and a `Robot` page with the existing 5x5 robot game.
 
+Live site: https://genthaler.github.io/fitzbeach/
+
 ## Features
 
 - Minimal main navigation with `Motorcycle` and `Robot` pages
