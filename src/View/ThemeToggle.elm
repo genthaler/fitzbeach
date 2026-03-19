@@ -111,9 +111,6 @@ sunSvg strokeColor =
         rayLength =
             2.5
 
-        strokeWidthValue =
-            coordinateValue strokeWidth
-
         strokeLinecap =
             "round"
 
@@ -131,9 +128,6 @@ sunSvg strokeColor =
 
         rayEndDistance =
             rayStartDistance + rayLength
-
-        coordinateValue value =
-            String.fromFloat value
 
         rayPoint distance angleInDegrees =
             let
@@ -153,12 +147,12 @@ sunSvg strokeColor =
                     rayPoint rayEndDistance angleInDegrees
             in
             line
-                [ SvgAttributes.x1 (coordinateValue startPoint.x)
-                , SvgAttributes.y1 (coordinateValue startPoint.y)
-                , SvgAttributes.x2 (coordinateValue endPoint.x)
-                , SvgAttributes.y2 (coordinateValue endPoint.y)
+                [ SvgAttributes.x1 (String.fromFloat startPoint.x)
+                , SvgAttributes.y1 (String.fromFloat startPoint.y)
+                , SvgAttributes.x2 (String.fromFloat endPoint.x)
+                , SvgAttributes.y2 (String.fromFloat endPoint.y)
                 , SvgAttributes.stroke strokeColor
-                , SvgAttributes.strokeWidth strokeWidthValue
+                , SvgAttributes.strokeWidth (String.fromFloat strokeWidth)
                 , SvgAttributes.strokeLinecap strokeLinecap
                 ]
                 []
@@ -174,7 +168,7 @@ sunSvg strokeColor =
             , SvgAttributes.cy centerCoordinate
             , SvgAttributes.r sunRadius
             , SvgAttributes.stroke strokeColor
-            , SvgAttributes.strokeWidth strokeWidthValue
+            , SvgAttributes.strokeWidth (String.fromFloat strokeWidth)
             ]
             []
             :: List.map ray rayAnglesInDegrees
@@ -237,27 +231,6 @@ moonSvg fillColor =
 
         shadowRadius =
             moonRadius * shadowRadiusMultiplier
-
-        coordinateValue value =
-            String.fromFloat value
-
-        moonCenterXValue =
-            coordinateValue moonCenterX
-
-        moonCenterYValue =
-            coordinateValue moonCenterY
-
-        moonRadiusValue =
-            coordinateValue moonRadius
-
-        shadowCenterXValue =
-            coordinateValue shadowCenterX
-
-        shadowCenterYValue =
-            coordinateValue shadowCenterY
-
-        shadowRadiusValue =
-            coordinateValue shadowRadius
     in
     svg
         [ SvgAttributes.viewBox viewBox
@@ -283,25 +256,25 @@ moonSvg fillColor =
                     ]
                     []
                 , circle
-                    [ SvgAttributes.cx moonCenterXValue
-                    , SvgAttributes.cy moonCenterYValue
-                    , SvgAttributes.r moonRadiusValue
+                    [ SvgAttributes.cx (String.fromFloat moonCenterX)
+                    , SvgAttributes.cy (String.fromFloat moonCenterY)
+                    , SvgAttributes.r (String.fromFloat moonRadius)
                     , SvgAttributes.fill visibleMoonFill
                     ]
                     []
                 , circle
-                    [ SvgAttributes.cx shadowCenterXValue
-                    , SvgAttributes.cy shadowCenterYValue
-                    , SvgAttributes.r shadowRadiusValue
+                    [ SvgAttributes.cx (String.fromFloat shadowCenterX)
+                    , SvgAttributes.cy (String.fromFloat shadowCenterY)
+                    , SvgAttributes.r (String.fromFloat shadowRadius)
                     , SvgAttributes.fill maskBackgroundFill
                     ]
                     []
                 ]
             ]
         , circle
-            [ SvgAttributes.cx moonCenterXValue
-            , SvgAttributes.cy moonCenterYValue
-            , SvgAttributes.r moonRadiusValue
+            [ SvgAttributes.cx (String.fromFloat moonCenterX)
+            , SvgAttributes.cy (String.fromFloat moonCenterY)
+            , SvgAttributes.r (String.fromFloat moonRadius)
             , SvgAttributes.fill fillColor
             , SvgAttributes.mask maskReference
             ]
