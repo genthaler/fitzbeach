@@ -87,11 +87,23 @@ sunSvg strokeColor =
         iconSize =
             "24"
 
+        viewBox =
+            "0 0 24 24"
+
+        transparentFill =
+            "none"
+
         center =
             "12"
 
         sunBodyRadius =
             "4.5"
+
+        strokeWidth =
+            "2"
+
+        strokeLinecap =
+            "round"
 
         verticalRayInnerY =
             "4.25"
@@ -136,23 +148,23 @@ sunSvg strokeColor =
                 , SvgAttributes.x2 x2
                 , SvgAttributes.y2 y2
                 , SvgAttributes.stroke strokeColor
-                , SvgAttributes.strokeWidth "2"
-                , SvgAttributes.strokeLinecap "round"
+                , SvgAttributes.strokeWidth strokeWidth
+                , SvgAttributes.strokeLinecap strokeLinecap
                 ]
                 []
     in
     svg
-        [ SvgAttributes.viewBox "0 0 24 24"
+        [ SvgAttributes.viewBox viewBox
         , SvgAttributes.width iconSize
         , SvgAttributes.height iconSize
-        , SvgAttributes.fill "none"
+        , SvgAttributes.fill transparentFill
         ]
         [ circle
             [ SvgAttributes.cx center
             , SvgAttributes.cy center
             , SvgAttributes.r sunBodyRadius
             , SvgAttributes.stroke strokeColor
-            , SvgAttributes.strokeWidth "2"
+            , SvgAttributes.strokeWidth strokeWidth
             ]
             []
         , ray center verticalRayOuterY center verticalRayInnerY
@@ -172,8 +184,29 @@ moonSvg fillColor =
         iconSize =
             "24"
 
+        viewBox =
+            "0 0 24 24"
+
+        transparentFill =
+            "none"
+
         maskId =
             "theme-toggle-moon-mask"
+
+        maskReference =
+            "url(#" ++ maskId ++ ")"
+
+        maskUnits =
+            "userSpaceOnUse"
+
+        origin =
+            "0"
+
+        maskBackgroundFill =
+            "black"
+
+        visibleMoonFill =
+            "white"
 
         moonCenterX =
             "11.25"
@@ -194,40 +227,40 @@ moonSvg fillColor =
             "8.5"
     in
     svg
-        [ SvgAttributes.viewBox "0 0 24 24"
+        [ SvgAttributes.viewBox viewBox
         , SvgAttributes.width iconSize
         , SvgAttributes.height iconSize
-        , SvgAttributes.fill "none"
+        , SvgAttributes.fill transparentFill
         ]
         [ defs []
             [ mask
                 [ SvgAttributes.id maskId
-                , SvgAttributes.maskUnits "userSpaceOnUse"
-                , SvgAttributes.x "0"
-                , SvgAttributes.y "0"
+                , SvgAttributes.maskUnits maskUnits
+                , SvgAttributes.x origin
+                , SvgAttributes.y origin
                 , SvgAttributes.width iconSize
                 , SvgAttributes.height iconSize
                 ]
                 [ rect
-                    [ SvgAttributes.x "0"
-                    , SvgAttributes.y "0"
+                    [ SvgAttributes.x origin
+                    , SvgAttributes.y origin
                     , SvgAttributes.width iconSize
                     , SvgAttributes.height iconSize
-                    , SvgAttributes.fill "black"
+                    , SvgAttributes.fill maskBackgroundFill
                     ]
                     []
                 , circle
                     [ SvgAttributes.cx moonCenterX
                     , SvgAttributes.cy moonCenterY
                     , SvgAttributes.r moonRadius
-                    , SvgAttributes.fill "white"
+                    , SvgAttributes.fill visibleMoonFill
                     ]
                     []
                 , circle
                     [ SvgAttributes.cx shadowCenterX
                     , SvgAttributes.cy shadowCenterY
                     , SvgAttributes.r shadowRadius
-                    , SvgAttributes.fill "black"
+                    , SvgAttributes.fill maskBackgroundFill
                     ]
                     []
                 ]
@@ -237,7 +270,7 @@ moonSvg fillColor =
             , SvgAttributes.cy moonCenterY
             , SvgAttributes.r moonRadius
             , SvgAttributes.fill fillColor
-            , SvgAttributes.mask ("url(#" ++ maskId ++ ")")
+            , SvgAttributes.mask maskReference
             ]
             []
         ]
