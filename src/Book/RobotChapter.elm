@@ -31,6 +31,7 @@ chapter =
         |> renderStatefulComponent
             (\state ->
                 Robot.View.page
+                    False
                     (Theme.palette state.themeMode)
                     state.robotDemo
                     { moveForward = MoveForward

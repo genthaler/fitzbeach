@@ -57,6 +57,8 @@ Create a production ElmBook build:
 npm run book:build
 ```
 
+For shared UI changes, treat `npm run book:build` as part of the standard validation set alongside `npm test` and `npm run review`.
+
 Run the unit tests:
 
 ```bash
@@ -87,7 +89,7 @@ Publish the current `dist/` output to GitHub Pages:
 npm run deploy
 ```
 
-`npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first.
+`npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first. ElmBook validation is separate: run `npm run book:build` before considering shared UI work complete.
 
 ## Design notes
 

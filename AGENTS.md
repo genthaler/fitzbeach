@@ -165,7 +165,7 @@ Optimise for readability, calmness, and polish.
 
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
-2. Run `npm test` and `npm run review` successfully before considering the task complete. If either check cannot be run, state that clearly and explain why.
+2. Run `npm test`, `npm run review`, and `npm run book:build` successfully before considering the task complete. If any check cannot be run, state that clearly and explain why.
 3. After the task is complete, commit the changes.
 
 ## Skills
