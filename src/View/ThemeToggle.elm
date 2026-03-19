@@ -4,7 +4,7 @@ module View.ThemeToggle exposing
     , view
     )
 
-import Element exposing (Element, el, height, html, px, toRgb, width)
+import Element exposing (Element, el, height, html, px, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Input as Input
@@ -80,7 +80,7 @@ sunIcon : Theme.Palette -> Element msg
 sunIcon colors =
     let
         strokeColor =
-            cssColor colors.buttonText
+            Theme.toCssColor colors.buttonText
 
         transparentFill =
             "none"
@@ -178,7 +178,7 @@ moonIcon : Theme.Palette -> Element msg
 moonIcon colors =
     let
         fillColor =
-            cssColor colors.buttonText
+            Theme.toCssColor colors.buttonText
 
         transparentFill =
             "none"
@@ -283,20 +283,3 @@ moonIcon colors =
                 ]
             )
         )
-
-
-cssColor : Element.Color -> String
-cssColor color =
-    let
-        rgba =
-            toRgb color
-    in
-    "rgba("
-        ++ String.fromInt (round (rgba.red * 255))
-        ++ ", "
-        ++ String.fromInt (round (rgba.green * 255))
-        ++ ", "
-        ++ String.fromInt (round (rgba.blue * 255))
-        ++ ", "
-        ++ String.fromFloat rgba.alpha
-        ++ ")"

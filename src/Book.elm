@@ -6,7 +6,7 @@ import Book.ProductPanelChapter
 import Book.RobotChapter
 import Book.RobotControlButtonChapter
 import Book.ThemeChapter
-import Element exposing (Element, toRgb)
+import Element exposing (Element)
 import ElmBook exposing (withChapterGroups, withStatefulOptions)
 import ElmBook.ElmUI exposing (Book, book)
 import ElmBook.StatefulOptions
@@ -68,11 +68,11 @@ bookThemeOptions =
             Theme.palette Theme.Light
     in
     [ ElmBook.ThemeOptions.subtitle "Calm component catalogue"
-    , ElmBook.ThemeOptions.background (cssColor colors.appBackground)
-    , ElmBook.ThemeOptions.accent (cssColor colors.bodyText)
-    , ElmBook.ThemeOptions.navBackground (cssColor colors.panelBackground)
-    , ElmBook.ThemeOptions.navAccent (cssColor colors.detailText)
-    , ElmBook.ThemeOptions.navAccentHighlight (cssColor colors.bodyText)
+    , ElmBook.ThemeOptions.background (Theme.toCssColor colors.appBackground)
+    , ElmBook.ThemeOptions.accent (Theme.toCssColor colors.bodyText)
+    , ElmBook.ThemeOptions.navBackground (Theme.toCssColor colors.panelBackground)
+    , ElmBook.ThemeOptions.navAccent (Theme.toCssColor colors.detailText)
+    , ElmBook.ThemeOptions.navAccentHighlight (Theme.toCssColor colors.bodyText)
     , ElmBook.ThemeOptions.globals [ darkModeThemeOverride ]
     ]
 
@@ -90,37 +90,20 @@ darkModeThemeOverride =
                 """
                 .elm-book-dark-mode .elm-book--wrapper {
                     --elm-book-background: """
-                    ++ cssColor colors.appBackground
+                    ++ Theme.toCssColor colors.appBackground
                     ++ """;
                     --elm-book-accent: """
-                    ++ cssColor colors.bodyText
+                    ++ Theme.toCssColor colors.bodyText
                     ++ """;
                     --elm-book-nav-background: """
-                    ++ cssColor colors.panelBackground
+                    ++ Theme.toCssColor colors.panelBackground
                     ++ """;
                     --elm-book-nav-accent: """
-                    ++ cssColor colors.detailText
+                    ++ Theme.toCssColor colors.detailText
                     ++ """;
                     --elm-book-nav-accent-highlight: """
-                    ++ cssColor colors.bodyText
+                    ++ Theme.toCssColor colors.bodyText
                     ++ """;
                 }
                 """
             ]
-
-
-cssColor : Element.Color -> String
-cssColor color =
-    let
-        rgba =
-            toRgb color
-    in
-    "rgba("
-        ++ String.fromInt (round (rgba.red * 255))
-        ++ ", "
-        ++ String.fromInt (round (rgba.green * 255))
-        ++ ", "
-        ++ String.fromInt (round (rgba.blue * 255))
-        ++ ", "
-        ++ String.fromFloat rgba.alpha
-        ++ ")"

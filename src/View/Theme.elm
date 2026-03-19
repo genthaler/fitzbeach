@@ -1,6 +1,6 @@
-module View.Theme exposing (Mode(..), Palette, palette)
+module View.Theme exposing (Mode(..), Palette, palette, toCssColor)
 
-import Element exposing (Color, rgb255)
+import Element exposing (Color, rgb255, toRgb)
 
 
 type Mode
@@ -62,3 +62,20 @@ palette mode =
             , robotMarkerText = rgb255 241 237 230
             , robotSubtleText = rgb255 191 184 174
             }
+
+
+toCssColor : Color -> String
+toCssColor color =
+    let
+        rgba =
+            toRgb color
+    in
+    "rgba("
+        ++ String.fromInt (round (rgba.red * 255))
+        ++ ", "
+        ++ String.fromInt (round (rgba.green * 255))
+        ++ ", "
+        ++ String.fromInt (round (rgba.blue * 255))
+        ++ ", "
+        ++ String.fromFloat rgba.alpha
+        ++ ")"
