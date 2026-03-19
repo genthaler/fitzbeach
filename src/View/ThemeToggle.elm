@@ -83,142 +83,160 @@ moonIcon colors =
 
 sunSvg : String -> Svg.Svg msg
 sunSvg strokeColor =
+    let
+        iconSize =
+            "24"
+
+        center =
+            "12"
+
+        sunBodyRadius =
+            "4.5"
+
+        verticalRayInnerY =
+            "4.25"
+
+        verticalRayOuterY =
+            "1.75"
+
+        bottomRayInnerY =
+            "19.75"
+
+        bottomRayOuterY =
+            "22.25"
+
+        horizontalRayInnerX =
+            "4.25"
+
+        horizontalRayOuterX =
+            "1.75"
+
+        rightRayInnerX =
+            "19.75"
+
+        rightRayOuterX =
+            "22.25"
+
+        diagonalRayInnerStart =
+            "6.2"
+
+        diagonalRayInnerEnd =
+            "17.8"
+
+        diagonalRayOuterStart =
+            "4.4"
+
+        diagonalRayOuterEnd =
+            "19.6"
+
+        ray x1 y1 x2 y2 =
+            line
+                ([ SvgAttributes.x1 x1
+                 , SvgAttributes.y1 y1
+                 , SvgAttributes.x2 x2
+                 , SvgAttributes.y2 y2
+                 ]
+                    ++ rayAttributes strokeColor
+                )
+                []
+    in
     svg
         [ SvgAttributes.viewBox "0 0 24 24"
-        , SvgAttributes.width "24"
-        , SvgAttributes.height "24"
+        , SvgAttributes.width iconSize
+        , SvgAttributes.height iconSize
         , SvgAttributes.fill "none"
         ]
         [ circle
-            [ SvgAttributes.cx "12"
-            , SvgAttributes.cy "12"
-            , SvgAttributes.r "4.5"
+            [ SvgAttributes.cx center
+            , SvgAttributes.cy center
+            , SvgAttributes.r sunBodyRadius
             , SvgAttributes.stroke strokeColor
             , SvgAttributes.strokeWidth "2"
             ]
             []
-        , line
-            ([ SvgAttributes.x1 "12"
-             , SvgAttributes.y1 "1.75"
-             , SvgAttributes.x2 "12"
-             , SvgAttributes.y2 "4.25"
-             ]
-                ++ rayAttributes strokeColor
-            )
-            []
-        , line
-            ([ SvgAttributes.x1 "12"
-             , SvgAttributes.y1 "19.75"
-             , SvgAttributes.x2 "12"
-             , SvgAttributes.y2 "22.25"
-             ]
-                ++ rayAttributes strokeColor
-            )
-            []
-        , line
-            ([ SvgAttributes.x1 "1.75"
-             , SvgAttributes.y1 "12"
-             , SvgAttributes.x2 "4.25"
-             , SvgAttributes.y2 "12"
-             ]
-                ++ rayAttributes strokeColor
-            )
-            []
-        , line
-            ([ SvgAttributes.x1 "19.75"
-             , SvgAttributes.y1 "12"
-             , SvgAttributes.x2 "22.25"
-             , SvgAttributes.y2 "12"
-             ]
-                ++ rayAttributes strokeColor
-            )
-            []
-        , line
-            ([ SvgAttributes.x1 "4.4"
-             , SvgAttributes.y1 "4.4"
-             , SvgAttributes.x2 "6.2"
-             , SvgAttributes.y2 "6.2"
-             ]
-                ++ rayAttributes strokeColor
-            )
-            []
-        , line
-            ([ SvgAttributes.x1 "17.8"
-             , SvgAttributes.y1 "17.8"
-             , SvgAttributes.x2 "19.6"
-             , SvgAttributes.y2 "19.6"
-             ]
-                ++ rayAttributes strokeColor
-            )
-            []
-        , line
-            ([ SvgAttributes.x1 "17.8"
-             , SvgAttributes.y1 "6.2"
-             , SvgAttributes.x2 "19.6"
-             , SvgAttributes.y2 "4.4"
-             ]
-                ++ rayAttributes strokeColor
-            )
-            []
-        , line
-            ([ SvgAttributes.x1 "4.4"
-             , SvgAttributes.y1 "19.6"
-             , SvgAttributes.x2 "6.2"
-             , SvgAttributes.y2 "17.8"
-             ]
-                ++ rayAttributes strokeColor
-            )
-            []
+        , ray center verticalRayOuterY center verticalRayInnerY
+        , ray center bottomRayInnerY center bottomRayOuterY
+        , ray horizontalRayOuterX center horizontalRayInnerX center
+        , ray rightRayInnerX center rightRayOuterX center
+        , ray diagonalRayOuterStart diagonalRayOuterStart diagonalRayInnerStart diagonalRayInnerStart
+        , ray diagonalRayInnerEnd diagonalRayInnerEnd diagonalRayOuterEnd diagonalRayOuterEnd
+        , ray diagonalRayInnerEnd diagonalRayInnerStart diagonalRayOuterEnd diagonalRayOuterStart
+        , ray diagonalRayOuterStart diagonalRayOuterEnd diagonalRayInnerStart diagonalRayInnerEnd
         ]
 
 
 moonSvg : String -> Svg.Svg msg
 moonSvg fillColor =
+    let
+        iconSize =
+            "24"
+
+        maskId =
+            "theme-toggle-moon-mask"
+
+        moonCenterX =
+            "11.25"
+
+        moonCenterY =
+            "12"
+
+        moonRadius =
+            "8.5"
+
+        shadowCenterX =
+            "16"
+
+        shadowCenterY =
+            "9.5"
+
+        shadowRadius =
+            "8.5"
+    in
     svg
         [ SvgAttributes.viewBox "0 0 24 24"
-        , SvgAttributes.width "24"
-        , SvgAttributes.height "24"
+        , SvgAttributes.width iconSize
+        , SvgAttributes.height iconSize
         , SvgAttributes.fill "none"
         ]
         [ defs []
             [ mask
-                [ SvgAttributes.id "theme-toggle-moon-mask"
+                [ SvgAttributes.id maskId
                 , SvgAttributes.maskUnits "userSpaceOnUse"
                 , SvgAttributes.x "0"
                 , SvgAttributes.y "0"
-                , SvgAttributes.width "24"
-                , SvgAttributes.height "24"
+                , SvgAttributes.width iconSize
+                , SvgAttributes.height iconSize
                 ]
                 [ rect
                     [ SvgAttributes.x "0"
                     , SvgAttributes.y "0"
-                    , SvgAttributes.width "24"
-                    , SvgAttributes.height "24"
+                    , SvgAttributes.width iconSize
+                    , SvgAttributes.height iconSize
                     , SvgAttributes.fill "black"
                     ]
                     []
                 , circle
-                    [ SvgAttributes.cx "11.25"
-                    , SvgAttributes.cy "12"
-                    , SvgAttributes.r "8.5"
+                    [ SvgAttributes.cx moonCenterX
+                    , SvgAttributes.cy moonCenterY
+                    , SvgAttributes.r moonRadius
                     , SvgAttributes.fill "white"
                     ]
                     []
                 , circle
-                    [ SvgAttributes.cx "16"
-                    , SvgAttributes.cy "9.5"
-                    , SvgAttributes.r "8.5"
+                    [ SvgAttributes.cx shadowCenterX
+                    , SvgAttributes.cy shadowCenterY
+                    , SvgAttributes.r shadowRadius
                     , SvgAttributes.fill "black"
                     ]
                     []
                 ]
             ]
         , circle
-            [ SvgAttributes.cx "11.25"
-            , SvgAttributes.cy "12"
-            , SvgAttributes.r "8.5"
+            [ SvgAttributes.cx moonCenterX
+            , SvgAttributes.cy moonCenterY
+            , SvgAttributes.r moonRadius
             , SvgAttributes.fill fillColor
-            , SvgAttributes.mask "url(#theme-toggle-moon-mask)"
+            , SvgAttributes.mask ("url(#" ++ maskId ++ ")")
             ]
             []
         ]
