@@ -63,29 +63,16 @@ themeToggleIcon colors mode =
             moonIcon colors
 
 
+themeToggleIconSize : Int
+themeToggleIconSize =
+    24
+
+
 sunIcon : Theme.Palette -> Element msg
 sunIcon colors =
-    el
-        [ width (px 24)
-        , height (px 24)
-        ]
-        (html (sunSvg (cssColor colors.buttonText)))
-
-
-moonIcon : Theme.Palette -> Element msg
-moonIcon colors =
-    el
-        [ width (px 24)
-        , height (px 24)
-        ]
-        (html (moonSvg (cssColor colors.buttonText)))
-
-
-sunSvg : String -> Svg.Svg msg
-sunSvg strokeColor =
     let
-        iconSize =
-            "24"
+        strokeColor =
+            cssColor colors.buttonText
 
         viewBox =
             "0 0 24 24"
@@ -157,29 +144,36 @@ sunSvg strokeColor =
                 ]
                 []
     in
-    svg
-        [ SvgAttributes.viewBox viewBox
-        , SvgAttributes.width iconSize
-        , SvgAttributes.height iconSize
-        , SvgAttributes.fill transparentFill
+    el
+        [ width (px themeToggleIconSize)
+        , height (px themeToggleIconSize)
         ]
-        (circle
-            [ SvgAttributes.cx centerCoordinate
-            , SvgAttributes.cy centerCoordinate
-            , SvgAttributes.r sunRadius
-            , SvgAttributes.stroke strokeColor
-            , SvgAttributes.strokeWidth (String.fromFloat strokeWidth)
-            ]
-            []
-            :: List.map ray rayAnglesInDegrees
+        (html
+            (svg
+                [ SvgAttributes.viewBox viewBox
+                , SvgAttributes.width (String.fromInt themeToggleIconSize)
+                , SvgAttributes.height (String.fromInt themeToggleIconSize)
+                , SvgAttributes.fill transparentFill
+                ]
+                (circle
+                    [ SvgAttributes.cx centerCoordinate
+                    , SvgAttributes.cy centerCoordinate
+                    , SvgAttributes.r sunRadius
+                    , SvgAttributes.stroke strokeColor
+                    , SvgAttributes.strokeWidth (String.fromFloat strokeWidth)
+                    ]
+                    []
+                    :: List.map ray rayAnglesInDegrees
+                )
+            )
         )
 
 
-moonSvg : String -> Svg.Svg msg
-moonSvg fillColor =
+moonIcon : Theme.Palette -> Element msg
+moonIcon colors =
     let
-        iconSize =
-            "24"
+        fillColor =
+            cssColor colors.buttonText
 
         viewBox =
             "0 0 24 24"
@@ -232,54 +226,61 @@ moonSvg fillColor =
         shadowRadius =
             moonRadius * shadowRadiusMultiplier
     in
-    svg
-        [ SvgAttributes.viewBox viewBox
-        , SvgAttributes.width iconSize
-        , SvgAttributes.height iconSize
-        , SvgAttributes.fill transparentFill
+    el
+        [ width (px themeToggleIconSize)
+        , height (px themeToggleIconSize)
         ]
-        [ defs []
-            [ mask
-                [ SvgAttributes.id maskId
-                , SvgAttributes.maskUnits maskUnits
-                , SvgAttributes.x origin
-                , SvgAttributes.y origin
-                , SvgAttributes.width iconSize
-                , SvgAttributes.height iconSize
+        (html
+            (svg
+                [ SvgAttributes.viewBox viewBox
+                , SvgAttributes.width (String.fromInt themeToggleIconSize)
+                , SvgAttributes.height (String.fromInt themeToggleIconSize)
+                , SvgAttributes.fill transparentFill
                 ]
-                [ rect
-                    [ SvgAttributes.x origin
-                    , SvgAttributes.y origin
-                    , SvgAttributes.width iconSize
-                    , SvgAttributes.height iconSize
-                    , SvgAttributes.fill maskBackgroundFill
+                [ defs []
+                    [ mask
+                        [ SvgAttributes.id maskId
+                        , SvgAttributes.maskUnits maskUnits
+                        , SvgAttributes.x origin
+                        , SvgAttributes.y origin
+                        , SvgAttributes.width (String.fromInt themeToggleIconSize)
+                        , SvgAttributes.height (String.fromInt themeToggleIconSize)
+                        ]
+                        [ rect
+                            [ SvgAttributes.x origin
+                            , SvgAttributes.y origin
+                            , SvgAttributes.width (String.fromInt themeToggleIconSize)
+                            , SvgAttributes.height (String.fromInt themeToggleIconSize)
+                            , SvgAttributes.fill maskBackgroundFill
+                            ]
+                            []
+                        , circle
+                            [ SvgAttributes.cx (String.fromFloat moonCenterX)
+                            , SvgAttributes.cy (String.fromFloat moonCenterY)
+                            , SvgAttributes.r (String.fromFloat moonRadius)
+                            , SvgAttributes.fill visibleMoonFill
+                            ]
+                            []
+                        , circle
+                            [ SvgAttributes.cx (String.fromFloat shadowCenterX)
+                            , SvgAttributes.cy (String.fromFloat shadowCenterY)
+                            , SvgAttributes.r (String.fromFloat shadowRadius)
+                            , SvgAttributes.fill maskBackgroundFill
+                            ]
+                            []
+                        ]
                     ]
-                    []
                 , circle
                     [ SvgAttributes.cx (String.fromFloat moonCenterX)
                     , SvgAttributes.cy (String.fromFloat moonCenterY)
                     , SvgAttributes.r (String.fromFloat moonRadius)
-                    , SvgAttributes.fill visibleMoonFill
-                    ]
-                    []
-                , circle
-                    [ SvgAttributes.cx (String.fromFloat shadowCenterX)
-                    , SvgAttributes.cy (String.fromFloat shadowCenterY)
-                    , SvgAttributes.r (String.fromFloat shadowRadius)
-                    , SvgAttributes.fill maskBackgroundFill
+                    , SvgAttributes.fill fillColor
+                    , SvgAttributes.mask maskReference
                     ]
                     []
                 ]
-            ]
-        , circle
-            [ SvgAttributes.cx (String.fromFloat moonCenterX)
-            , SvgAttributes.cy (String.fromFloat moonCenterY)
-            , SvgAttributes.r (String.fromFloat moonRadius)
-            , SvgAttributes.fill fillColor
-            , SvgAttributes.mask maskReference
-            ]
-            []
-        ]
+            )
+        )
 
 
 cssColor : Element.Color -> String
