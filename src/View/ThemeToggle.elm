@@ -94,61 +94,71 @@ sunSvg strokeColor =
             "none"
 
         center =
-            "12"
+            12
 
         sunBodyRadius =
-            "4.5"
+            4.5
 
         strokeWidth =
-            "2"
+            2
+
+        rayVisibleGap =
+            4
+
+        sunOuterRadius =
+            sunBodyRadius + (strokeWidth / 2)
+
+        rayLength =
+            2.5
+
+        strokeWidthValue =
+            coordinateValue strokeWidth
 
         strokeLinecap =
             "round"
 
-        verticalRayInnerY =
-            "4.25"
+        rayAnglesInDegrees =
+            [ -90, -45, 0, 45, 90, 135, 180, 225 ]
 
-        verticalRayOuterY =
-            "1.75"
+        centerCoordinate =
+            String.fromFloat center
 
-        bottomRayInnerY =
-            "19.75"
+        sunRadius =
+            String.fromFloat sunBodyRadius
 
-        bottomRayOuterY =
-            "22.25"
+        rayStartDistance =
+            sunOuterRadius + rayVisibleGap
 
-        horizontalRayInnerX =
-            "4.25"
+        rayEndDistance =
+            rayStartDistance + rayLength
 
-        horizontalRayOuterX =
-            "1.75"
+        coordinateValue value =
+            String.fromFloat value
 
-        rightRayInnerX =
-            "19.75"
+        rayPoint distance angleInDegrees =
+            let
+                angleInRadians =
+                    degrees angleInDegrees
+            in
+            { x = center + (distance * cos angleInRadians)
+            , y = center + (distance * sin angleInRadians)
+            }
 
-        rightRayOuterX =
-            "22.25"
+        ray angleInDegrees =
+            let
+                startPoint =
+                    rayPoint rayStartDistance angleInDegrees
 
-        diagonalRayInnerStart =
-            "6.2"
-
-        diagonalRayInnerEnd =
-            "17.8"
-
-        diagonalRayOuterStart =
-            "4.4"
-
-        diagonalRayOuterEnd =
-            "19.6"
-
-        ray x1 y1 x2 y2 =
+                endPoint =
+                    rayPoint rayEndDistance angleInDegrees
+            in
             line
-                [ SvgAttributes.x1 x1
-                , SvgAttributes.y1 y1
-                , SvgAttributes.x2 x2
-                , SvgAttributes.y2 y2
+                [ SvgAttributes.x1 (coordinateValue startPoint.x)
+                , SvgAttributes.y1 (coordinateValue startPoint.y)
+                , SvgAttributes.x2 (coordinateValue endPoint.x)
+                , SvgAttributes.y2 (coordinateValue endPoint.y)
                 , SvgAttributes.stroke strokeColor
-                , SvgAttributes.strokeWidth strokeWidth
+                , SvgAttributes.strokeWidth strokeWidthValue
                 , SvgAttributes.strokeLinecap strokeLinecap
                 ]
                 []
@@ -159,23 +169,16 @@ sunSvg strokeColor =
         , SvgAttributes.height iconSize
         , SvgAttributes.fill transparentFill
         ]
-        [ circle
-            [ SvgAttributes.cx center
-            , SvgAttributes.cy center
-            , SvgAttributes.r sunBodyRadius
+        (circle
+            [ SvgAttributes.cx centerCoordinate
+            , SvgAttributes.cy centerCoordinate
+            , SvgAttributes.r sunRadius
             , SvgAttributes.stroke strokeColor
-            , SvgAttributes.strokeWidth strokeWidth
+            , SvgAttributes.strokeWidth strokeWidthValue
             ]
             []
-        , ray center verticalRayOuterY center verticalRayInnerY
-        , ray center bottomRayInnerY center bottomRayOuterY
-        , ray horizontalRayOuterX center horizontalRayInnerX center
-        , ray rightRayInnerX center rightRayOuterX center
-        , ray diagonalRayOuterStart diagonalRayOuterStart diagonalRayInnerStart diagonalRayInnerStart
-        , ray diagonalRayInnerEnd diagonalRayInnerEnd diagonalRayOuterEnd diagonalRayOuterEnd
-        , ray diagonalRayInnerEnd diagonalRayInnerStart diagonalRayOuterEnd diagonalRayOuterStart
-        , ray diagonalRayOuterStart diagonalRayOuterEnd diagonalRayInnerStart diagonalRayInnerEnd
-        ]
+            :: List.map ray rayAnglesInDegrees
+        )
 
 
 moonSvg : String -> Svg.Svg msg
