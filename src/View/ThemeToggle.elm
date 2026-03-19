@@ -198,25 +198,25 @@ moonSvg fillColor =
                     ]
                     []
                 , circle
-                    [ SvgAttributes.cx "12"
+                    [ SvgAttributes.cx "11.25"
                     , SvgAttributes.cy "12"
-                    , SvgAttributes.r "8"
+                    , SvgAttributes.r "8.5"
                     , SvgAttributes.fill "white"
                     ]
                     []
                 , circle
-                    [ SvgAttributes.cx "15.25"
-                    , SvgAttributes.cy "9.75"
-                    , SvgAttributes.r "8"
+                    [ SvgAttributes.cx "16"
+                    , SvgAttributes.cy "9.5"
+                    , SvgAttributes.r "8.5"
                     , SvgAttributes.fill "black"
                     ]
                     []
                 ]
             ]
         , circle
-            [ SvgAttributes.cx "12"
+            [ SvgAttributes.cx "11.25"
             , SvgAttributes.cy "12"
-            , SvgAttributes.r "8"
+            , SvgAttributes.r "8.5"
             , SvgAttributes.fill fillColor
             , SvgAttributes.mask "url(#theme-toggle-moon-mask)"
             ]
