@@ -114,7 +114,7 @@ npm run deploy
 
 ## Design notes
 
-The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. The Motorcycle page uses a quiet product-panel grid inspired by Bellroy collection layouts and now simulates a remote collection feed by progressively revealing products over time each time the page is shown, while spacing, borders, and controls remain intentionally understated to keep the interaction readable without feeling bare. On narrower screens the shell reduces padding, stacks the header controls, wraps the robot actions, and scales the board and cards down to avoid horizontal overflow.
+The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. The Motorcycle page uses a quiet product-panel grid and simulates a remote collection feed by progressively revealing products over time each time the page is shown, while spacing, borders, and controls remain intentionally understated to keep the interaction readable without feeling bare. On narrower screens the shell reduces padding, stacks the header controls, wraps the robot actions, and scales the board and cards down to avoid horizontal overflow.
 
 The ElmBook catalogue follows the same theme language. Its chrome uses the app palette rather than ElmBook's default blues, and the documented chapters render using the same light and dark theme state used by the main UI.
 
