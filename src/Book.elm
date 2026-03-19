@@ -4,6 +4,7 @@ import Book.Fixtures
 import Book.MotorcycleChapter
 import Book.ProductPanelChapter
 import Book.RobotChapter
+import Book.RobotControlButtonChapter
 import Book.ThemeChapter
 import Element exposing (Element, toRgb)
 import ElmBook exposing (withChapterGroups, withStatefulOptions)
@@ -49,6 +50,7 @@ main =
             [ ( "Foundations"
               , [ Book.ThemeChapter.chapter
                 , Book.ProductPanelChapter.chapter
+                , Book.RobotControlButtonChapter.chapter
                 ]
               )
             , ( "Pages"

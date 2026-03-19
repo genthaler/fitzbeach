@@ -1,4 +1,4 @@
-module Robot.View exposing (Controls, page)
+module Robot.View exposing (Controls, controlButton, page)
 
 import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, maximum, none, paddingXY, px, row, spacing, text, width, wrappedRow)
 import Element.Background as Background
