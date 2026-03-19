@@ -11,7 +11,8 @@
     "build": "parcel build index.html",
     "review": "elm-review",
     "review:fix": "elm-review --fix-all-without-prompt",
-    "predeploy": "npm run test && npm run review && npm run build",
+    "verify": "npm test && npm run review && npm run book:build",
+    "predeploy": "npm run verify && npm run build",
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {

@@ -39,6 +39,7 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - Start ElmBook catalogue: `npm run book`
 - Build production bundle: `npm run build`
 - Build ElmBook catalogue: `npm run book:build`
+- Run full verification: `npm run verify`
 - Run tests: `npm test`
 - Run review checks: `npm run review`
 - Apply review autofixes: `npm run review:fix`
@@ -165,7 +166,7 @@ Optimise for readability, calmness, and polish.
 
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
-2. Run `npm test`, `npm run review`, and `npm run book:build` successfully before considering the task complete. If any check cannot be run, state that clearly and explain why.
+2. Run `npm run verify` successfully before considering the task complete. If it cannot be run, state that clearly and explain why.
 3. After the task is complete, commit the changes.
 
 ## Skills
