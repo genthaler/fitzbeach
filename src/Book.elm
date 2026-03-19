@@ -5,11 +5,12 @@ import Book.MotorcycleChapter
 import Book.ProductPanelChapter
 import Book.RobotChapter
 import Book.ThemeChapter
-import Element exposing (toRgb)
+import Element exposing (Element, toRgb)
 import ElmBook exposing (withChapterGroups, withStatefulOptions)
 import ElmBook.ElmUI exposing (Book, book)
 import ElmBook.StatefulOptions
 import ElmBook.ThemeOptions
+import Html
 import View.Theme as Theme
 
 
@@ -58,7 +59,7 @@ main =
             ]
 
 
-bookThemeOptions : List (ElmBook.ThemeOptions.ThemeOption html)
+bookThemeOptions : List (ElmBook.ThemeOptions.ThemeOption (Element msg))
 bookThemeOptions =
     let
         colors =
@@ -70,7 +71,40 @@ bookThemeOptions =
     , ElmBook.ThemeOptions.navBackground (cssColor colors.panelBackground)
     , ElmBook.ThemeOptions.navAccent (cssColor colors.detailText)
     , ElmBook.ThemeOptions.navAccentHighlight (cssColor colors.bodyText)
+    , ElmBook.ThemeOptions.globals [ darkModeThemeOverride ]
     ]
+
+
+darkModeThemeOverride : Element msg
+darkModeThemeOverride =
+    let
+        colors =
+            Theme.palette Theme.Dark
+    in
+    Element.html <|
+        Html.node "style"
+            []
+            [ Html.text <|
+                """
+                .elm-book-dark-mode .elm-book--wrapper {
+                    --elm-book-background: """
+                    ++ cssColor colors.appBackground
+                    ++ """;
+                    --elm-book-accent: """
+                    ++ cssColor colors.bodyText
+                    ++ """;
+                    --elm-book-nav-background: """
+                    ++ cssColor colors.panelBackground
+                    ++ """;
+                    --elm-book-nav-accent: """
+                    ++ cssColor colors.detailText
+                    ++ """;
+                    --elm-book-nav-accent-highlight: """
+                    ++ cssColor colors.bodyText
+                    ++ """;
+                }
+                """
+            ]
 
 
 cssColor : Element.Color -> String
