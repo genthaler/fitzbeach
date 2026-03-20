@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nix Verified Frontend"
+  short_description: "Pin frontend verification with Nix"
+  default_prompt: "Use $nix-verified-frontend to align this frontend project's Nix dev shell, canonical verify command, and CI or deploy workflow."
