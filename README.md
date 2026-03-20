@@ -121,6 +121,8 @@ npm run deploy
 `npm run deploy` uses `gh-pages -d dist` and relies on `predeploy` to run `npm run verify` and then `npm run build:pages`, so the deployed app uses the `/fitzbeach/` GitHub Pages path prefix.
 
 GitHub Actions also runs the same Nix-based verification and deploy path on every push to `master`.
+Separate GitHub Actions workflows also check `flake.lock` health on pushes and pull requests, and open a weekly PR to refresh `flake.lock`.
+Lockfile update PRs created with the default `GITHUB_TOKEN` do not automatically trigger other workflows; if you want CI on those PRs, rerun or reopen them manually, or switch that workflow to a PAT-backed token.
 
 ## Design notes
 
