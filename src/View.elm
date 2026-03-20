@@ -203,7 +203,7 @@ pageBody compactLayout colors model robotControls =
                 (not (List.isEmpty model.motorcycleFeed.pendingProducts))
 
         RobotPage ->
-            Robot.View.page compactLayout colors model.robot robotControls
+            Robot.View.view compactLayout colors model.robot robotControls
 
 
 isCompact : Int -> Bool

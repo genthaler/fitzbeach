@@ -22,7 +22,7 @@ chapter =
     ElmBook.Chapter.chapter "Robot Playground"
         |> renderStatefulComponent
             (\state ->
-                Robot.View.page
+                Robot.View.view
                     False
                     (Theme.palette state.themeMode)
                     state.robotDemo
