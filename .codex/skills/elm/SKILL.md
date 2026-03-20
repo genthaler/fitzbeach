@@ -52,11 +52,12 @@ Use the checks that exist in the current project. Prefer the smallest command th
 
 ## Module structure
 - Prefer module names that describe the architectural role they play, not generic placeholders.
-- When a feature or page owns its own nested Model-View-Update boundary, prefer naming that module `Page`.
-- Use `View` for modules that are focused on rendering and view helpers only.
-- Keep `Model` for domain data, invariants, and lower-level state types, rather than page-level orchestration modules.
+- When a namespace represents a single feature, prefer the feature name itself for the top-level orchestration module, such as `Motorcycle` or `Robot`.
+- Use `.View` for modules that are focused on rendering and view helpers only.
+- Keep `.Model` for domain data, invariants, and lower-level state types, rather than top-level feature orchestration modules.
+- Keep `.Logic` for supporting state-transition helpers when a separate logic layer is justified.
 - Avoid `Main` for nested feature modules unless they are actual application entrypoints; in Elm codebases, `Main` strongly suggests a boot module.
-- When splitting a feature across modules, prefer names that make the boundary obvious at a glance, such as domain `Model`, orchestration `Page`, and rendering `View`.
+- When splitting a feature across modules, prefer names that make the boundary obvious at a glance, such as feature orchestration `Robot`, rendering `Robot.View`, domain `Robot.Model`, and supporting transitions `Robot.Logic`.
 
 ## Refactoring guidance
 - Prefer compiler-guided renames and type changes.
