@@ -16,6 +16,7 @@ import Robot
 import Robot.Logic as RobotLogic
 import Time
 import View
+import View.Shell as Shell
 import View.Theme as Theme
 
 
@@ -130,8 +131,11 @@ keyPressToMsg key =
 
 view : Model -> Html.Html Msg
 view model =
-    View.view model
-        { selectPage = SelectPage
+    Shell.view
+        { currentPage = model.currentPage
+        , themeMode = model.themeMode
+        , viewport = model.viewport
+        , selectPage = SelectPage
         , setTheme = SetTheme
-        , robotControls = Robot.controls RobotMsg
+        , content = \colors compactLayout -> View.page model colors compactLayout (Robot.controls RobotMsg)
         }

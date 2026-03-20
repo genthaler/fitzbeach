@@ -143,7 +143,8 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `src/Robot/Model.elm` contains the robot domain model and movement rules.
 - `src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.
 - `src/Robot/View.elm` contains the robot page UI and board rendering.
-- `src/View.elm` contains the shared application shell and page-level view composition.
+- `src/View.elm` contains page selection and rendering for the top-level routes.
+- `src/View/Shell.elm` contains the shared application shell, header, navigation, theme toggle placement, and responsive frame layout.
 - `src/View/ThemeToggle.elm` contains the reusable theme toggle component shared by the app and ElmBook.
 - `src/View/Theme.elm` centralises the shared color palette.
 - `tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
