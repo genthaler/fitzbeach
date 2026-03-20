@@ -137,6 +137,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `src/Book/` contains ElmBook fixtures and chapters.
 - `book.js` boots the compiled ElmBook app into `#app`.
 - `book.html` is the minimal HTML shell for the ElmBook catalogue.
+- `src/Motorcycle/Model.elm` contains the Motorcycle feature data and feed progression state helpers.
 - `src/Motorcycle/Page.elm` contains the Motorcycle page UI.
 - `src/Robot/Model.elm` contains the robot domain model and movement rules.
 - `src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.

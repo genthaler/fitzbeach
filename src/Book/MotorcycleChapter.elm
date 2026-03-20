@@ -2,6 +2,7 @@ module Book.MotorcycleChapter exposing (SharedState, chapter)
 
 import ElmBook.Chapter exposing (renderStatefulComponent)
 import ElmBook.ElmUI exposing (Chapter)
+import Motorcycle.Model
 import Motorcycle.Page
 import View.Theme as Theme
 
@@ -18,6 +19,7 @@ chapter =
                 Motorcycle.Page.view
                     False
                     (Theme.palette state.themeMode)
-                    Motorcycle.Page.products
+                    (List.length Motorcycle.Model.products)
+                    Motorcycle.Model.products
                     False
             )

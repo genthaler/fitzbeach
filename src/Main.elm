@@ -1,6 +1,5 @@
 module Main exposing
     ( Model
-    , MotorcycleFeed
     , Msg(..)
     , Viewport
     , initModel
@@ -12,7 +11,7 @@ import Browser
 import Browser.Events
 import Html
 import Json.Decode as Decode
-import Motorcycle.Page as MotorcyclePage
+import Motorcycle.Model as Motorcycle
 import Robot.Logic as RobotLogic
 import Robot.Model as Robot
 import Time
@@ -25,7 +24,7 @@ type alias Model =
     , history : List RobotLogic.HistoryEntry
     , themeMode : Theme.Mode
     , currentPage : View.Page
-    , motorcycleFeed : MotorcycleFeed
+    , motorcycleFeed : Motorcycle.Feed
     , viewport : Viewport
     }
 
@@ -47,12 +46,6 @@ type Msg
 type alias Viewport =
     { width : Int
     , height : Int
-    }
-
-
-type alias MotorcycleFeed =
-    { visibleProducts : List MotorcyclePage.Product
-    , pendingProducts : List MotorcyclePage.Product
     }
 
 
@@ -98,7 +91,7 @@ update msg model =
                 | currentPage = selectedPage
                 , motorcycleFeed =
                     if selectedPage == View.MotorcyclePage then
-                        initialMotorcycleFeed
+                        Motorcycle.initialFeed
 
                     else
                         model.motorcycleFeed
@@ -110,7 +103,7 @@ update msg model =
             ( { model | viewport = { width = width, height = height } }, Cmd.none )
 
         ReceiveNextProduct ->
-            ( { model | motorcycleFeed = receiveNextProduct model.motorcycleFeed }, Cmd.none )
+            ( { model | motorcycleFeed = Motorcycle.receiveNextProduct model.motorcycleFeed }, Cmd.none )
 
 
 initModel : Model
@@ -119,7 +112,7 @@ initModel =
     , history = []
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
-    , motorcycleFeed = initialMotorcycleFeed
+    , motorcycleFeed = Motorcycle.initialFeed
     , viewport = { width = 0, height = 0 }
     }
 
@@ -151,25 +144,6 @@ keyPressToMsg key =
 
         Nothing ->
             IgnoreKeyPress
-
-
-receiveNextProduct : MotorcycleFeed -> MotorcycleFeed
-receiveNextProduct feed =
-    case feed.pendingProducts of
-        nextProduct :: remainingProducts ->
-            { visibleProducts = feed.visibleProducts ++ [ nextProduct ]
-            , pendingProducts = remainingProducts
-            }
-
-        [] ->
-            feed
-
-
-initialMotorcycleFeed : MotorcycleFeed
-initialMotorcycleFeed =
-    { visibleProducts = []
-    , pendingProducts = MotorcyclePage.products
-    }
 
 
 view : Model -> Html.Html Msg

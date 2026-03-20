@@ -6,6 +6,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html
+import Motorcycle.Model as Motorcycle
 import Motorcycle.Page as MotorcyclePage
 import Robot.Logic as RobotLogic
 import Robot.Model as Robot
@@ -28,10 +29,7 @@ type alias Config msg =
 
 view :
     { a
-        | motorcycleFeed :
-            { visibleProducts : List MotorcyclePage.Product
-            , pendingProducts : List MotorcyclePage.Product
-            }
+        | motorcycleFeed : Motorcycle.Feed
         , robot : Robot.Robot
         , history : List RobotLogic.HistoryEntry
         , themeMode : Theme.Mode
@@ -48,10 +46,7 @@ view model config =
 
 page :
     { a
-        | motorcycleFeed :
-            { visibleProducts : List MotorcyclePage.Product
-            , pendingProducts : List MotorcyclePage.Product
-            }
+        | motorcycleFeed : Motorcycle.Feed
         , robot : Robot.Robot
         , history : List RobotLogic.HistoryEntry
         , themeMode : Theme.Mode
@@ -190,10 +185,7 @@ pageBody :
     -> Theme.Palette
     ->
         { a
-            | motorcycleFeed :
-                { visibleProducts : List MotorcyclePage.Product
-                , pendingProducts : List MotorcyclePage.Product
-                }
+            | motorcycleFeed : Motorcycle.Feed
             , robot : Robot.Robot
             , history : List RobotLogic.HistoryEntry
             , currentPage : Page
@@ -206,6 +198,7 @@ pageBody compactLayout colors model robotControls =
             MotorcyclePage.view
                 compactLayout
                 colors
+                (List.length model.motorcycleFeed.visibleProducts + List.length model.motorcycleFeed.pendingProducts)
                 model.motorcycleFeed.visibleProducts
                 (not (List.isEmpty model.motorcycleFeed.pendingProducts))
 

@@ -1,21 +1,22 @@
-module Motorcycle.Page exposing (Product, productPanel, products, view)
+module Motorcycle.Page exposing (productPanel, view)
 
 import Element exposing (Element, alignBottom, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
+import Motorcycle.Model exposing (Product)
 import View.Theme as Theme
 
 
-view : Bool -> Theme.Palette -> List Product -> Bool -> Element msg
-view compactLayout colors loadedProducts isLoading =
+view : Bool -> Theme.Palette -> Int -> List Product -> Bool -> Element msg
+view compactLayout colors totalProducts loadedProducts isLoading =
     column
         [ width fill
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
         [ pageHeading compactLayout colors "Motorcycle"
-        , loadingStatus colors loadedProducts isLoading
+        , loadingStatus colors totalProducts loadedProducts isLoading
         , productPanelLayout compactLayout colors loadedProducts
         ]
 
@@ -45,80 +46,8 @@ pageHeading compactLayout colors labelText =
         ]
 
 
-type alias Product =
-    { name : String
-    , price : String
-    , description : String
-    }
-
-
-products : List Product
-products =
-    [ { name = "Transit"
-      , price = "$89"
-      , description = "Compact essentials"
-      }
-    , { name = "Materials"
-      , price = "$129"
-      , description = "Light, durable, adaptable"
-      }
-    , { name = "Carry"
-      , price = "$159"
-      , description = "Everyday travel use"
-      }
-    , { name = "Packing"
-      , price = "$199"
-      , description = "Organised without bulk"
-      }
-    , { name = "Summit"
-      , price = "$69"
-      , description = "Slim carry for short city rides"
-      }
-    , { name = "Contour"
-      , price = "$79"
-      , description = "Compact storage with a refined shell"
-      }
-    , { name = "Drift"
-      , price = "$99"
-      , description = "Everyday capacity with quick access"
-      }
-    , { name = "Terrain"
-      , price = "$109"
-      , description = "Balanced organisation for longer hauls"
-      }
-    , { name = "Axis"
-      , price = "$119"
-      , description = "Structured carry with understated detailing"
-      }
-    , { name = "Range"
-      , price = "$139"
-      , description = "Versatile storage for mixed travel days"
-      }
-    , { name = "Nomad"
-      , price = "$149"
-      , description = "Lightweight packing with durable finishes"
-      }
-    , { name = "Vector"
-      , price = "$169"
-      , description = "Purposeful compartments in a calm form"
-      }
-    , { name = "Roam"
-      , price = "$179"
-      , description = "Expanded capacity without visual bulk"
-      }
-    , { name = "Passage"
-      , price = "$189"
-      , description = "Travel-ready layout with quiet utility"
-      }
-    ]
-
-
-loadingStatus : Theme.Palette -> List Product -> Bool -> Element msg
-loadingStatus colors loadedProducts isLoading =
-    let
-        totalCount =
-            List.length products
-    in
+loadingStatus : Theme.Palette -> Int -> List Product -> Bool -> Element msg
+loadingStatus colors totalCount loadedProducts isLoading =
     el
         [ Font.size 14
         , Font.color colors.detailText

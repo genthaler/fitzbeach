@@ -2,7 +2,7 @@ module MainTest exposing (tests)
 
 import Expect
 import Main exposing (Msg(..), initModel, update)
-import Motorcycle.Page
+import Motorcycle.Model
 import Test exposing (Test, describe, test)
 import View
 
@@ -26,12 +26,12 @@ tests =
                         List.foldl
                             (\_ model -> Tuple.first (update tick model))
                             initModel
-                            Motorcycle.Page.products
+                            Motorcycle.Model.products
                 in
                 Expect.all
-                    [ \_ -> Expect.equal (List.take 1 Motorcycle.Page.products) firstModel.motorcycleFeed.visibleProducts
-                    , \_ -> Expect.equal (List.drop 1 Motorcycle.Page.products) firstModel.motorcycleFeed.pendingProducts
-                    , \_ -> Expect.equal Motorcycle.Page.products fullyLoadedModel.motorcycleFeed.visibleProducts
+                    [ \_ -> Expect.equal (List.take 1 Motorcycle.Model.products) firstModel.motorcycleFeed.visibleProducts
+                    , \_ -> Expect.equal (List.drop 1 Motorcycle.Model.products) firstModel.motorcycleFeed.pendingProducts
+                    , \_ -> Expect.equal Motorcycle.Model.products fullyLoadedModel.motorcycleFeed.visibleProducts
                     , \_ -> Expect.equal [] fullyLoadedModel.motorcycleFeed.pendingProducts
                     ]
                     ()
@@ -53,7 +53,7 @@ tests =
                 Expect.all
                     [ \_ -> Expect.equal View.MotorcyclePage restartedModel.currentPage
                     , \_ -> Expect.equal [] restartedModel.motorcycleFeed.visibleProducts
-                    , \_ -> Expect.equal Motorcycle.Page.products restartedModel.motorcycleFeed.pendingProducts
+                    , \_ -> Expect.equal Motorcycle.Model.products restartedModel.motorcycleFeed.pendingProducts
                     ]
                     ()
         ]

@@ -2,6 +2,7 @@ module Book.ProductPanelChapter exposing (SharedState, chapter)
 
 import ElmBook.Chapter exposing (renderStatefulComponent)
 import ElmBook.ElmUI exposing (Chapter)
+import Motorcycle.Model
 import Motorcycle.Page
 import View.Theme as Theme
 
@@ -22,7 +23,7 @@ chapter =
             )
 
 
-samplePanel : Motorcycle.Page.Product
+samplePanel : Motorcycle.Model.Product
 samplePanel =
     { name = "Transit"
     , price = "$89"
