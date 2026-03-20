@@ -3,7 +3,7 @@ module MainTest exposing (tests)
 import Expect
 import Main exposing (Msg(..), initModel, update)
 import Motorcycle.Model
-import Robot.Feature as RobotFeature
+import Robot
 import Robot.Logic exposing (Command(..))
 import Test exposing (Test, describe, test)
 import View
@@ -74,8 +74,8 @@ tests =
                 Expect.all
                     [ \_ ->
                         Expect.equal
-                            (RobotFeature.update (RobotFeature.ApplyCommand MoveForwardCommand) dirtyModel.robotFeature)
-                            updatedModel.robotFeature
+                            (Robot.update (Robot.ApplyCommand MoveForwardCommand) dirtyModel.robot)
+                            updatedModel.robot
                     , \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal View.RobotPage updatedModel.currentPage
                     , \_ -> Expect.equal dirtyModel.motorcycleFeed updatedModel.motorcycleFeed
@@ -86,7 +86,7 @@ tests =
                 let
                     progressedModel =
                         { initModel
-                            | robotFeature = RobotFeature.update RobotFeature.MoveForward initModel.robotFeature
+                            | robot = Robot.update Robot.MoveForward initModel.robot
                             , themeMode = Theme.Dark
                         }
 
@@ -95,7 +95,7 @@ tests =
                 in
                 Expect.all
                     [ \_ -> Expect.equal View.RobotPage updatedModel.currentPage
-                    , \_ -> Expect.equal progressedModel.robotFeature updatedModel.robotFeature
+                    , \_ -> Expect.equal progressedModel.robot updatedModel.robot
                     , \_ -> Expect.equal progressedModel.themeMode updatedModel.themeMode
                     , \_ -> Expect.equal progressedModel.motorcycleFeed updatedModel.motorcycleFeed
                     ]

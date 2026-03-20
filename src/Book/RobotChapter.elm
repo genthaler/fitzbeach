@@ -5,7 +5,7 @@ import Element
 import ElmBook.Actions exposing (mapUpdate)
 import ElmBook.Chapter exposing (renderStatefulComponent)
 import ElmBook.ElmUI exposing (Chapter)
-import Robot.Feature
+import Robot
 import Robot.View
 import View.Theme as Theme
 
@@ -26,12 +26,12 @@ chapter =
                     False
                     (Theme.palette state.themeMode)
                     state.robotDemo
-                    (Robot.Feature.controls identity)
+                    (Robot.controls identity)
                     |> Element.map
                         (mapUpdate
                             { toState = \sharedState robotDemo -> { sharedState | robotDemo = robotDemo }
                             , fromState = .robotDemo
-                            , update = Robot.Feature.update
+                            , update = Robot.update
                             }
                         )
             )

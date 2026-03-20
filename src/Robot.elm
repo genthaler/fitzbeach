@@ -1,4 +1,4 @@
-module Robot.Feature exposing
+module Robot exposing
     ( Model
     , Msg(..)
     , controls

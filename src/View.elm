@@ -6,9 +6,9 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html
+import Motorcycle
 import Motorcycle.Model as Motorcycle
-import Motorcycle.Page as MotorcyclePage
-import Robot.Feature as RobotFeature
+import Robot
 import Robot.View
 import View.Theme as Theme
 import View.ThemeToggle as ThemeToggle
@@ -29,7 +29,7 @@ type alias Config msg =
 view :
     { a
         | motorcycleFeed : Motorcycle.Feed
-        , robotFeature : RobotFeature.Model
+        , robot : Robot.Model
         , themeMode : Theme.Mode
         , currentPage : Page
         , viewport : { width : Int, height : Int }
@@ -45,7 +45,7 @@ view model config =
 page :
     { a
         | motorcycleFeed : Motorcycle.Feed
-        , robotFeature : RobotFeature.Model
+        , robot : Robot.Model
         , themeMode : Theme.Mode
         , currentPage : Page
         , viewport : { width : Int, height : Int }
@@ -187,7 +187,7 @@ pageBody :
     ->
         { a
             | motorcycleFeed : Motorcycle.Feed
-            , robotFeature : RobotFeature.Model
+            , robot : Robot.Model
             , currentPage : Page
         }
     -> Robot.View.Controls msg
@@ -195,7 +195,7 @@ pageBody :
 pageBody compactLayout colors model robotControls =
     case model.currentPage of
         MotorcyclePage ->
-            MotorcyclePage.view
+            Motorcycle.view
                 compactLayout
                 colors
                 (List.length model.motorcycleFeed.visibleProducts + List.length model.motorcycleFeed.pendingProducts)
@@ -203,7 +203,7 @@ pageBody compactLayout colors model robotControls =
                 (not (List.isEmpty model.motorcycleFeed.pendingProducts))
 
         RobotPage ->
-            Robot.View.page compactLayout colors model.robotFeature robotControls
+            Robot.View.page compactLayout colors model.robot robotControls
 
 
 isCompact : Int -> Bool

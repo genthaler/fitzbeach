@@ -1,4 +1,4 @@
-module Motorcycle.Page exposing (productPanel, view)
+module Motorcycle exposing (productPanel, view)
 
 import Element exposing (Element, alignBottom, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background

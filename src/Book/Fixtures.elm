@@ -3,13 +3,13 @@ module Book.Fixtures exposing
     , initialRobotDemo
     )
 
-import Robot.Feature
+import Robot
 
 
 type alias RobotDemo =
-    Robot.Feature.Model
+    Robot.Model
 
 
 initialRobotDemo : RobotDemo
 initialRobotDemo =
-    Robot.Feature.initialModel
+    Robot.initialModel

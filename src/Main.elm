@@ -12,7 +12,7 @@ import Browser.Events
 import Html
 import Json.Decode as Decode
 import Motorcycle.Model as Motorcycle
-import Robot.Feature as RobotFeature
+import Robot
 import Robot.Logic as RobotLogic
 import Time
 import View
@@ -20,7 +20,7 @@ import View.Theme as Theme
 
 
 type alias Model =
-    { robotFeature : RobotFeature.Model
+    { robot : Robot.Model
     , themeMode : Theme.Mode
     , currentPage : View.Page
     , motorcycleFeed : Motorcycle.Feed
@@ -29,7 +29,7 @@ type alias Model =
 
 
 type Msg
-    = RobotMsg RobotFeature.Msg
+    = RobotMsg Robot.Msg
     | KeyboardCommand RobotLogic.Command
     | IgnoreKeyPress
     | SetTheme Theme.Mode
@@ -58,10 +58,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         RobotMsg robotMsg ->
-            ( { model | robotFeature = RobotFeature.update robotMsg model.robotFeature }, Cmd.none )
+            ( { model | robot = Robot.update robotMsg model.robot }, Cmd.none )
 
         KeyboardCommand command ->
-            ( { model | robotFeature = RobotFeature.update (RobotFeature.ApplyCommand command) model.robotFeature }, Cmd.none )
+            ( { model | robot = Robot.update (Robot.ApplyCommand command) model.robot }, Cmd.none )
 
         IgnoreKeyPress ->
             ( model, Cmd.none )
@@ -91,7 +91,7 @@ update msg model =
 
 initModel : Model
 initModel =
-    { robotFeature = RobotFeature.initialModel
+    { robot = Robot.initialModel
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
     , motorcycleFeed = Motorcycle.initialFeed
@@ -133,5 +133,5 @@ view model =
     View.view model
         { selectPage = SelectPage
         , setTheme = SetTheme
-        , robotControls = RobotFeature.controls RobotMsg
+        , robotControls = Robot.controls RobotMsg
         }
