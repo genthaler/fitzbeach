@@ -67,6 +67,7 @@ palette mode =
 toCssColor : Color -> String
 toCssColor color =
     let
+        rgba : { red : Float, green : Float, blue : Float, alpha : Float }
         rgba =
             toRgb color
     in

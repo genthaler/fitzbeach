@@ -64,6 +64,7 @@ main =
 bookThemeOptions : List (ElmBook.ThemeOptions.ThemeOption (Element msg))
 bookThemeOptions =
     let
+        colors : Theme.Palette
         colors =
             Theme.palette Theme.Light
     in
@@ -80,6 +81,7 @@ bookThemeOptions =
 darkModeThemeOverride : Element msg
 darkModeThemeOverride =
     let
+        colors : Theme.Palette
         colors =
             Theme.palette Theme.Dark
     in

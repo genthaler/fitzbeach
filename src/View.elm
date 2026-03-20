@@ -57,12 +57,15 @@ page :
     -> Element msg
 page model config =
     let
+        colors : Theme.Palette
         colors =
             Theme.palette model.themeMode
 
+        compactLayout : Bool
         compactLayout =
             isCompact model.viewport.width
 
+        horizontalPadding : Int
         horizontalPadding =
             if compactLayout then
                 20
@@ -70,6 +73,7 @@ page model config =
             else
                 40
 
+        verticalPadding : Int
         verticalPadding =
             if compactLayout then
                 24

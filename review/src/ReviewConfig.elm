@@ -46,18 +46,18 @@ config =
     , NoDebug.Log.rule
     , NoDebug.TodoOrToString.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
+    , NoMissingTypeAnnotationInLetIn.rule
+        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoSimpleLetBody.rule
     , NoPrematureLetComputation.rule
-    
+
     -- Module structure rules (medium performance impact)
     , NoExposingEverything.rule
-        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoImportingEverything.rule []
-        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoMissingTypeAnnotation.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoMissingTypeExpose.rule
-    
+
     -- Unused detection rules (more expensive, run later)
     , NoUnused.Variables.rule
     , NoUnused.Parameters.rule
@@ -68,12 +68,11 @@ config =
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoUnused.Modules.rule
     , NoUnused.Dependencies.rule
-    
+
     -- Documentation rules (can be expensive on large codebases)
     , Docs.ReviewAtDocs.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
-    
+
     -- Most expensive rules last
     , Simplify.rule Simplify.defaults
-        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     ]

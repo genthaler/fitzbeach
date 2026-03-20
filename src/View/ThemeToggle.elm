@@ -14,9 +14,16 @@ import Svg.Attributes as SvgAttributes
 import View.Theme as Theme
 
 
+type alias Point =
+    { x : Float
+    , y : Float
+    }
+
+
 view : Theme.Palette -> Theme.Mode -> msg -> Element msg
 view colors activeMode onToggle =
     let
+        nextMode : Theme.Mode
         nextMode =
             toggleThemeMode activeMode
     in
@@ -79,50 +86,66 @@ themeToggleIconViewBox =
 sunIcon : Theme.Palette -> Element msg
 sunIcon colors =
     let
+        strokeColor : String
         strokeColor =
             Theme.toCssColor colors.buttonText
 
+        transparentFill : String
         transparentFill =
             "none"
 
+        center : Float
         center =
             12
 
+        sunBodyRadius : Float
         sunBodyRadius =
             4.5
 
+        strokeWidth : Float
         strokeWidth =
             2
 
+        rayVisibleGap : Float
         rayVisibleGap =
             4
 
+        sunOuterRadius : Float
         sunOuterRadius =
             sunBodyRadius + (strokeWidth / 2)
 
+        rayLength : Float
         rayLength =
             2.5
 
+        strokeLinecap : String
         strokeLinecap =
             "round"
 
+        rayAnglesInDegrees : List Float
         rayAnglesInDegrees =
             [ -90, -45, 0, 45, 90, 135, 180, 225 ]
 
+        centerCoordinate : String
         centerCoordinate =
             String.fromFloat center
 
+        sunRadius : String
         sunRadius =
             String.fromFloat sunBodyRadius
 
+        rayStartDistance : Float
         rayStartDistance =
             sunOuterRadius + rayVisibleGap
 
+        rayEndDistance : Float
         rayEndDistance =
             rayStartDistance + rayLength
 
+        rayPoint : Float -> Float -> Point
         rayPoint distance angleInDegrees =
             let
+                angleInRadians : Float
                 angleInRadians =
                     degrees angleInDegrees
             in
@@ -130,11 +153,14 @@ sunIcon colors =
             , y = center + (distance * sin angleInRadians)
             }
 
+        ray : Float -> Svg.Svg msg
         ray angleInDegrees =
             let
+                startPoint : Point
                 startPoint =
                     rayPoint rayStartDistance angleInDegrees
 
+                endPoint : Point
                 endPoint =
                     rayPoint rayEndDistance angleInDegrees
             in
@@ -177,54 +203,71 @@ sunIcon colors =
 moonIcon : Theme.Palette -> Element msg
 moonIcon colors =
     let
+        fillColor : String
         fillColor =
             Theme.toCssColor colors.buttonText
 
+        transparentFill : String
         transparentFill =
             "none"
 
+        maskId : String
         maskId =
             "theme-toggle-moon-mask"
 
+        maskReference : String
         maskReference =
             "url(#" ++ maskId ++ ")"
 
+        maskUnits : String
         maskUnits =
             "userSpaceOnUse"
 
+        origin : String
         origin =
             "0"
 
+        maskBackgroundFill : String
         maskBackgroundFill =
             "black"
 
+        visibleMoonFill : String
         visibleMoonFill =
             "white"
 
+        moonCenterX : Float
         moonCenterX =
             11.25
 
+        moonCenterY : Float
         moonCenterY =
             12
 
+        moonRadius : Float
         moonRadius =
             8.5
 
+        shadowOffsetX : Float
         shadowOffsetX =
             4.75
 
+        shadowOffsetY : Float
         shadowOffsetY =
             -2.5
 
+        shadowRadiusMultiplier : Float
         shadowRadiusMultiplier =
             1
 
+        shadowCenterX : Float
         shadowCenterX =
             moonCenterX + shadowOffsetX
 
+        shadowCenterY : Float
         shadowCenterY =
             moonCenterY + shadowOffsetY
 
+        shadowRadius : Float
         shadowRadius =
             moonRadius * shadowRadiusMultiplier
     in

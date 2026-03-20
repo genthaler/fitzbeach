@@ -70,6 +70,7 @@ loadingStatus colors totalCount loadedProducts isLoading =
 productPanelLayout : Bool -> Theme.Palette -> List Product -> Element msg
 productPanelLayout compactLayout colors loadedProducts =
     let
+        panels : List (Element msg)
         panels =
             List.map (productPanel compactLayout colors) loadedProducts
     in
@@ -91,6 +92,7 @@ productPanelLayout compactLayout colors loadedProducts =
 productPanel : Bool -> Theme.Palette -> Product -> Element msg
 productPanel compactLayout colors panel =
     let
+        panelHeight : Int
         panelHeight =
             if compactLayout then
                 396
@@ -98,6 +100,7 @@ productPanel compactLayout colors panel =
             else
                 452
 
+        imageHeight : Int
         imageHeight =
             if compactLayout then
                 188
@@ -105,6 +108,7 @@ productPanel compactLayout colors panel =
             else
                 236
 
+        panelWidth : Element.Length
         panelWidth =
             if compactLayout then
                 fill

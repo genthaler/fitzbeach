@@ -123,9 +123,11 @@ gridRow compactLayout colors robot yCoordinate =
 gridCell : Bool -> Theme.Palette -> Robot.Robot -> Int -> Int -> Element msg
 gridCell compactLayout colors robot xCoordinate yCoordinate =
     let
+        isRobot : Bool
         isRobot =
             Robot.x robot == xCoordinate && Robot.y robot == yCoordinate
 
+        cellSize : Int
         cellSize =
             if compactLayout then
                 48
