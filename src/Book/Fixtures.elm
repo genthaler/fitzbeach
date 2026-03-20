@@ -3,18 +3,13 @@ module Book.Fixtures exposing
     , initialRobotDemo
     )
 
-import Robot.Logic as RobotLogic
-import Robot.Model as Robot
+import Robot.Feature
 
 
 type alias RobotDemo =
-    { robot : Robot.Robot
-    , history : List RobotLogic.HistoryEntry
-    }
+    Robot.Feature.Model
 
 
 initialRobotDemo : RobotDemo
 initialRobotDemo =
-    { robot = Robot.initialRobot
-    , history = []
-    }
+    Robot.Feature.initialModel

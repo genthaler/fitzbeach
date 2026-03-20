@@ -3,8 +3,11 @@ module MainTest exposing (tests)
 import Expect
 import Main exposing (Msg(..), initModel, update)
 import Motorcycle.Model
+import Robot.Feature as RobotFeature
+import Robot.Logic exposing (Command(..))
 import Test exposing (Test, describe, test)
 import View
+import View.Theme as Theme
 
 
 tests : Test
@@ -54,6 +57,47 @@ tests =
                     [ \_ -> Expect.equal View.MotorcyclePage restartedModel.currentPage
                     , \_ -> Expect.equal [] restartedModel.motorcycleFeed.visibleProducts
                     , \_ -> Expect.equal Motorcycle.Model.products restartedModel.motorcycleFeed.pendingProducts
+                    ]
+                    ()
+        , test "keyboard command delegates to the robot feature without affecting other root state" <|
+            \_ ->
+                let
+                    dirtyModel =
+                        { initModel
+                            | themeMode = Theme.Dark
+                            , currentPage = View.RobotPage
+                        }
+
+                    ( updatedModel, _ ) =
+                        update (KeyboardCommand MoveForwardCommand) dirtyModel
+                in
+                Expect.all
+                    [ \_ ->
+                        Expect.equal
+                            (RobotFeature.update (RobotFeature.ApplyCommand MoveForwardCommand) dirtyModel.robotFeature)
+                            updatedModel.robotFeature
+                    , \_ -> Expect.equal Theme.Dark updatedModel.themeMode
+                    , \_ -> Expect.equal View.RobotPage updatedModel.currentPage
+                    , \_ -> Expect.equal dirtyModel.motorcycleFeed updatedModel.motorcycleFeed
+                    ]
+                    ()
+        , test "selecting the robot page changes only the current page" <|
+            \_ ->
+                let
+                    progressedModel =
+                        { initModel
+                            | robotFeature = RobotFeature.update RobotFeature.MoveForward initModel.robotFeature
+                            , themeMode = Theme.Dark
+                        }
+
+                    ( updatedModel, _ ) =
+                        update (SelectPage View.RobotPage) progressedModel
+                in
+                Expect.all
+                    [ \_ -> Expect.equal View.RobotPage updatedModel.currentPage
+                    , \_ -> Expect.equal progressedModel.robotFeature updatedModel.robotFeature
+                    , \_ -> Expect.equal progressedModel.themeMode updatedModel.themeMode
+                    , \_ -> Expect.equal progressedModel.motorcycleFeed updatedModel.motorcycleFeed
                     ]
                     ()
         ]

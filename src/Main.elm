@@ -12,16 +12,15 @@ import Browser.Events
 import Html
 import Json.Decode as Decode
 import Motorcycle.Model as Motorcycle
+import Robot.Feature as RobotFeature
 import Robot.Logic as RobotLogic
-import Robot.Model as Robot
 import Time
 import View
 import View.Theme as Theme
 
 
 type alias Model =
-    { robot : Robot.Robot
-    , history : List RobotLogic.HistoryEntry
+    { robotFeature : RobotFeature.Model
     , themeMode : Theme.Mode
     , currentPage : View.Page
     , motorcycleFeed : Motorcycle.Feed
@@ -30,11 +29,7 @@ type alias Model =
 
 
 type Msg
-    = MoveForward
-    | TurnLeft
-    | TurnRight
-    | Undo
-    | Reset
+    = RobotMsg RobotFeature.Msg
     | KeyboardCommand RobotLogic.Command
     | IgnoreKeyPress
     | SetTheme Theme.Mode
@@ -62,26 +57,14 @@ main =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        MoveForward ->
-            ( RobotLogic.applyCommand RobotLogic.MoveForwardCommand model, Cmd.none )
-
-        TurnLeft ->
-            ( RobotLogic.applyCommand RobotLogic.TurnLeftCommand model, Cmd.none )
-
-        TurnRight ->
-            ( RobotLogic.applyCommand RobotLogic.TurnRightCommand model, Cmd.none )
+        RobotMsg robotMsg ->
+            ( { model | robotFeature = RobotFeature.update robotMsg model.robotFeature }, Cmd.none )
 
         KeyboardCommand command ->
-            ( RobotLogic.applyCommand command model, Cmd.none )
+            ( { model | robotFeature = RobotFeature.update (RobotFeature.ApplyCommand command) model.robotFeature }, Cmd.none )
 
         IgnoreKeyPress ->
             ( model, Cmd.none )
-
-        Undo ->
-            ( RobotLogic.undo model, Cmd.none )
-
-        Reset ->
-            ( { model | robot = Robot.initialRobot, history = [] }, Cmd.none )
 
         SetTheme mode ->
             ( { model | themeMode = mode }, Cmd.none )
@@ -108,8 +91,7 @@ update msg model =
 
 initModel : Model
 initModel =
-    { robot = Robot.initialRobot
-    , history = []
+    { robotFeature = RobotFeature.initialModel
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
     , motorcycleFeed = Motorcycle.initialFeed
@@ -151,11 +133,5 @@ view model =
     View.view model
         { selectPage = SelectPage
         , setTheme = SetTheme
-        , robotControls =
-            { moveForward = MoveForward
-            , turnLeft = TurnLeft
-            , turnRight = TurnRight
-            , undo = Undo
-            , reset = Reset
-            }
+        , robotControls = RobotFeature.controls RobotMsg
         }

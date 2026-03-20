@@ -8,8 +8,7 @@ import Element.Input as Input
 import Html
 import Motorcycle.Model as Motorcycle
 import Motorcycle.Page as MotorcyclePage
-import Robot.Logic as RobotLogic
-import Robot.Model as Robot
+import Robot.Feature as RobotFeature
 import Robot.View
 import View.Theme as Theme
 import View.ThemeToggle as ThemeToggle
@@ -30,8 +29,7 @@ type alias Config msg =
 view :
     { a
         | motorcycleFeed : Motorcycle.Feed
-        , robot : Robot.Robot
-        , history : List RobotLogic.HistoryEntry
+        , robotFeature : RobotFeature.Model
         , themeMode : Theme.Mode
         , currentPage : Page
         , viewport : { width : Int, height : Int }
@@ -47,8 +45,7 @@ view model config =
 page :
     { a
         | motorcycleFeed : Motorcycle.Feed
-        , robot : Robot.Robot
-        , history : List RobotLogic.HistoryEntry
+        , robotFeature : RobotFeature.Model
         , themeMode : Theme.Mode
         , currentPage : Page
         , viewport : { width : Int, height : Int }
@@ -190,8 +187,7 @@ pageBody :
     ->
         { a
             | motorcycleFeed : Motorcycle.Feed
-            , robot : Robot.Robot
-            , history : List RobotLogic.HistoryEntry
+            , robotFeature : RobotFeature.Model
             , currentPage : Page
         }
     -> Robot.View.Controls msg
@@ -207,7 +203,7 @@ pageBody compactLayout colors model robotControls =
                 (not (List.isEmpty model.motorcycleFeed.pendingProducts))
 
         RobotPage ->
-            Robot.View.page compactLayout colors model robotControls
+            Robot.View.page compactLayout colors model.robotFeature robotControls
 
 
 isCompact : Int -> Bool

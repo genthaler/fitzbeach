@@ -5,7 +5,7 @@ import Element
 import ElmBook.Actions exposing (mapUpdate)
 import ElmBook.Chapter exposing (renderStatefulComponent)
 import ElmBook.ElmUI exposing (Chapter)
-import Robot.Logic as RobotLogic
+import Robot.Feature
 import Robot.View
 import View.Theme as Theme
 
@@ -17,14 +17,6 @@ type alias SharedState x =
     }
 
 
-type Msg
-    = MoveForward
-    | TurnLeft
-    | TurnRight
-    | Undo
-    | Reset
-
-
 chapter : Chapter (SharedState x)
 chapter =
     ElmBook.Chapter.chapter "Robot Playground"
@@ -34,36 +26,12 @@ chapter =
                     False
                     (Theme.palette state.themeMode)
                     state.robotDemo
-                    { moveForward = MoveForward
-                    , turnLeft = TurnLeft
-                    , turnRight = TurnRight
-                    , undo = Undo
-                    , reset = Reset
-                    }
+                    (Robot.Feature.controls identity)
                     |> Element.map
                         (mapUpdate
                             { toState = \sharedState robotDemo -> { sharedState | robotDemo = robotDemo }
                             , fromState = .robotDemo
-                            , update = update
+                            , update = Robot.Feature.update
                             }
                         )
             )
-
-
-update : Msg -> RobotDemo -> RobotDemo
-update msg model =
-    case msg of
-        MoveForward ->
-            RobotLogic.applyCommand RobotLogic.MoveForwardCommand model
-
-        TurnLeft ->
-            RobotLogic.applyCommand RobotLogic.TurnLeftCommand model
-
-        TurnRight ->
-            RobotLogic.applyCommand RobotLogic.TurnRightCommand model
-
-        Undo ->
-            RobotLogic.undo model
-
-        Reset ->
-            Book.Fixtures.initialRobotDemo

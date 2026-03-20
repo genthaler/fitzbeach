@@ -139,6 +139,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `book.html` is the minimal HTML shell for the ElmBook catalogue.
 - `src/Motorcycle/Model.elm` contains the Motorcycle feature data and feed progression state helpers.
 - `src/Motorcycle/Page.elm` contains the Motorcycle page UI.
+- `src/Robot/Feature.elm` contains the robot page feature state and update orchestration.
 - `src/Robot/Model.elm` contains the robot domain model and movement rules.
 - `src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.
 - `src/Robot/View.elm` contains the robot page UI and board rendering.
@@ -147,7 +148,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `src/View/Theme.elm` centralises the shared color palette.
 - `tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 
-The boundary between domain and UI is deliberate: movement logic stays in the domain module, while the app layer handles input and presentation concerns such as command history.
+The boundary between domain and UI is deliberate: movement logic stays in the domain module, robot page orchestration lives in the feature module, and the app layer handles top-level routing and subscriptions.
 
 ## Why Elm
 
