@@ -1,0 +1,4 @@
+interface:
+  display_name: "ElmBook"
+  short_description: "Maintain ElmBook catalogues"
+  default_prompt: "Use $elmbook to add or refine ElmBook chapters, keep shared demo state coherent, and validate the catalogue with the project's ElmBook commands."

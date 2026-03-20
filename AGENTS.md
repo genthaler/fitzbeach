@@ -31,6 +31,7 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - The ElmBook catalogue mounts into `<div id="app"></div>` in `book.html`.
 - If Elm dependencies are added later, keep them intentional and minimal.
 - Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
+- When creating a new project-local skill under `./.codex/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
 
 ## Commands
 
