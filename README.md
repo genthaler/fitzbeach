@@ -161,3 +161,5 @@ Elm is a good fit for a small interactive exercise like this because it keeps st
 - Add direct placement controls for the robot
 - Add automated Elm tests around robot movement and update behavior
 - Improve keyboard accessibility cues in the UI
+- Initialize the shell layout from browser viewport flags on startup to avoid a desktop first paint on narrow screens
+- Initialize the app theme from the browser's `prefers-color-scheme` media query on startup
