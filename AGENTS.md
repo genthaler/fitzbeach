@@ -7,7 +7,7 @@
 ## Scope
 
 This file defines repo-specific rules for `fitzbeach`.
-Use the local project skills for general Elm, `elm-review`, `elm-ui`, Parcel app, README maintenance, and git workflow guidance.
+Use the local project skills for general Elm, `elm-review`, `elm-ui`, ElmBook, GitHub Pages static app deployment, Parcel app, README maintenance, and git workflow guidance.
 When a task involves skills, prefer repo-local skills under `./.codex/skills/` before falling back to global skills.
 
 ## Structure
@@ -174,7 +174,9 @@ Before finishing:
 ### Available local skills
 
 - `elm`: General Elm application and refactor work.
+- `elmbook`: ElmBook catalogues, chapters, shared demo state, and theme alignment.
 - `elm-review`: `elm-review` runs, rule fixes, and review config maintenance.
+- `github-pages-static-app`: GitHub Pages deploy scripts, public path handling, and `gh-pages` publishing for static apps.
 - `elm-ui`: `mdgriffith/elm-ui` layout and styling work.
 - `elm-ui-review`: Calm, minimal `elm-ui` presentation review.
 - `elm-parcel-app`: Parcel bootstrapping and Elm app integration.
