@@ -35,8 +35,11 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - When creating or updating a project-local skill, use the local `skill-authoring` skill.
 - Project-local `SKILL.md` files should follow this section order: title, when to use, when not to use, workflow, fixing guidance, final checks.
 - Project-local `SKILL.md` files should not use YAML frontmatter; keep skill metadata only in `agents/openai.yaml`.
-- When the user asks for a prompt for a new Codex thread, prefer a minimal prompt that relies on this repository's `AGENTS.md` and local skills instead of restating repo instructions.
 - When a task clearly matches a repo-local skill, reference that skill by name in the prompt rather than rewriting its workflow inline.
+- When the user asks to implement a change, prefer the local `implementation` skill as the default workflow and combine it with narrower domain skills only when needed.
+- When the user asks to fix a bug, address a finding, or correct a regression, prefer the local `fixing` skill as the default workflow and combine it with narrower domain skills only when needed.
+- When the user asks for a review, prefer the local `ui-review` skill for UI-focused review requests and findings-first review workflows.
+- When the user asks for a refactor, prefer the local `refactor-step` skill for bounded behavior-preserving cleanup work.
 - When using the task plan tool, prefer short user-visible milestones. Do not keep an inspection or analysis step in progress after the relevant files have been read. Separate editing, testing, verification, and commit steps.
 
 ## Commands
@@ -184,6 +187,8 @@ Before finishing:
 - `elmbook`: ElmBook catalogues, chapters, shared demo state, and theme alignment.
 - `elm-review`: `elm-review` runs, rule fixes, and review config maintenance.
 - `elm-testing`: Add or improve Elm test coverage in this repo, especially around behavior seams, pure helpers, and feature/module contracts.
+- `implementation`: Default workflow for directed implementation tasks in this repo, keeping prompt overhead low and coordinating narrower skills when needed.
+- `fixing`: Default workflow for targeted bug fixes, review findings, and regression corrections in this repo, favouring the smallest defensible change.
 - `github-pages-static-app`: GitHub Pages deploy scripts, public path handling, and `gh-pages` publishing for static apps.
 - `nix-verified-frontend`: Nix dev shells, pinned verify commands, and aligned local/CI/deploy frontend workflows.
 - `elm-ui`: `mdgriffith/elm-ui` layout and styling work.
