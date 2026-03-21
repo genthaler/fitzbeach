@@ -19,8 +19,12 @@ Live site: https://genthaler.github.io/fitzbeach/
 ## Tech stack
 
 - Elm
+- Haskell
 - `mdgriffith/elm-ui`
 - Parcel
+- AWS SAM
+- AWS Lambda container images
+- S3 + CloudFront
 
 ## Run locally
 
@@ -210,6 +214,112 @@ GitHub Actions also runs the same Nix-based verification and deploy path on ever
 Separate GitHub Actions workflows also check `flake.lock` health on pushes and pull requests, and open a weekly PR to refresh `flake.lock`.
 Lockfile update PRs created with the default `GITHUB_TOKEN` do not automatically trigger other workflows; if you want CI on those PRs, rerun or reopen them manually, or switch that workflow to a PAT-backed token.
 
+## AWS deployment
+
+This repo also includes a container-based AWS deployment path with:
+
+- Elm static assets in a private S3 bucket behind CloudFront
+- A Haskell backend deployed as an AWS Lambda container image
+- A public Lambda Function URL for `/health` and `/products`
+- One SAM template at `infra/template.yaml` for the AWS resources
+
+### AWS prerequisites
+
+- AWS CLI installed and authenticated
+- SAM CLI installed
+- Docker installed and running
+- An AWS region selected
+- An AWS profile selected if you do not want to use the default profile
+
+The AWS helper scripts read these environment variables:
+
+- `FITZBEACH_AWS_STACK_NAME` for the CloudFormation stack name. Default: `fitzbeach-aws`
+- `FITZBEACH_AWS_PROJECT_NAME` for resource naming. Default: `fitzbeach`
+- `AWS_REGION` or `FITZBEACH_AWS_REGION` for the AWS region. Default: `ap-southeast-2`
+- `AWS_PROFILE` or `FITZBEACH_AWS_PROFILE` for the AWS profile. Optional
+- `FITZBEACH_AWS_IMAGE_TAG` to override the backend image tag during deploy. Optional
+- `FITZBEACH_API_BASE_URL` to override the frontend API base URL during `aws:frontend:build`. Optional
+
+Example setup:
+
+```bash
+export AWS_PROFILE=personal
+export AWS_REGION=ap-southeast-2
+export FITZBEACH_AWS_STACK_NAME=fitzbeach-aws
+```
+
+### First-time AWS setup
+
+Install frontend dependencies first:
+
+```bash
+npm install
+```
+
+Validate the SAM template and build the Lambda image locally:
+
+```bash
+npm run aws:build
+```
+
+Deploy the stack:
+
+```bash
+npm run aws:deploy
+```
+
+`npm run aws:deploy` performs the first-run bootstrap for the ECR repository automatically, pushes a fresh backend image tag, and then updates the Lambda function to use that image.
+
+### Publish the frontend
+
+Build the frontend against the deployed Function URL:
+
+```bash
+npm run aws:frontend:build
+```
+
+Upload `dist/` to S3 and invalidate CloudFront:
+
+```bash
+npm run aws:frontend:publish
+```
+
+`npm run aws:frontend:publish` already runs `npm run aws:frontend:build` first, so the publish path is usually the only command you need.
+
+### Find the deployed URLs
+
+Print the stack outputs:
+
+```bash
+npm run aws:status
+```
+
+That command includes:
+
+- `FrontendUrl` for the CloudFront site
+- `BackendFunctionUrl` for the Lambda Function URL
+- `FrontendBucketName` for the S3 bucket
+- `BackendRepositoryUri` for the ECR repository
+
+### Test the deployed backend
+
+Once the stack is up, use the Function URL from `npm run aws:status`:
+
+```bash
+curl "$FUNCTION_URL/health"
+curl "$FUNCTION_URL/products"
+```
+
+Open the CloudFront URL from `npm run aws:status` to test the deployed frontend.
+
+### Tear everything down
+
+```bash
+npm run aws:destroy
+```
+
+That command empties the frontend bucket and then deletes the CloudFormation stack.
+
 ## Design notes
 
 The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. The Motorcycle page uses a quiet product-panel grid and simulates a remote collection feed by progressively revealing products over time each time the page is shown, while spacing, borders, and controls remain intentionally understated to keep the interaction readable without feeling bare. On narrower screens the shell reduces padding, stacks the header controls, wraps the robot actions, and scales the board and cards down to avoid horizontal overflow.
@@ -219,15 +329,17 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 ## Architecture notes
 
 - `src/Main.elm` owns application state, subscriptions, and top-level message routing.
-- `backend/app/Main.hs` starts the local Haskell service and exposes `/health` and `/products`.
+- `backend/app/Main.hs` starts the Haskell service, exposes `/health` and `/products`, and can run both locally and inside the Lambda container.
 - `backend/src/Product.hs` defines the backend `Product` JSON shape shared conceptually with the Elm frontend.
 - `backend/src/ProductSource.hs` keeps the current static in-memory product list separate from the HTTP layer so it can be replaced later by DynamoDB or another store.
+- `backend/Dockerfile` builds the Lambda-compatible backend container image.
+- `infra/template.yaml` defines the ECR repository, Lambda Function URL, private frontend bucket, and CloudFront distribution for AWS deployment.
 - `src/Book.elm` is a separate ElmBook entrypoint for documented UI examples.
 - `src/Book/` contains ElmBook fixtures and chapters.
 - `book.js` boots the compiled ElmBook app into `#app`.
 - `book.html` is the minimal HTML shell for the ElmBook catalogue.
 - `src/Motorcycle.elm` contains the Motorcycle feature rendering.
-- `src/Motorcycle/Api.elm` contains the frontend HTTP request for loading products from the local service.
+- `src/Motorcycle/Api.elm` contains the frontend HTTP request for loading products from the configured backend base URL.
 - `src/Motorcycle/Model.elm` contains the Motorcycle feature product model, JSON decoder, and local sample data used by ElmBook.
 - `src/Robot.elm` contains the robot feature state and update orchestration.
 - `src/Robot/Model.elm` contains the robot domain model and movement rules.
@@ -237,6 +349,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `src/View/Shell.elm` contains the shared application shell, header, navigation, theme toggle placement, and responsive frame layout.
 - `src/View/ThemeToggle.elm` contains the reusable theme toggle component shared by the app and ElmBook.
 - `src/View/Theme.elm` centralises the shared color palette.
+- `scripts/aws-*.sh` keep the AWS build, deploy, publish, status, and teardown flow readable from `package.json`.
 - `tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 
 The boundary between domain and UI is deliberate: movement logic stays in the domain module, robot feature orchestration lives in the top-level feature module, and the app layer handles routing and subscriptions. The first backend step follows the same approach by keeping the static product source separate from the Haskell HTTP handlers.

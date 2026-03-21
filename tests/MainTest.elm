@@ -2,7 +2,7 @@ module MainTest exposing (tests)
 
 import Expect
 import Http
-import Main exposing (Msg(..), initModel, keyboardCommandsEnabled, update)
+import Main exposing (Msg(..), defaultApiBaseUrl, initModel, keyboardCommandsEnabled, update)
 import Motorcycle.Model
 import Robot
 import Robot.Logic exposing (Command(..))
@@ -50,7 +50,7 @@ tests =
                         update (ReceiveProducts (Err Http.NetworkError)) initModel
                 in
                 Expect.all
-                    [ \_ -> Expect.equal (Motorcycle.Model.Failed "Start the local Haskell service on http://localhost:8080.") updatedModel.motorcycleProducts
+                    [ \_ -> Expect.equal (Motorcycle.Model.Failed ("Check that the product service is reachable at " ++ defaultApiBaseUrl ++ ".")) updatedModel.motorcycleProducts
                     , \_ -> Expect.equal initModel.robot updatedModel.robot
                     , \_ -> Expect.equal initModel.currentPage updatedModel.currentPage
                     ]

@@ -1,7 +1,9 @@
 module Main exposing
-    ( Model
+    ( Flags
+    , Model
     , Msg(..)
     , Viewport
+    , defaultApiBaseUrl
     , initModel
     , keyboardCommandsEnabled
     , main
@@ -17,6 +19,7 @@ import Motorcycle.Api
 import Motorcycle.Model as Motorcycle
 import Robot
 import Robot.Logic as RobotLogic
+import String
 import View
 import View.Shell as Shell
 import View.Theme as Theme
@@ -27,6 +30,7 @@ type alias Model =
     , themeMode : Theme.Mode
     , currentPage : View.Page
     , motorcycleProducts : Motorcycle.ProductState
+    , apiBaseUrl : String
     , viewport : Viewport
     }
 
@@ -47,14 +51,33 @@ type alias Viewport =
     }
 
 
-main : Program () Model Msg
+type alias Flags =
+    { apiBaseUrl : String
+    }
+
+
+main : Program Flags Model Msg
 main =
     Browser.element
-        { init = \_ -> ( initModel, loadProducts )
+        { init = init
         , update = update
         , view = view
         , subscriptions = subscriptions
         }
+
+
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+    let
+        apiBaseUrl : String
+        apiBaseUrl =
+            normaliseApiBaseUrl flags.apiBaseUrl
+
+        model : Model
+        model =
+            { initModel | apiBaseUrl = apiBaseUrl }
+    in
+    ( model, loadProducts apiBaseUrl )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -88,7 +111,7 @@ update msg model =
                         model.motorcycleProducts
               }
             , if retryProducts then
-                loadProducts
+                loadProducts model.apiBaseUrl
 
               else
                 Cmd.none
@@ -98,7 +121,7 @@ update msg model =
             ( { model | viewport = { width = width, height = height } }, Cmd.none )
 
         ReceiveProducts result ->
-            ( { model | motorcycleProducts = productStateFromResult result }, Cmd.none )
+            ( { model | motorcycleProducts = productStateFromResult model.apiBaseUrl result }, Cmd.none )
 
 
 initModel : Model
@@ -107,8 +130,14 @@ initModel =
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
     , motorcycleProducts = Motorcycle.Loading
+    , apiBaseUrl = defaultApiBaseUrl
     , viewport = { width = 0, height = 0 }
     }
+
+
+defaultApiBaseUrl : String
+defaultApiBaseUrl =
+    "http://localhost:8080"
 
 
 subscriptions : Model -> Sub Msg
@@ -144,9 +173,9 @@ keyPressToMsg key =
             IgnoreKeyPress
 
 
-loadProducts : Cmd Msg
-loadProducts =
-    Motorcycle.Api.getProducts ReceiveProducts
+loadProducts : String -> Cmd Msg
+loadProducts apiBaseUrl =
+    Motorcycle.Api.getProducts apiBaseUrl ReceiveProducts
 
 
 shouldRetryProducts : Motorcycle.ProductState -> Bool
@@ -162,18 +191,18 @@ shouldRetryProducts productState =
             False
 
 
-productStateFromResult : Result Http.Error (List Motorcycle.Product) -> Motorcycle.ProductState
-productStateFromResult result =
+productStateFromResult : String -> Result Http.Error (List Motorcycle.Product) -> Motorcycle.ProductState
+productStateFromResult apiBaseUrl result =
     case result of
         Ok products ->
             Motorcycle.Loaded products
 
         Err error ->
-            Motorcycle.Failed (httpErrorMessage error)
+            Motorcycle.Failed (httpErrorMessage apiBaseUrl error)
 
 
-httpErrorMessage : Http.Error -> String
-httpErrorMessage error =
+httpErrorMessage : String -> Http.Error -> String
+httpErrorMessage apiBaseUrl error =
     case error of
         Http.BadUrl _ ->
             "Check the frontend API URL."
@@ -182,13 +211,25 @@ httpErrorMessage error =
             "The request timed out."
 
         Http.NetworkError ->
-            "Start the local Haskell service on http://localhost:8080."
+            "Check that the product service is reachable at " ++ apiBaseUrl ++ "."
 
         Http.BadStatus statusCode ->
             "The service returned HTTP " ++ String.fromInt statusCode ++ "."
 
         Http.BadBody _ ->
             "The service returned unexpected JSON."
+
+
+normaliseApiBaseUrl : String -> String
+normaliseApiBaseUrl apiBaseUrl =
+    if String.isEmpty apiBaseUrl then
+        defaultApiBaseUrl
+
+    else if String.endsWith "/" apiBaseUrl then
+        String.dropRight 1 apiBaseUrl
+
+    else
+        apiBaseUrl
 
 
 view : Model -> Html.Html Msg
