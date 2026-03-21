@@ -23,6 +23,7 @@ import NoDebug.Log
 import NoDebug.TodoOrToString
 import NoExposingEverything
 import NoImportingEverything
+import NoMissingSubscriptionsCall
 import NoMissingTypeAnnotation
 import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
@@ -57,6 +58,8 @@ config =
     -- Module structure rules (medium performance impact)
     , NoExposingEverything.rule
     , NoImportingEverything.rule []
+    , NoMissingSubscriptionsCall.rule
+        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoDeprecated.rule NoDeprecated.defaults
     , NoMissingTypeAnnotation.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
