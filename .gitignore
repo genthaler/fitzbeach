@@ -4,3 +4,4 @@ dist
 dist-book
 elm-stuff
 .DS_Store
+backend/.stack-work/
