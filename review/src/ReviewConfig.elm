@@ -18,6 +18,7 @@ Performance optimizations:
 
 import Docs.ReviewAtDocs
 import NoConfusingPrefixOperator
+import NoDeprecated
 import NoDebug.Log
 import NoDebug.TodoOrToString
 import NoExposingEverything
@@ -54,6 +55,7 @@ config =
     -- Module structure rules (medium performance impact)
     , NoExposingEverything.rule
     , NoImportingEverything.rule []
+    , NoDeprecated.rule NoDeprecated.defaults
     , NoMissingTypeAnnotation.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoMissingTypeExpose.rule
