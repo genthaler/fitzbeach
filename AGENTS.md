@@ -32,6 +32,10 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - If Elm dependencies are added later, keep them intentional and minimal.
 - Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
 - When creating a new project-local skill under `./.codex/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
+- When creating or updating a project-local skill, use the local `skill-authoring` skill.
+- Project-local `SKILL.md` files should follow this section order: title, when to use, when not to use, workflow, fixing guidance, final checks.
+- When the user asks for a prompt for a new Codex thread, prefer a minimal prompt that relies on this repository's `AGENTS.md` and local skills instead of restating repo instructions.
+- When a task clearly matches a repo-local skill, reference that skill by name in the prompt rather than rewriting its workflow inline.
 
 ## Commands
 
@@ -181,6 +185,9 @@ Before finishing:
 - `nix-verified-frontend`: Nix dev shells, pinned verify commands, and aligned local/CI/deploy frontend workflows.
 - `elm-ui`: `mdgriffith/elm-ui` layout and styling work.
 - `elm-ui-review`: Calm, minimal `elm-ui` presentation review.
+- `skill-authoring`: Canonical format and workflow guidance for creating or revising repo-local skills.
+- `ui-review`: Findings-first UI review workflow for this repo, prioritising responsiveness, accessibility, regressions, and calm presentation consistency.
 - `elm-parcel-app`: Parcel bootstrapping and Elm app integration.
+- `refactor-step`: Incremental architecture or codebase cleanup workflow that preserves behaviour and keeps docs/tests aligned.
 - `readme-sync`: Keep `README.md` aligned with app behavior and commands.
 - `git`: Git status, diff review, and commit message guidance.

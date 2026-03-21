@@ -1,0 +1,2 @@
+name: refactor-step
+description: Incremental architecture or codebase cleanup workflow that preserves behaviour and keeps docs/tests aligned.
