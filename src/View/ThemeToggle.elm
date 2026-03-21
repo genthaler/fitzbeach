@@ -1,5 +1,8 @@
 module View.ThemeToggle exposing
-    ( themeToggleDescription
+    ( Config
+    , Icon(..)
+    , config
+    , themeToggleDescription
     , toggleThemeMode
     , view
     )
@@ -20,12 +23,24 @@ type alias Point =
     }
 
 
+type Icon
+    = Sun
+    | Moon
+
+
+type alias Config =
+    { nextMode : Theme.Mode
+    , description : String
+    , icon : Icon
+    }
+
+
 view : Theme.Palette -> Theme.Mode -> msg -> Element msg
 view colors activeMode onToggle =
     let
-        nextMode : Theme.Mode
-        nextMode =
-            toggleThemeMode activeMode
+        toggleConfig : Config
+        toggleConfig =
+            config activeMode
     in
     Input.button
         [ Background.color colors.buttonBackground
@@ -33,11 +48,30 @@ view colors activeMode onToggle =
         , Border.width 1
         , Border.color colors.buttonBorder
         , Element.paddingXY 16 12
-        , Region.description (themeToggleDescription nextMode)
+        , Region.description toggleConfig.description
         ]
         { onPress = Just onToggle
-        , label = themeToggleIcon colors nextMode
+        , label = themeToggleIcon colors toggleConfig.icon
         }
+
+
+config : Theme.Mode -> Config
+config activeMode =
+    let
+        nextMode : Theme.Mode
+        nextMode =
+            toggleThemeMode activeMode
+    in
+    { nextMode = nextMode
+    , description = themeToggleDescription nextMode
+    , icon =
+        case nextMode of
+            Theme.Light ->
+                Sun
+
+            Theme.Dark ->
+                Moon
+    }
 
 
 toggleThemeMode : Theme.Mode -> Theme.Mode
@@ -60,13 +94,13 @@ themeToggleDescription mode =
             "Switch to dark theme"
 
 
-themeToggleIcon : Theme.Palette -> Theme.Mode -> Element msg
-themeToggleIcon colors mode =
-    case mode of
-        Theme.Light ->
+themeToggleIcon : Theme.Palette -> Icon -> Element msg
+themeToggleIcon colors icon =
+    case icon of
+        Sun ->
             sunIcon colors
 
-        Theme.Dark ->
+        Moon ->
             moonIcon colors
 
 
