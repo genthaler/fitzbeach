@@ -85,6 +85,12 @@ Or start the server directly through GHCi in one command:
 npm run backend:ghci:main
 ```
 
+If you want to run that directly through `nix develop -c` on systems where the full command is not parsed as separate arguments, use:
+
+```bash
+nix develop -c sh -lc 'npm run backend:ghci:main'
+```
+
 That starts the API on `http://localhost:8080`.
 
 Confirm the API is responding:
