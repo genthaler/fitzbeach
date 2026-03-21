@@ -37,6 +37,7 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - Project-local `SKILL.md` files should not use YAML frontmatter; keep skill metadata only in `agents/openai.yaml`.
 - When the user asks for a prompt for a new Codex thread, prefer a minimal prompt that relies on this repository's `AGENTS.md` and local skills instead of restating repo instructions.
 - When a task clearly matches a repo-local skill, reference that skill by name in the prompt rather than rewriting its workflow inline.
+- When using the task plan tool, prefer short user-visible milestones. Do not keep an inspection or analysis step in progress after the relevant files have been read. Separate editing, testing, verification, and commit steps.
 
 ## Commands
 
