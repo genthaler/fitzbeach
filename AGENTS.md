@@ -178,7 +178,8 @@ Optimise for readability, calmness, and polish.
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
 2. Run the repo's required final verification command, `nix develop -c npm run verify`, before considering a substantive code task complete. Direct intermediate `npm` or other commands are allowed. If the Nix-based verification cannot be run, state that clearly and explain why.
-3. After the task is complete, commit the changes.
+3. Before making a repo commit for new work, create or switch to a branch whose name starts with `codex/` unless the user explicitly asks to stay on the current branch.
+4. After the task is complete, commit the changes.
 
 ## Skills
 
@@ -199,4 +200,4 @@ Before finishing:
 - `elm-parcel-app`: Parcel bootstrapping and Elm app integration.
 - `refactor-step`: Incremental architecture or codebase cleanup workflow that preserves behaviour and keeps docs/tests aligned.
 - `readme-sync`: Keep `README.md` aligned with app behavior and commands.
-- `git`: Git status, diff review, and commit message guidance.
+- `git`: Git status, diff review, branch naming, and commit message guidance.
