@@ -27,6 +27,7 @@ import NoMissingTypeAnnotation
 import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
 import NoPrematureLetComputation
+import NoRecursiveUpdate
 import NoSimpleLetBody
 import NoUnused.CustomTypeConstructorArgs
 import NoUnused.CustomTypeConstructors
@@ -59,6 +60,7 @@ config =
     , NoMissingTypeAnnotation.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoMissingTypeExpose.rule
+    , NoRecursiveUpdate.rule
 
     -- Unused detection rules (more expensive, run later)
     , NoUnused.Variables.rule
