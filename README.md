@@ -74,6 +74,18 @@ Or directly with Stack:
 stack --stack-yaml backend/stack.yaml run
 ```
 
+Restart the backend automatically when Haskell files change:
+
+```bash
+npm run backend:watch
+```
+
+Or directly with Stack:
+
+```bash
+stack --stack-yaml backend/stack.yaml build --file-watch --exec fitzbeach-backend
+```
+
 Open the backend in GHCi for local iteration:
 
 ```bash
@@ -114,6 +126,14 @@ npm run dev
 ```
 
 Then open the Parcel app and load the default `Motorcycle` page. It will request products from `http://localhost:8080/products`.
+
+To run both frontend and backend watch processes together:
+
+```bash
+npm run dev:all
+```
+
+That command uses `concurrently` to start both processes and stop the other one if either side exits with an error.
 
 Start the ElmBook documentation app:
 
