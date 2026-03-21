@@ -67,6 +67,18 @@ Start the local Haskell product service:
 npm run backend:run
 ```
 
+Open the backend in GHCi for local iteration:
+
+```bash
+npm run backend:ghci
+```
+
+Then run the server from the GHCi prompt with:
+
+```haskell
+:main
+```
+
 That starts the API on `http://localhost:8080`.
 
 Confirm the API is responding:
