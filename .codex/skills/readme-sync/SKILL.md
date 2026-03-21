@@ -21,9 +21,14 @@ description: "Use when code or configuration changes may affect user-visible beh
 4. Update examples, commands, and file paths together so documentation does not drift partially.
 5. Do not describe planned features as if they already exist.
 
-## Expectations
+## Fixing guidance
 - Keep instructions accurate and minimal.
 - Match the terminology used in the codebase.
 - Preserve working setup commands unless they truly changed.
 - Avoid documenting internal implementation details unless the README already does.
 - State explicitly when no README change is needed after checking.
+
+## Final checks
+- `README.md` matches the current app behaviour, commands, and structure affected by the change.
+- Examples, commands, and paths have been updated together where needed.
+- If no README change was required, that decision is stated explicitly.

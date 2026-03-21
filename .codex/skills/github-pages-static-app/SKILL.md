@@ -15,6 +15,11 @@ description: "Use when tasks involve deploying a static site or frontend app to 
 Use alongside framework-specific skills when the app build itself is changing.
 Use alongside `readme-sync` when deployment instructions or contributor workflow change.
 
+## When not to use
+- When the task is limited to app code with no deploy workflow or public-path impact.
+- When the deployment target is not GitHub Pages.
+- When the request is only to review UI or domain logic.
+
 ## Workflow
 1. Inspect the existing deploy path first.
    - Read `package.json` or equivalent task runner config.
@@ -34,29 +39,21 @@ Use alongside `readme-sync` when deployment instructions or contributor workflow
 6. Re-check the docs and workflow after changes.
    - README and contributor instructions should describe the actual deploy and verification path, not an approximation.
 
-## Script guidance
+## Fixing guidance
 - Prefer a structure like:
   - `build`: normal production build
   - `build:pages`: GitHub Pages build with repository prefix if needed
   - `predeploy`: verification plus the Pages build
   - `deploy`: `gh-pages -d <build-dir>`
 - Keep script names conventional unless the project already uses a different pattern.
-
-## Common pitfalls
 - Forgetting the repository path prefix, causing broken asset URLs after deploy.
 - Publishing the wrong output directory.
 - Letting `deploy` bypass tests, lint, or review checks that the project expects.
 - Documenting a deploy flow that does not match the scripts on disk.
-
-## Common checks
-- `npm run build`
-- `npm run build:pages`
-- `npm run predeploy`
-- `npm run deploy`
-
-Run the smallest relevant command first, then the full predeploy path when validating a release workflow change.
+- Run the smallest relevant command first, then the full predeploy path when validating a release workflow change.
 
 ## Final checks
 - The deploy workflow clearly separates verification, build, and publish steps.
 - Any Pages-specific public URL or base path is intentional and documented.
 - The published directory matches the configured build output.
+- Relevant validation has been run with commands such as `npm run build`, `npm run build:pages`, `npm run predeploy`, or `npm run deploy` as appropriate.

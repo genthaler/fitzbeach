@@ -14,6 +14,11 @@ description: "Use when tasks involve running elm-review, fixing lint or static-a
 Use alongside the `elm` skill when review fixes require non-trivial Elm refactors.
 Use alongside the `readme-sync` skill if review commands or contributor workflow change.
 
+## When not to use
+- When the task is general Elm implementation work without a review or static-analysis concern.
+- When the task is documentation-only and does not affect review config or lint workflow.
+- When another skill better fits the main change and `elm-review` only needs a final pass.
+
 ## Workflow
 1. Inspect the review setup first.
    - Read `package.json` for review scripts.
@@ -41,22 +46,14 @@ Use alongside the `readme-sync` skill if review commands or contributor workflow
 - `Simplify`: accept the simpler expression when it does not reduce readability.
 - `NoDebug.*`: remove debug code instead of hiding it behind dead branches.
 - Import or exposing rules: tighten imports and exposing lists rather than broadening them.
-
-## Config guidance
 - Keep `review/` changes intentional and minimal.
 - Preserve the ordering and grouping of rules when the config is already structured for performance or clarity.
 - Prefer directory-scoped ignores over global weakening when tests or generated code need exceptions.
 - If a new rule package is required, keep it intentional and validate the resulting config.
-
-## Common checks
-- `npm run review`
-- `npm run review:fix`
-- `npm test`
-- `npm run build`
-
-Prefer the project's existing scripts over raw `elm-review` commands unless debugging a script problem.
+- Prefer the project's existing scripts over raw `elm-review` commands unless debugging a script problem.
 
 ## Final checks
 - `elm-review` passes before the task is complete, or any remaining failure is stated clearly as a blocker.
 - Elm code still compiles conceptually with the project's existing architecture and naming.
 - Any config change in `review/src/ReviewConfig.elm` is deliberate, narrow, and explained.
+- Relevant validation has been rerun using commands such as `npm run review`, `npm run review:fix`, `npm test`, or `npm run build` as appropriate.

@@ -15,6 +15,11 @@ description: "Use when tasks involve frontend or static-app projects that use Ni
 Use alongside framework-specific skills when application code is changing.
 Use alongside `readme-sync` when setup, verification, or contributor workflow changes.
 
+## When not to use
+- When the repository does not use Nix flakes or dev shells and the task does not introduce them.
+- When the task is limited to app code with no tooling, CI, or verification workflow impact.
+- When deployment and verification are outside the scope of the request.
+
 ## Workflow
 1. Inspect the Nix entrypoints first.
    - Read `flake.nix`, `.envrc`, CI workflows, and package scripts together.
@@ -34,25 +39,18 @@ Use alongside `readme-sync` when setup, verification, or contributor workflow ch
 6. Re-validate after workflow changes.
    - Re-run the pinned verification command after changing scripts, flake inputs, or CI/deploy wiring.
 
-## Script guidance
+## Fixing guidance
 - Prefer a dedicated script such as `verify` for the project's full validation suite.
 - Prefer `nix develop -c <verify-command>` as the final, reproducible check.
 - Keep deploy-specific scripts layered on top of verification rather than duplicating it.
-
-## Common pitfalls
 - Letting CI use a different toolchain or command sequence than local verification.
 - Treating direct package-manager commands as equivalent to the pinned Nix validation path when the project says otherwise.
 - Expanding the dev shell with unnecessary tools that the repo does not actually use.
 - Forgetting to update docs when the canonical Nix command changes.
-
-## Common checks
-- `nix develop`
-- `nix develop -c npm run verify`
-- `npm run verify`
-
-Use the project's actual command names, but prefer the Nix-wrapped verification command when confirming the final state.
+- Use the project's actual command names, but prefer the Nix-wrapped verification command when confirming the final state.
 
 ## Final checks
 - The project has a clear canonical verification command under Nix.
 - Local instructions, CI, and deploy workflow all point at the same pinned validation path.
+- Relevant validation has been run with the Nix-wrapped verification command, such as `nix develop -c npm run verify`, when appropriate.
 - Any inability to run the Nix-based verification step is stated clearly.
