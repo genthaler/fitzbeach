@@ -79,6 +79,12 @@ Then run the server from the GHCi prompt with:
 :main
 ```
 
+Or start the server directly through GHCi in one command:
+
+```bash
+npm run backend:ghci:main
+```
+
 That starts the API on `http://localhost:8080`.
 
 Confirm the API is responding:

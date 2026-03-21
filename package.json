@@ -5,6 +5,7 @@
     "clean": "shx rm -rf .parcel-cache dist dist-book",
     "backend:build": "stack --stack-yaml backend/stack.yaml build",
     "backend:ghci": "stack --stack-yaml backend/stack.yaml ghci",
+    "backend:ghci:main": "stack --stack-yaml backend/stack.yaml ghci --ghci-options -e --ghci-options :main",
     "backend:run": "stack --stack-yaml backend/stack.yaml run",
     "book": "parcel book.html",
     "book:build": "parcel build book.html --dist-dir dist-book",
