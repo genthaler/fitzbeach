@@ -26,10 +26,6 @@ Live site: https://genthaler.github.io/fitzbeach/
 
 Prerequisites:
 
-- Nix
-
-Optional direct tool setup:
-
 - Node.js
 - npm
 - Stack
@@ -40,7 +36,6 @@ Optional Nix setup:
 nix develop
 ```
 
-The dev shell provides pinned versions of Node.js, Elm, `elm-test`, and `elm-review`. Direct `npm` commands remain available for intermediate work, but the required final verification step for this repo is:
 The dev shell provides pinned versions of Node.js, Elm, `elm-test`, `elm-review`, and Stack. Direct `npm` commands remain available for intermediate work, but the required final verification step for this repo is:
 
 ```bash
@@ -61,16 +56,34 @@ Build the local Haskell product service:
 npm run backend:build
 ```
 
+Or directly with Stack:
+
+```bash
+stack --stack-yaml backend/stack.yaml build
+```
+
 Start the local Haskell product service:
 
 ```bash
 npm run backend:run
 ```
 
+Or directly with Stack:
+
+```bash
+stack --stack-yaml backend/stack.yaml run
+```
+
 Open the backend in GHCi for local iteration:
 
 ```bash
 npm run backend:ghci
+```
+
+Or directly with Stack:
+
+```bash
+stack --stack-yaml backend/stack.yaml ghci
 ```
 
 Then run the server from the GHCi prompt with:
@@ -83,12 +96,6 @@ Or start the server directly through GHCi in one command:
 
 ```bash
 npm run backend:ghci:main
-```
-
-If you want to run that directly through `nix develop -c` on systems where the full command is not parsed as separate arguments, use:
-
-```bash
-nix develop -c sh -lc 'npm run backend:ghci:main'
 ```
 
 That starts the API on `http://localhost:8080`.
@@ -139,6 +146,12 @@ nix develop -c npm run verify
 ```
 
 That command runs `npm test`, `npm run review`, and `npm run book:build` inside the pinned Nix shell.
+
+If you prefer not to enter the Nix shell first, use:
+
+```bash
+nix develop -c sh -lc 'npm run verify'
+```
 
 Run the unit tests:
 
