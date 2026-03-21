@@ -20,6 +20,7 @@
             elmPackages.elm
             elmPackages.elm-test
             elmPackages.elm-review
+            stack
             git
           ];
         };

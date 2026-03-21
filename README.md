@@ -26,6 +26,10 @@ Live site: https://genthaler.github.io/fitzbeach/
 
 Prerequisites:
 
+- Nix
+
+Optional direct tool setup:
+
 - Node.js
 - npm
 - Stack
@@ -37,6 +41,7 @@ nix develop
 ```
 
 The dev shell provides pinned versions of Node.js, Elm, `elm-test`, and `elm-review`. Direct `npm` commands remain available for intermediate work, but the required final verification step for this repo is:
+The dev shell provides pinned versions of Node.js, Elm, `elm-test`, `elm-review`, and Stack. Direct `npm` commands remain available for intermediate work, but the required final verification step for this repo is:
 
 ```bash
 nix develop -c npm run verify
@@ -44,17 +49,22 @@ nix develop -c npm run verify
 
 If you use `direnv`, this repo also includes an `.envrc` so entering the directory can load the flake shell automatically after `direnv allow`.
 
-Install dependencies:
+Install frontend dependencies:
 
 ```bash
 npm install
 ```
 
+Build the local Haskell product service:
+
+```bash
+npm run backend:build
+```
+
 Start the local Haskell product service:
 
 ```bash
-cd backend
-stack run
+npm run backend:run
 ```
 
 That starts the API on `http://localhost:8080`.
