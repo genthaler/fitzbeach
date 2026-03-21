@@ -25,9 +25,10 @@ Create or revise repo-local Codex skills using a consistent structure so they ar
    - workflow
    - fixing guidance
    - final checks
-4. Keep the content concrete. Prefer task-shaped instructions, repo paths, commands, and completion criteria over abstract advice.
-5. Create or update `agents/openai.yaml` for the skill with a short name and one-sentence description.
-6. If the new skill changes how future prompts should be written or how skills should be formatted, update `AGENTS.md` in the same change.
+4. Do not add YAML frontmatter to `SKILL.md`. Keep machine-readable skill metadata only in `agents/openai.yaml`.
+5. Keep the content concrete. Prefer task-shaped instructions, repo paths, commands, and completion criteria over abstract advice.
+6. Create or update `agents/openai.yaml` for the skill with a short name and one-sentence description.
+7. If the new skill changes how future prompts should be written or how skills should be formatted, update `AGENTS.md` in the same change.
 
 ## Fixing guidance
 
@@ -39,6 +40,7 @@ Create or revise repo-local Codex skills using a consistent structure so they ar
 ## Final checks
 
 - Confirm the `SKILL.md` uses the canonical section order.
+- Confirm the `SKILL.md` does not include YAML frontmatter.
 - Confirm `agents/openai.yaml` exists and matches the skill name and purpose.
 - Confirm the skill does not restate large parts of `AGENTS.md` unless the repetition is necessary for correct use.
 - If the skill was added or significantly changed, check whether `AGENTS.md` should mention it in the local skills list or project rules.

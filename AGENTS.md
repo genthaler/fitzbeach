@@ -34,6 +34,7 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - When creating a new project-local skill under `./.codex/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
 - When creating or updating a project-local skill, use the local `skill-authoring` skill.
 - Project-local `SKILL.md` files should follow this section order: title, when to use, when not to use, workflow, fixing guidance, final checks.
+- Project-local `SKILL.md` files should not use YAML frontmatter; keep skill metadata only in `agents/openai.yaml`.
 - When the user asks for a prompt for a new Codex thread, prefer a minimal prompt that relies on this repository's `AGENTS.md` and local skills instead of restating repo instructions.
 - When a task clearly matches a repo-local skill, reference that skill by name in the prompt rather than rewriting its workflow inline.
 
