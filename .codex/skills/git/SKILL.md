@@ -1,8 +1,3 @@
----
-name: "git"
-description: "Use when working with git status and diffs, especially when suggesting commit messages after approved file changes. Base suggestions on the current diff against `HEAD`, note unrelated working tree changes, and prefer short imperative commit messages with a change-type prefix."
----
-
 # Git Skill
 
 ## When to use

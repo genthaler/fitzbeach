@@ -1,8 +1,3 @@
----
-name: "elm-ui"
-description: "Use when tasks involve `mdgriffith/elm-ui`, including layout composition, spacing, typography, attribute helpers, and small UI changes in Elm projects. Prefer existing project helpers and visual patterns instead of introducing raw HTML or new styling systems."
----
-
 # Elm UI Skill
 
 ## When to use

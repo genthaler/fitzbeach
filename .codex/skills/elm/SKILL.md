@@ -1,8 +1,3 @@
----
-name: "elm"
-description: "Use when tasks involve Elm applications or libraries, especially The Elm Architecture, compiler-guided refactors, decoders and encoders, type-safe model changes, and small updates that preserve compilability. Prefer existing project patterns, explicit top-level types, and minimal changes."
----
-
 # Elm Skill
 
 ## When to use

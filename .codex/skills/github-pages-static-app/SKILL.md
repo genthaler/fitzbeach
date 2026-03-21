@@ -1,8 +1,3 @@
----
-name: "github-pages-static-app"
-description: "Use when tasks involve deploying a static site or frontend app to GitHub Pages, including configuring build and predeploy scripts, handling repository path prefixes, publishing a build directory with gh-pages, and validating the deploy workflow."
----
-
 # GitHub Pages Static App Skill
 
 ## When to use

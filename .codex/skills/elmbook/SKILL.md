@@ -1,8 +1,3 @@
----
-name: "elmbook"
-description: "Use when tasks involve ElmBook catalogues for Elm applications, including adding or refining chapters, documenting reusable components or pages, sharing state across examples, aligning ElmBook theme options with app styling, and validating ElmBook builds."
----
-
 # ElmBook Skill
 
 ## When to use

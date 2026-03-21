@@ -1,8 +1,3 @@
----
-name: "readme-sync"
-description: "Use when code or configuration changes may affect user-visible behaviour, setup, controls, commands, architecture notes, or project structure. Check whether `README.md` should be updated and keep documentation aligned with the current state of the project."
----
-
 # README Sync Skill
 
 ## When to use

@@ -1,8 +1,3 @@
----
-name: "elm-review"
-description: "Use when tasks involve running elm-review, fixing lint or static-analysis violations in Elm projects, maintaining review configuration, or making rule-aware refactors with minimal code churn. Prefer the project's existing review scripts, preserve compilability, and validate with elm-review after changes."
----
-
 # Elm Review Skill
 
 ## When to use

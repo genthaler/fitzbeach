@@ -1,8 +1,3 @@
----
-name: "elm-ui-review"
-description: "Use when reviewing or refining Elm UI presentation for calm, minimal, well-spaced interfaces. Focus on spacing, typography, restrained surfaces, interaction clarity, and accessibility in `elm-ui`-based views."
----
-
 # Elm UI Review Skill
 
 ## When to use

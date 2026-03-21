@@ -1,8 +1,3 @@
----
-name: "elm-parcel-app"
-description: "Use when working on Elm apps booted with Parcel. Inspect `elm.json`, `src/Main.elm`, `index.js`, and `index.html`, keep the bootstrapping simple, and validate with the smallest relevant Parcel or Elm build command."
----
-
 # Elm Parcel App Skill
 
 ## When to use

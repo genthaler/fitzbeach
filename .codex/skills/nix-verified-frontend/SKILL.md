@@ -1,8 +1,3 @@
----
-name: "nix-verified-frontend"
-description: "Use when tasks involve frontend or static-app projects that use Nix flakes or dev shells to pin tooling, run a canonical verification command, and keep local, CI, and deploy workflows aligned."
----
-
 # Nix Verified Frontend Skill
 
 ## When to use
