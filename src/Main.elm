@@ -3,7 +3,9 @@ module Main exposing
     , Msg(..)
     , Viewport
     , initModel
+    , keyboardCommandsEnabled
     , main
+    , motorcycleFeedSubscriptionEnabled
     , update
     )
 
@@ -104,19 +106,34 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Browser.Events.onResize ResizeViewport
-        , if model.currentPage /= View.MotorcyclePage || List.isEmpty model.motorcycleFeed.pendingProducts then
-            Sub.none
+        , if motorcycleFeedSubscriptionEnabled model then
+            Time.every 250 (\_ -> ReceiveNextProduct)
 
           else
-            Time.every 250 (\_ -> ReceiveNextProduct)
-        , case model.currentPage of
-            View.RobotPage ->
-                Browser.Events.onKeyDown
-                    (Decode.map keyPressToMsg (Decode.field "key" Decode.string))
+            Sub.none
+        , if keyboardCommandsEnabled model.currentPage then
+            Browser.Events.onKeyDown
+                (Decode.map keyPressToMsg (Decode.field "key" Decode.string))
 
-            View.MotorcyclePage ->
-                Sub.none
+          else
+            Sub.none
         ]
+
+
+keyboardCommandsEnabled : View.Page -> Bool
+keyboardCommandsEnabled currentPage =
+    case currentPage of
+        View.RobotPage ->
+            True
+
+        View.MotorcyclePage ->
+            False
+
+
+motorcycleFeedSubscriptionEnabled : Model -> Bool
+motorcycleFeedSubscriptionEnabled model =
+    model.currentPage == View.MotorcyclePage
+        && not (List.isEmpty model.motorcycleFeed.pendingProducts)
 
 
 keyPressToMsg : String -> Msg

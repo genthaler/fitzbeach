@@ -1,7 +1,7 @@
 module MainTest exposing (tests)
 
 import Expect
-import Main exposing (Msg(..), initModel, update)
+import Main exposing (Msg(..), initModel, keyboardCommandsEnabled, motorcycleFeedSubscriptionEnabled, update)
 import Motorcycle.Model
 import Robot
 import Robot.Logic exposing (Command(..))
@@ -16,6 +16,36 @@ tests =
         [ test "initModel starts on the motorcycle page" <|
             \_ ->
                 Expect.equal View.MotorcyclePage initModel.currentPage
+        , test "keyboard commands are enabled only on the robot page" <|
+            \_ ->
+                Expect.all
+                    [ \_ -> Expect.equal True (keyboardCommandsEnabled View.RobotPage)
+                    , \_ -> Expect.equal False (keyboardCommandsEnabled View.MotorcyclePage)
+                    ]
+                    ()
+        , test "motorcycle feed subscription is enabled only while products remain on the motorcycle page" <|
+            \_ ->
+                let
+                    withPendingProducts =
+                        initModel
+
+                    withoutPendingProducts =
+                        { initModel
+                            | motorcycleFeed =
+                                { visibleProducts = Motorcycle.Model.products
+                                , pendingProducts = []
+                                }
+                        }
+
+                    robotPageModel =
+                        { initModel | currentPage = View.RobotPage }
+                in
+                Expect.all
+                    [ \_ -> Expect.equal True (motorcycleFeedSubscriptionEnabled withPendingProducts)
+                    , \_ -> Expect.equal False (motorcycleFeedSubscriptionEnabled withoutPendingProducts)
+                    , \_ -> Expect.equal False (motorcycleFeedSubscriptionEnabled robotPageModel)
+                    ]
+                    ()
         , test "motorcycle products stream into the model one at a time" <|
             \_ ->
                 let
