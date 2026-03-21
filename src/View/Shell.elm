@@ -1,4 +1,4 @@
-module View.Shell exposing (Config, view)
+module View.Shell exposing (Config, isCompact, view)
 
 import Element exposing (Element, centerX, centerY, column, el, fill, height, layout, maximum, paddingEach, paddingXY, row, spacing, text, width)
 import Element.Background as Background
