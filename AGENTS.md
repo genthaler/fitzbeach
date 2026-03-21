@@ -44,6 +44,7 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 
 ## Commands
 
+- Elm tooling may not be available on the base shell path in this repo. Prefer project scripts first, and if a direct Elm command is needed, run it through `nix develop -c ...`.
 - Install JS dependencies: `npm install`
 - Start dev server: `npm run dev`
 - Start ElmBook catalogue: `npm run book`
