@@ -25,7 +25,10 @@ chapter =
 
 samplePanel : Motorcycle.Model.Product
 samplePanel =
-    { name = "Transit"
-    , price = "$89"
-    , description = "Compact essentials"
+    { id = 1
+    , name = "Transit Helmet Bag"
+    , category = "Moto Travel"
+    , priceCents = 18900
+    , currency = "USD"
+    , imageUrl = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80"
     }

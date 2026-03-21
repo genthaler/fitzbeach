@@ -5,18 +5,18 @@ module Main exposing
     , initModel
     , keyboardCommandsEnabled
     , main
-    , motorcycleFeedSubscriptionEnabled
     , update
     )
 
 import Browser
 import Browser.Events
 import Html
+import Http
 import Json.Decode as Decode
+import Motorcycle.Api
 import Motorcycle.Model as Motorcycle
 import Robot
 import Robot.Logic as RobotLogic
-import Time
 import View
 import View.Shell as Shell
 import View.Theme as Theme
@@ -26,7 +26,7 @@ type alias Model =
     { robot : Robot.Model
     , themeMode : Theme.Mode
     , currentPage : View.Page
-    , motorcycleFeed : Motorcycle.Feed
+    , motorcycleProducts : Motorcycle.ProductState
     , viewport : Viewport
     }
 
@@ -38,7 +38,7 @@ type Msg
     | SetTheme Theme.Mode
     | SelectPage View.Page
     | ResizeViewport Int Int
-    | ReceiveNextProduct
+    | ReceiveProducts (Result Http.Error (List Motorcycle.Product))
 
 
 type alias Viewport =
@@ -50,7 +50,7 @@ type alias Viewport =
 main : Program () Model Msg
 main =
     Browser.element
-        { init = \_ -> ( initModel, Cmd.none )
+        { init = \_ -> ( initModel, loadProducts )
         , update = update
         , view = view
         , subscriptions = subscriptions
@@ -73,23 +73,32 @@ update msg model =
             ( { model | themeMode = mode }, Cmd.none )
 
         SelectPage selectedPage ->
+            let
+                retryProducts : Bool
+                retryProducts =
+                    selectedPage == View.MotorcyclePage && shouldRetryProducts model.motorcycleProducts
+            in
             ( { model
                 | currentPage = selectedPage
-                , motorcycleFeed =
-                    if selectedPage == View.MotorcyclePage then
-                        Motorcycle.initialFeed
+                , motorcycleProducts =
+                    if retryProducts then
+                        Motorcycle.Loading
 
                     else
-                        model.motorcycleFeed
+                        model.motorcycleProducts
               }
-            , Cmd.none
+            , if retryProducts then
+                loadProducts
+
+              else
+                Cmd.none
             )
 
         ResizeViewport width height ->
             ( { model | viewport = { width = width, height = height } }, Cmd.none )
 
-        ReceiveNextProduct ->
-            ( { model | motorcycleFeed = Motorcycle.receiveNextProduct model.motorcycleFeed }, Cmd.none )
+        ReceiveProducts result ->
+            ( { model | motorcycleProducts = productStateFromResult result }, Cmd.none )
 
 
 initModel : Model
@@ -97,7 +106,7 @@ initModel =
     { robot = Robot.initialModel
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
-    , motorcycleFeed = Motorcycle.initialFeed
+    , motorcycleProducts = Motorcycle.Loading
     , viewport = { width = 0, height = 0 }
     }
 
@@ -106,11 +115,6 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Browser.Events.onResize ResizeViewport
-        , if motorcycleFeedSubscriptionEnabled model then
-            Time.every 250 (\_ -> ReceiveNextProduct)
-
-          else
-            Sub.none
         , if keyboardCommandsEnabled model.currentPage then
             Browser.Events.onKeyDown
                 (Decode.map keyPressToMsg (Decode.field "key" Decode.string))
@@ -130,12 +134,6 @@ keyboardCommandsEnabled currentPage =
             False
 
 
-motorcycleFeedSubscriptionEnabled : Model -> Bool
-motorcycleFeedSubscriptionEnabled model =
-    model.currentPage == View.MotorcyclePage
-        && not (List.isEmpty model.motorcycleFeed.pendingProducts)
-
-
 keyPressToMsg : String -> Msg
 keyPressToMsg key =
     case RobotLogic.commandFromKey key of
@@ -144,6 +142,53 @@ keyPressToMsg key =
 
         Nothing ->
             IgnoreKeyPress
+
+
+loadProducts : Cmd Msg
+loadProducts =
+    Motorcycle.Api.getProducts ReceiveProducts
+
+
+shouldRetryProducts : Motorcycle.ProductState -> Bool
+shouldRetryProducts productState =
+    case productState of
+        Motorcycle.Failed _ ->
+            True
+
+        Motorcycle.Loading ->
+            False
+
+        Motorcycle.Loaded _ ->
+            False
+
+
+productStateFromResult : Result Http.Error (List Motorcycle.Product) -> Motorcycle.ProductState
+productStateFromResult result =
+    case result of
+        Ok products ->
+            Motorcycle.Loaded products
+
+        Err error ->
+            Motorcycle.Failed (httpErrorMessage error)
+
+
+httpErrorMessage : Http.Error -> String
+httpErrorMessage error =
+    case error of
+        Http.BadUrl _ ->
+            "Check the frontend API URL."
+
+        Http.Timeout ->
+            "The request timed out."
+
+        Http.NetworkError ->
+            "Start the local Haskell service on http://localhost:8080."
+
+        Http.BadStatus statusCode ->
+            "The service returned HTTP " ++ String.fromInt statusCode ++ "."
+
+        Http.BadBody _ ->
+            "The service returned unexpected JSON."
 
 
 view : Model -> Html.Html Msg

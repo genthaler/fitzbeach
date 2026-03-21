@@ -1,6 +1,6 @@
 # Fitzbeach
 
-A small Elm application with a restrained main menu and two pages: a `Motorcycle` product-style landing page and a `Robot` page with the existing 5x5 robot game.
+A small Elm application with a restrained main menu and two pages: a `Motorcycle` product-style landing page backed by a local Haskell service for development, and a `Robot` page with the existing 5x5 robot game.
 
 Live site: https://genthaler.github.io/fitzbeach/
 
@@ -8,7 +8,7 @@ Live site: https://genthaler.github.io/fitzbeach/
 
 - Minimal main navigation with `Motorcycle` and `Robot` pages
 - Responsive shell layout that adapts navigation, spacing, and page composition for narrower screens
-- `Motorcycle` landing page with a restrained product-style panel grid that simulates products arriving over time whenever the page is shown
+- `Motorcycle` landing page that loads a restrained product panel grid from a local Haskell JSON API during development
 - 5x5 robot grid rendered with `elm-ui`
 - Robot movement constrained to the grid bounds
 - Button controls for move, turn left, turn right, undo, and reset
@@ -28,6 +28,7 @@ Prerequisites:
 
 - Node.js
 - npm
+- Stack
 
 Optional Nix setup:
 
@@ -49,11 +50,29 @@ Install dependencies:
 npm install
 ```
 
-Start the development server:
+Start the local Haskell product service:
+
+```bash
+cd backend
+stack run
+```
+
+That starts the API on `http://localhost:8080`.
+
+Confirm the API is responding:
+
+```bash
+curl http://localhost:8080/health
+curl http://localhost:8080/products
+```
+
+Start the frontend development server from the repo root in a second terminal:
 
 ```bash
 npm run dev
 ```
+
+Then open the Parcel app and load the default `Motorcycle` page. It will request products from `http://localhost:8080/products`.
 
 Start the ElmBook documentation app:
 
@@ -133,12 +152,16 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 ## Architecture notes
 
 - `src/Main.elm` owns application state, subscriptions, and top-level message routing.
+- `backend/app/Main.hs` starts the local Haskell service and exposes `/health` and `/products`.
+- `backend/src/Product.hs` defines the backend `Product` JSON shape shared conceptually with the Elm frontend.
+- `backend/src/ProductSource.hs` keeps the current static in-memory product list separate from the HTTP layer so it can be replaced later by DynamoDB or another store.
 - `src/Book.elm` is a separate ElmBook entrypoint for documented UI examples.
 - `src/Book/` contains ElmBook fixtures and chapters.
 - `book.js` boots the compiled ElmBook app into `#app`.
 - `book.html` is the minimal HTML shell for the ElmBook catalogue.
 - `src/Motorcycle.elm` contains the Motorcycle feature rendering.
-- `src/Motorcycle/Model.elm` contains the Motorcycle feature data and feed progression state helpers.
+- `src/Motorcycle/Api.elm` contains the frontend HTTP request for loading products from the local service.
+- `src/Motorcycle/Model.elm` contains the Motorcycle feature product model, JSON decoder, and local sample data used by ElmBook.
 - `src/Robot.elm` contains the robot feature state and update orchestration.
 - `src/Robot/Model.elm` contains the robot domain model and movement rules.
 - `src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.
@@ -149,7 +172,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `src/View/Theme.elm` centralises the shared color palette.
 - `tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 
-The boundary between domain and UI is deliberate: movement logic stays in the domain module, robot feature orchestration lives in the top-level feature module, and the app layer handles routing and subscriptions.
+The boundary between domain and UI is deliberate: movement logic stays in the domain module, robot feature orchestration lives in the top-level feature module, and the app layer handles routing and subscriptions. The first backend step follows the same approach by keeping the static product source separate from the Haskell HTTP handlers.
 
 ## Why Elm
 

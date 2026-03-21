@@ -16,7 +16,7 @@ type Page
 
 page :
     { a
-        | motorcycleFeed : Motorcycle.Feed
+        | motorcycleProducts : Motorcycle.ProductState
         , robot : Robot.Model
         , currentPage : Page
     }
@@ -30,9 +30,7 @@ page model colors compactLayout robotControls =
             Motorcycle.view
                 compactLayout
                 colors
-                (List.length model.motorcycleFeed.visibleProducts + List.length model.motorcycleFeed.pendingProducts)
-                model.motorcycleFeed.visibleProducts
-                (not (List.isEmpty model.motorcycleFeed.pendingProducts))
+                model.motorcycleProducts
 
         RobotPage ->
             Robot.View.view compactLayout colors model.robot robotControls

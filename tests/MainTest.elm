@@ -1,7 +1,8 @@
 module MainTest exposing (tests)
 
 import Expect
-import Main exposing (Msg(..), initModel, keyboardCommandsEnabled, motorcycleFeedSubscriptionEnabled, update)
+import Http
+import Main exposing (Msg(..), initModel, keyboardCommandsEnabled, update)
 import Motorcycle.Model
 import Robot
 import Robot.Logic exposing (Command(..))
@@ -15,7 +16,11 @@ tests =
     describe "Main"
         [ test "initModel starts on the motorcycle page" <|
             \_ ->
-                Expect.equal View.MotorcyclePage initModel.currentPage
+                Expect.all
+                    [ \_ -> Expect.equal View.MotorcyclePage initModel.currentPage
+                    , \_ -> Expect.equal Motorcycle.Model.Loading initModel.motorcycleProducts
+                    ]
+                    ()
         , test "keyboard commands are enabled only on the robot page" <|
             \_ ->
                 Expect.all
@@ -23,70 +28,31 @@ tests =
                     , \_ -> Expect.equal False (keyboardCommandsEnabled View.MotorcyclePage)
                     ]
                     ()
-        , test "motorcycle feed subscription is enabled only while products remain on the motorcycle page" <|
+        , test "successful product responses populate the motorcycle collection" <|
             \_ ->
                 let
-                    withPendingProducts =
-                        initModel
+                    products =
+                        Motorcycle.Model.sampleProducts
 
-                    withoutPendingProducts =
-                        { initModel
-                            | motorcycleFeed =
-                                { visibleProducts = Motorcycle.Model.products
-                                , pendingProducts = []
-                                }
-                        }
-
-                    robotPageModel =
-                        { initModel | currentPage = View.RobotPage }
+                    ( updatedModel, _ ) =
+                        update (ReceiveProducts (Ok products)) initModel
                 in
                 Expect.all
-                    [ \_ -> Expect.equal True (motorcycleFeedSubscriptionEnabled withPendingProducts)
-                    , \_ -> Expect.equal False (motorcycleFeedSubscriptionEnabled withoutPendingProducts)
-                    , \_ -> Expect.equal False (motorcycleFeedSubscriptionEnabled robotPageModel)
+                    [ \_ -> Expect.equal (Motorcycle.Model.Loaded products) updatedModel.motorcycleProducts
+                    , \_ -> Expect.equal initModel.robot updatedModel.robot
+                    , \_ -> Expect.equal initModel.currentPage updatedModel.currentPage
                     ]
                     ()
-        , test "motorcycle products stream into the model one at a time" <|
+        , test "failed product responses store an error state" <|
             \_ ->
                 let
-                    tick =
-                        ReceiveNextProduct
-
-                    ( firstModel, _ ) =
-                        update tick initModel
-
-                    fullyLoadedModel =
-                        List.foldl
-                            (\_ model -> Tuple.first (update tick model))
-                            initModel
-                            Motorcycle.Model.products
+                    ( updatedModel, _ ) =
+                        update (ReceiveProducts (Err Http.NetworkError)) initModel
                 in
                 Expect.all
-                    [ \_ -> Expect.equal (List.take 1 Motorcycle.Model.products) firstModel.motorcycleFeed.visibleProducts
-                    , \_ -> Expect.equal (List.drop 1 Motorcycle.Model.products) firstModel.motorcycleFeed.pendingProducts
-                    , \_ -> Expect.equal Motorcycle.Model.products fullyLoadedModel.motorcycleFeed.visibleProducts
-                    , \_ -> Expect.equal [] fullyLoadedModel.motorcycleFeed.pendingProducts
-                    ]
-                    ()
-        , test "selecting the motorcycle page restarts the simulated product feed" <|
-            \_ ->
-                let
-                    advanceFeed =
-                        Tuple.first << update ReceiveNextProduct
-
-                    progressedModel =
-                        initModel
-                            |> advanceFeed
-                            |> advanceFeed
-                            |> (\model -> Tuple.first (update (SelectPage View.RobotPage) model))
-
-                    ( restartedModel, _ ) =
-                        update (SelectPage View.MotorcyclePage) progressedModel
-                in
-                Expect.all
-                    [ \_ -> Expect.equal View.MotorcyclePage restartedModel.currentPage
-                    , \_ -> Expect.equal [] restartedModel.motorcycleFeed.visibleProducts
-                    , \_ -> Expect.equal Motorcycle.Model.products restartedModel.motorcycleFeed.pendingProducts
+                    [ \_ -> Expect.equal (Motorcycle.Model.Failed "Start the local Haskell service on http://localhost:8080.") updatedModel.motorcycleProducts
+                    , \_ -> Expect.equal initModel.robot updatedModel.robot
+                    , \_ -> Expect.equal initModel.currentPage updatedModel.currentPage
                     ]
                     ()
         , test "keyboard command delegates to the robot feature without affecting other root state" <|
@@ -108,7 +74,7 @@ tests =
                             updatedModel.robot
                     , \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal View.RobotPage updatedModel.currentPage
-                    , \_ -> Expect.equal dirtyModel.motorcycleFeed updatedModel.motorcycleFeed
+                    , \_ -> Expect.equal dirtyModel.motorcycleProducts updatedModel.motorcycleProducts
                     ]
                     ()
         , test "RobotMsg delegates to the robot feature without affecting root-only state" <|
@@ -127,7 +93,7 @@ tests =
                     [ \_ -> Expect.equal (Robot.update Robot.TurnLeft dirtyModel.robot) updatedModel.robot
                     , \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal View.RobotPage updatedModel.currentPage
-                    , \_ -> Expect.equal dirtyModel.motorcycleFeed updatedModel.motorcycleFeed
+                    , \_ -> Expect.equal dirtyModel.motorcycleProducts updatedModel.motorcycleProducts
                     , \_ -> Expect.equal dirtyModel.viewport updatedModel.viewport
                     ]
                     ()
@@ -150,7 +116,7 @@ tests =
                     [ \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal dirtyModel.robot updatedModel.robot
                     , \_ -> Expect.equal dirtyModel.currentPage updatedModel.currentPage
-                    , \_ -> Expect.equal dirtyModel.motorcycleFeed updatedModel.motorcycleFeed
+                    , \_ -> Expect.equal dirtyModel.motorcycleProducts updatedModel.motorcycleProducts
                     , \_ -> Expect.equal dirtyModel.viewport updatedModel.viewport
                     ]
                     ()
@@ -172,7 +138,7 @@ tests =
                     , \_ -> Expect.equal dirtyModel.robot updatedModel.robot
                     , \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal dirtyModel.currentPage updatedModel.currentPage
-                    , \_ -> Expect.equal dirtyModel.motorcycleFeed updatedModel.motorcycleFeed
+                    , \_ -> Expect.equal dirtyModel.motorcycleProducts updatedModel.motorcycleProducts
                     ]
                     ()
         , test "selecting the robot page changes only the current page" <|
@@ -191,7 +157,7 @@ tests =
                     [ \_ -> Expect.equal View.RobotPage updatedModel.currentPage
                     , \_ -> Expect.equal progressedModel.robot updatedModel.robot
                     , \_ -> Expect.equal progressedModel.themeMode updatedModel.themeMode
-                    , \_ -> Expect.equal progressedModel.motorcycleFeed updatedModel.motorcycleFeed
+                    , \_ -> Expect.equal progressedModel.motorcycleProducts updatedModel.motorcycleProducts
                     ]
                     ()
         ]

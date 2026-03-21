@@ -1,23 +1,24 @@
 module Motorcycle exposing (productPanel, view)
 
-import Element exposing (Element, alignBottom, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
+import Element exposing (Element, alignBottom, clip, column, el, fill, height, image, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import Motorcycle.Model exposing (Product)
+import Motorcycle.Model as MotorcycleModel exposing (Product, ProductState(..))
+import String
 import View.Theme as Theme
 
 
-view : Bool -> Theme.Palette -> Int -> List Product -> Bool -> Element msg
-view compactLayout colors totalProducts loadedProducts isLoading =
+view : Bool -> Theme.Palette -> ProductState -> Element msg
+view compactLayout colors productState =
     column
         [ width fill
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
         [ pageHeading compactLayout colors "Motorcycle"
-        , loadingStatus colors totalProducts loadedProducts isLoading
-        , productPanelLayout compactLayout colors loadedProducts
+        , statusPanel compactLayout colors productState
+        , productPanelLayout compactLayout colors productState
         ]
 
 
@@ -46,33 +47,56 @@ pageHeading compactLayout colors labelText =
         ]
 
 
-loadingStatus : Theme.Palette -> Int -> List Product -> Bool -> Element msg
-loadingStatus colors totalCount loadedProducts isLoading =
+statusPanel : Bool -> Theme.Palette -> ProductState -> Element msg
+statusPanel compactLayout colors productState =
+    let
+        message : String
+        message =
+            case productState of
+                Loading ->
+                    "Loading products from the local service."
+
+                Loaded loadedProducts ->
+                    "Collection loaded. "
+                        ++ String.fromInt (List.length loadedProducts)
+                        ++ " products available."
+
+                Failed reason ->
+                    "Product service unavailable. " ++ reason
+    in
     el
         [ Font.size 14
         , Font.color colors.detailText
-        ]
-        (text
-            (if isLoading then
-                "Loading products... "
-                    ++ String.fromInt (List.length loadedProducts)
-                    ++ " of "
-                    ++ String.fromInt totalCount
+        , width fill
+        , Background.color colors.panelBackground
+        , Border.width 1
+        , Border.rounded 18
+        , Border.color colors.panelBorder
+        , padding
+            (if compactLayout then
+                18
 
              else
-                "Collection loaded. "
-                    ++ String.fromInt totalCount
-                    ++ " products available."
+                20
             )
-        )
+        ]
+        (text message)
 
 
-productPanelLayout : Bool -> Theme.Palette -> List Product -> Element msg
-productPanelLayout compactLayout colors loadedProducts =
+productPanelLayout : Bool -> Theme.Palette -> ProductState -> Element msg
+productPanelLayout compactLayout colors productState =
     let
         panels : List (Element msg)
         panels =
-            List.map (productPanel compactLayout colors) loadedProducts
+            case productState of
+                Loaded loadedProducts ->
+                    List.map (productPanel compactLayout colors) loadedProducts
+
+                Loading ->
+                    []
+
+                Failed _ ->
+                    []
     in
     if compactLayout then
         column
@@ -129,28 +153,40 @@ productPanel compactLayout colors panel =
         [ el
             [ width fill
             , height (px imageHeight)
-            , Background.color colors.appBackground
-            , Border.width 1
+            , clip
             , Border.rounded 18
-            , Border.color colors.panelBorder
             ]
-            Element.none
+            (image
+                [ width fill
+                , height fill
+                ]
+                { src = panel.imageUrl
+                , description = panel.name
+                }
+            )
         , el
-            [ Font.size 14
-            , Font.color colors.bodyText
-            ]
-            (text panel.name)
-        , paragraph
-            [ Font.size 15
+            [ Font.size 13
             , Font.color colors.detailText
+            ]
+            (text panel.category)
+        , paragraph
+            [ Font.size 24
+            , Font.color colors.bodyText
             , width fill
             , Element.spacing 6
             ]
-            [ text panel.price ]
+            [ text panel.name ]
+        , paragraph
+            [ Font.size 15
+            , Font.color colors.bodyText
+            , width fill
+            , Element.spacing 6
+            ]
+            [ text (MotorcycleModel.priceLabel panel) ]
         , el
             [ alignBottom
             , Font.size 13
             , Font.color colors.detailText
             ]
-            (text panel.description)
+            (text ("Product #" ++ String.fromInt panel.id))
         ]

@@ -19,7 +19,5 @@ chapter =
                 Motorcycle.view
                     False
                     (Theme.palette state.themeMode)
-                    (List.length Motorcycle.Model.products)
-                    Motorcycle.Model.products
-                    False
+                    (Motorcycle.Model.Loaded Motorcycle.Model.sampleProducts)
             )

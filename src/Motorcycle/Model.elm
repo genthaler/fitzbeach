@@ -1,100 +1,90 @@
-module Motorcycle.Model exposing
-    ( Feed
-    , Product
-    , initialFeed
-    , products
-    , receiveNextProduct
-    )
+module Motorcycle.Model exposing (Product, ProductState(..), priceLabel, productDecoder, sampleProducts)
+
+import Json.Decode as Decode exposing (Decoder)
+import String
 
 
 type alias Product =
-    { name : String
-    , price : String
-    , description : String
+    { id : Int
+    , name : String
+    , category : String
+    , priceCents : Int
+    , currency : String
+    , imageUrl : String
     }
 
 
-type alias Feed =
-    { visibleProducts : List Product
-    , pendingProducts : List Product
-    }
+type ProductState
+    = Loading
+    | Loaded (List Product)
+    | Failed String
 
 
-products : List Product
-products =
-    [ { name = "Transit"
-      , price = "$89"
-      , description = "Compact essentials"
+productDecoder : Decoder Product
+productDecoder =
+    Decode.map6 Product
+        (Decode.field "id" Decode.int)
+        (Decode.field "name" Decode.string)
+        (Decode.field "category" Decode.string)
+        (Decode.field "priceCents" Decode.int)
+        (Decode.field "currency" Decode.string)
+        (Decode.field "imageUrl" Decode.string)
+
+
+priceLabel : Product -> String
+priceLabel product =
+    let
+        centsText : String
+        centsText =
+            String.padLeft 2 '0' (String.fromInt (remainderBy 100 product.priceCents))
+    in
+    currencySymbol product.currency
+        ++ String.fromInt (product.priceCents // 100)
+        ++ "."
+        ++ centsText
+
+
+currencySymbol : String -> String
+currencySymbol currency =
+    case currency of
+        "USD" ->
+            "$"
+
+        "AUD" ->
+            "$"
+
+        _ ->
+            currency ++ " "
+
+
+sampleProducts : List Product
+sampleProducts =
+    [ { id = 1
+      , name = "Transit Helmet Bag"
+      , category = "Moto Travel"
+      , priceCents = 18900
+      , currency = "USD"
+      , imageUrl = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80"
       }
-    , { name = "Materials"
-      , price = "$129"
-      , description = "Light, durable, adaptable"
+    , { id = 2
+      , name = "Contour Tank Sling"
+      , category = "Daily Carry"
+      , priceCents = 12900
+      , currency = "USD"
+      , imageUrl = "https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=900&q=80"
       }
-    , { name = "Carry"
-      , price = "$159"
-      , description = "Everyday travel use"
+    , { id = 3
+      , name = "Summit Roll Pack"
+      , category = "Weekend Ride"
+      , priceCents = 24900
+      , currency = "USD"
+      , imageUrl = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
       }
-    , { name = "Packing"
-      , price = "$199"
-      , description = "Organised without bulk"
-      }
-    , { name = "Summit"
-      , price = "$69"
-      , description = "Slim carry for short city rides"
-      }
-    , { name = "Contour"
-      , price = "$79"
-      , description = "Compact storage with a refined shell"
-      }
-    , { name = "Drift"
-      , price = "$99"
-      , description = "Everyday capacity with quick access"
-      }
-    , { name = "Terrain"
-      , price = "$109"
-      , description = "Balanced organisation for longer hauls"
-      }
-    , { name = "Axis"
-      , price = "$119"
-      , description = "Structured carry with understated detailing"
-      }
-    , { name = "Range"
-      , price = "$139"
-      , description = "Versatile storage for mixed travel days"
-      }
-    , { name = "Nomad"
-      , price = "$149"
-      , description = "Lightweight packing with durable finishes"
-      }
-    , { name = "Vector"
-      , price = "$169"
-      , description = "Purposeful compartments in a calm form"
-      }
-    , { name = "Roam"
-      , price = "$179"
-      , description = "Expanded capacity without visual bulk"
-      }
-    , { name = "Passage"
-      , price = "$189"
-      , description = "Travel-ready layout with quiet utility"
+    , { id = 4
+      , name = "Range Utility Pouch"
+      , category = "Organisation"
+      , priceCents = 6900
+      , currency = "USD"
+      , imageUrl = "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=80"
       }
     ]
-
-
-initialFeed : Feed
-initialFeed =
-    { visibleProducts = []
-    , pendingProducts = products
-    }
-
-
-receiveNextProduct : Feed -> Feed
-receiveNextProduct feed =
-    case feed.pendingProducts of
-        nextProduct :: remainingProducts ->
-            { visibleProducts = feed.visibleProducts ++ [ nextProduct ]
-            , pendingProducts = remainingProducts
-            }
-
-        [] ->
-            feed
