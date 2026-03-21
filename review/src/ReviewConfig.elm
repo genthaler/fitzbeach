@@ -17,6 +17,7 @@ Performance optimizations:
 -}
 
 import Docs.ReviewAtDocs
+import NoInvalidRGBValues
 import NoConfusingPrefixOperator
 import NoDeprecated
 import NoDebug.Log
@@ -24,6 +25,7 @@ import NoDebug.TodoOrToString
 import NoExposingEverything
 import NoImportingEverything
 import NoMissingSubscriptionsCall
+import NoTestValuesInProductionCode
 import NoMissingTypeAnnotation
 import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
@@ -47,6 +49,7 @@ config : List Rule
 config =
     -- Fast syntax-based rules first
     [ NoConfusingPrefixOperator.rule
+    , NoInvalidRGBValues.rule
     , NoDebug.Log.rule
     , NoDebug.TodoOrToString.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
@@ -65,6 +68,8 @@ config =
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoMissingTypeExpose.rule
     , NoRecursiveUpdate.rule
+    , NoTestValuesInProductionCode.rule
+        (NoTestValuesInProductionCode.startsWith "test_")
     , NoUselessSubscriptions.rule
 
     -- Unused detection rules (more expensive, run later)
