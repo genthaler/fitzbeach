@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE NoFieldSelectors #-}
 
 module Product
     ( Product(..)

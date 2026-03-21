@@ -20,7 +20,9 @@
             elmPackages.elm
             elmPackages.elm-test
             elmPackages.elm-review
+            pkg-config
             stack
+            zlib
             git
           ];
         };

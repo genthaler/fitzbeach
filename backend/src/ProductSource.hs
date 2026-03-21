@@ -2,6 +2,7 @@ module ProductSource
     ( allProducts
     ) where
 
+import Prelude hiding (id)
 import Product (Product (..))
 
 allProducts :: [Product]
