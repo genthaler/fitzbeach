@@ -29,6 +29,7 @@ import NoMissingTypeExpose
 import NoPrematureLetComputation
 import NoRecursiveUpdate
 import NoSimpleLetBody
+import NoUselessSubscriptions
 import NoUnused.CustomTypeConstructorArgs
 import NoUnused.CustomTypeConstructors
 import NoUnused.Dependencies
@@ -61,6 +62,7 @@ config =
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoMissingTypeExpose.rule
     , NoRecursiveUpdate.rule
+    , NoUselessSubscriptions.rule
 
     -- Unused detection rules (more expensive, run later)
     , NoUnused.Variables.rule
