@@ -173,7 +173,7 @@ Optimise for readability, calmness, and polish.
 
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
-2. Run `nix develop -c npm run verify` successfully before considering the task complete. Direct intermediate `npm` or other commands are allowed. If the Nix-based verification cannot be run, state that clearly and explain why.
+2. Run the repo's required final verification command, `nix develop -c npm run verify`, before considering a substantive code task complete. Direct intermediate `npm` or other commands are allowed. If the Nix-based verification cannot be run, state that clearly and explain why.
 3. After the task is complete, commit the changes.
 
 ## Skills
@@ -183,6 +183,7 @@ Before finishing:
 - `elm`: General Elm application and refactor work.
 - `elmbook`: ElmBook catalogues, chapters, shared demo state, and theme alignment.
 - `elm-review`: `elm-review` runs, rule fixes, and review config maintenance.
+- `elm-testing`: Add or improve Elm test coverage in this repo, especially around behavior seams, pure helpers, and feature/module contracts.
 - `github-pages-static-app`: GitHub Pages deploy scripts, public path handling, and `gh-pages` publishing for static apps.
 - `nix-verified-frontend`: Nix dev shells, pinned verify commands, and aligned local/CI/deploy frontend workflows.
 - `elm-ui`: `mdgriffith/elm-ui` layout and styling work.
