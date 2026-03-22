@@ -408,6 +408,11 @@ Workflow behavior:
 - The destroy workflow is manual-only and runs `./scripts/aws-destroy.sh`
 - Both workflows use the same shell scripts as local development so the CI path stays aligned with local commands
 
+Current verification status:
+
+- The GitHub Actions deploy workflow has been exercised successfully against AWS with GitHub OIDC authentication
+- The GitHub Actions destroy workflow uses the same role and shell scripts, but has not been exercised in GitHub Actions here because it is intentionally destructive
+
 ## Design notes
 
 The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. The Motorcycle page uses a quiet product-panel grid and simulates a remote collection feed by progressively revealing products over time each time the page is shown, while spacing, borders, and controls remain intentionally understated to keep the interaction readable without feeling bare. On narrower screens the shell reduces padding, stacks the header controls, wraps the robot actions, and scales the board and cards down to avoid horizontal overflow.
