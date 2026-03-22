@@ -41,10 +41,14 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - When the user asks for a review, prefer the local `ui-review` skill for UI-focused review requests and findings-first review workflows.
 - When the user asks for a refactor, prefer the local `refactor-step` skill for bounded behavior-preserving cleanup work.
 - When using the task plan tool, prefer short user-visible milestones. Do not keep an inspection or analysis step in progress after the relevant files have been read. Separate editing, testing, verification, and commit steps.
+- Treat `.tool-versions` as the local `asdf` toolchain path and `flake.nix` as the CI and pinned verification path.
+- For tools shared by both `.tool-versions` and `flake.nix`, such as Node.js and Stack, keep versions aligned where practical and update both files together when intentionally changing them.
+- Do not add AWS deploy tooling to `flake.nix` unless the user explicitly asks for that complexity; prefer the normal shell toolchain for AWS CLI and Docker.
 
 ## Commands
 
 - Elm tooling may not be available on the base shell path in this repo. Prefer project scripts first, and if a direct Elm command is needed, run it through `nix develop -c ...`.
+- The canonical pinned verification command remains `nix develop -c npm run verify`, but if local disk limits make Nix impractical, direct `npm` commands are acceptable for local iteration as long as any inability to run the Nix command is stated clearly.
 - Install JS dependencies: `npm install`
 - Start dev server: `npm run dev`
 - Start ElmBook catalogue: `npm run book`
