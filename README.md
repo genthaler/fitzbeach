@@ -368,7 +368,8 @@ aws iam create-open-id-connect-provider \
   - `<AWS_ACCOUNT_ID>` with your AWS account ID
   - `<GITHUB_OWNER>` with the GitHub owner or organisation
   - `<GITHUB_REPO>` with this repository name
-  - If your default branch is not `master`, update the branch ref in the `sub` claim
+  - The default template trusts any branch in this repository so branch-based `workflow_dispatch` runs can use the same role
+  - If you only want deploys from one branch, tighten the `sub` claim to that branch ref instead
 - Create the GitHub deploy role:
 
 ```bash
