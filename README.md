@@ -22,7 +22,7 @@ Live site: https://genthaler.github.io/fitzbeach/
 - Haskell
 - `mdgriffith/elm-ui`
 - Parcel
-- AWS SAM
+- AWS CloudFormation
 - AWS Lambda container images
 - S3 + CloudFront
 
@@ -47,6 +47,8 @@ nix develop -c npm run verify
 ```
 
 If you use `direnv`, this repo also includes an `.envrc` so entering the directory can load the flake shell automatically after `direnv allow`.
+
+The Nix shell stays focused on app verification and local development. The AWS deploy path intentionally uses your normal `aws`, `docker`, and shell environment rather than adding those tools to the flake.
 
 Install frontend dependencies:
 
@@ -210,7 +212,7 @@ npm run deploy
 `npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first. ElmBook validation is separate: run `nix develop -c npm run verify` before considering shared UI work complete.
 `npm run deploy` uses `gh-pages -d dist` and relies on `predeploy` to run `npm run verify` and then `npm run build:pages`, so the deployed app uses the `/fitzbeach/` GitHub Pages path prefix.
 
-GitHub Actions also runs the same Nix-based verification and deploy path on every push to `master`.
+GitHub Actions now keeps Nix health checks separate and uses dedicated AWS deploy and destroy workflows for the CloudFormation-based AWS path.
 Separate GitHub Actions workflows also check `flake.lock` health on pushes and pull requests, and open a weekly PR to refresh `flake.lock`.
 Lockfile update PRs created with the default `GITHUB_TOKEN` do not automatically trigger other workflows; if you want CI on those PRs, rerun or reopen them manually, or switch that workflow to a PAT-backed token.
 
@@ -221,12 +223,11 @@ This repo also includes a container-based AWS deployment path with:
 - Elm static assets in a private S3 bucket behind CloudFront
 - A Haskell backend deployed as an AWS Lambda container image
 - A public Lambda Function URL for `/health` and `/products`
-- One SAM template at `infra/template.yaml` for the AWS resources
+- One CloudFormation template at `infra/template.yaml` for the AWS resources
 
 ### AWS prerequisites
 
 - AWS CLI installed and authenticated
-- SAM CLI installed
 - Docker installed and running
 - An AWS region selected
 - An AWS profile selected if you do not want to use the default profile
@@ -243,7 +244,6 @@ The AWS helper scripts read these environment variables:
 Example setup:
 
 ```bash
-export AWS_PROFILE=personal
 export AWS_REGION=ap-southeast-2
 export FITZBEACH_AWS_STACK_NAME=fitzbeach-aws
 ```
@@ -256,7 +256,7 @@ Install frontend dependencies first:
 npm install
 ```
 
-Validate the SAM template and build the Lambda image locally:
+Validate the CloudFormation template and build the Lambda image locally:
 
 ```bash
 npm run aws:build
@@ -269,6 +269,8 @@ npm run aws:deploy
 ```
 
 `npm run aws:deploy` performs the first-run bootstrap for the ECR repository automatically, pushes a fresh backend image tag, and then updates the Lambda function to use that image.
+
+`npm run aws:build` uses `aws cloudformation validate-template` before the Docker build, so AWS credentials need to be available even for the validation step.
 
 ### Publish the frontend
 
@@ -320,6 +322,31 @@ npm run aws:destroy
 
 That command empties the frontend bucket and then deletes the CloudFormation stack.
 
+### GitHub Actions AWS deploy and destroy
+
+The repo includes:
+
+- `.github/workflows/deploy.yml` to verify and deploy on pushes to `master`, and to support manual deploy runs
+- `.github/workflows/destroy.yml` for manual teardown runs
+
+These workflows use GitHub OIDC with AWS rather than long-lived access keys.
+
+One-time GitHub setup:
+
+- Create an AWS IAM role that trusts GitHub's OIDC provider for this repository
+- Grant that role permission for CloudFormation, Lambda, ECR, S3, CloudFront, and IAM role creation for this stack
+- Add the role ARN as the repository secret `AWS_DEPLOY_ROLE_ARN`
+- Optionally add repository variables:
+  - `AWS_REGION`
+  - `FITZBEACH_AWS_STACK_NAME`
+  - `FITZBEACH_AWS_PROJECT_NAME`
+
+Workflow behavior:
+
+- The deploy workflow runs `npm ci`, `npm run verify`, `npm run aws:deploy`, and `npm run aws:frontend:publish`
+- The destroy workflow is manual-only and runs `./scripts/aws-destroy.sh`
+- Both workflows use the same shell scripts as local development so the CI path stays aligned with local commands
+
 ## Design notes
 
 The interface aims for a calm, low-noise presentation. The default light theme uses a restrained white and soft-grey palette, with very light grey panels, dark grey text, and a darker accent for the robot itself. The Motorcycle page uses a quiet product-panel grid and simulates a remote collection feed by progressively revealing products over time each time the page is shown, while spacing, borders, and controls remain intentionally understated to keep the interaction readable without feeling bare. On narrower screens the shell reduces padding, stacks the header controls, wraps the robot actions, and scales the board and cards down to avoid horizontal overflow.
@@ -333,7 +360,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `backend/src/Product.hs` defines the backend `Product` JSON shape shared conceptually with the Elm frontend.
 - `backend/src/ProductSource.hs` keeps the current static in-memory product list separate from the HTTP layer so it can be replaced later by DynamoDB or another store.
 - `backend/Dockerfile` builds the Lambda-compatible backend container image.
-- `infra/template.yaml` defines the ECR repository, Lambda Function URL, private frontend bucket, and CloudFront distribution for AWS deployment.
+- `infra/template.yaml` defines the ECR repository, Lambda Function URL, private frontend bucket, and CloudFront distribution for CloudFormation-based AWS deployment.
 - `src/Book.elm` is a separate ElmBook entrypoint for documented UI examples.
 - `src/Book/` contains ElmBook fixtures and chapters.
 - `book.js` boots the compiled ElmBook app into `#app`.
@@ -350,6 +377,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `src/View/ThemeToggle.elm` contains the reusable theme toggle component shared by the app and ElmBook.
 - `src/View/Theme.elm` centralises the shared color palette.
 - `scripts/aws-*.sh` keep the AWS build, deploy, publish, status, and teardown flow readable from `package.json`.
+- `.github/workflows/` contains Nix health, AWS deploy, AWS destroy, and lockfile maintenance workflows.
 - `tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 
 The boundary between domain and UI is deliberate: movement logic stays in the domain module, robot feature orchestration lives in the top-level feature module, and the app layer handles routing and subscriptions. The first backend step follows the same approach by keeping the static product source separate from the Haskell HTTP handlers.

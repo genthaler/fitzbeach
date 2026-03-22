@@ -6,7 +6,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 source "$repo_root/scripts/aws-common.sh"
 
-sam_validate --template-file "$repo_root/infra/template.yaml"
+aws_cli cloudformation validate-template \
+  --template-body "file://$repo_root/infra/template.yaml" >/dev/null
 
 docker build \
   --platform linux/amd64 \

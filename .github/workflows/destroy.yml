@@ -1,9 +1,6 @@
-name: AWS Deploy
+name: AWS Destroy
 
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
     inputs:
       aws_region:
@@ -11,8 +8,12 @@ on:
         required: false
         type: string
       stack_name:
-        description: Stack name override
+        description: Stack name to destroy
         required: false
+        type: string
+      confirm_destroy:
+        description: Type destroy to confirm
+        required: true
         type: string
 
 env:
@@ -26,28 +27,20 @@ permissions:
   id-token: write
 
 concurrency:
-  group: aws-deploy-${{ github.ref }}-${{ inputs.stack_name || vars.FITZBEACH_AWS_STACK_NAME || 'fitzbeach-aws' }}
+  group: aws-destroy-${{ inputs.stack_name || vars.FITZBEACH_AWS_STACK_NAME || 'fitzbeach-aws' }}
   cancel-in-progress: false
 
 jobs:
-  verify-and-deploy:
+  destroy:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Require explicit confirmation
+        run: |
+          test "${{ inputs.confirm_destroy }}" = "destroy"
+
       - name: Check out repository
         uses: actions/checkout@v5
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24.5.0
-          cache: npm
-
-      - name: Install npm dependencies
-        run: npm ci
-
-      - name: Verify
-        run: npm run verify
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -55,8 +48,5 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
 
-      - name: Deploy infrastructure and backend
-        run: npm run aws:deploy
-
-      - name: Publish frontend
-        run: npm run aws:frontend:publish
+      - name: Destroy stack
+        run: ./scripts/aws-destroy.sh

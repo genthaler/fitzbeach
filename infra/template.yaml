@@ -1,5 +1,4 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Transform: AWS::Serverless-2016-10-31
 Description: Fitzbeach AWS deployment
 
 Parameters:
@@ -89,19 +88,35 @@ Resources:
                 AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${FrontendDistribution}"
 
   BackendFunction:
-    Type: AWS::Serverless::Function
+    Type: AWS::Lambda::Function
     Condition: HasBackendImageTag
     Properties:
-      PackageType: Image
-      ImageUri: !Sub "${BackendRepository.RepositoryUri}:${BackendImageTag}"
       Architectures:
         - x86_64
+      Code:
+        ImageUri: !Sub "${BackendRepository.RepositoryUri}:${BackendImageTag}"
+      PackageType: Image
+      Role: !GetAtt BackendFunctionRole.Arn
       MemorySize: 512
       Timeout: 30
       Environment:
         Variables:
           APP_ENABLE_CORS: "false"
           PORT: "8080"
+
+  BackendFunctionRole:
+    Type: AWS::IAM::Role
+    Condition: HasBackendImageTag
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
   BackendFunctionUrl:
     Type: AWS::Lambda::Url
