@@ -8,6 +8,24 @@ source "$repo_root/scripts/aws-common.sh"
 
 image_tag="${FITZBEACH_AWS_IMAGE_TAG:-$(date -u +%Y%m%d%H%M%S)}"
 
+stack_status() {
+  aws_cli cloudformation describe-stacks \
+    --stack-name "$STACK_NAME" \
+    --query "Stacks[0].StackStatus" \
+    --output text 2>/dev/null || true
+}
+
+reset_failed_stack_if_needed() {
+  local current_status
+  current_status="$(stack_status)"
+
+  if [[ "$current_status" == "ROLLBACK_COMPLETE" ]]; then
+    echo "Deleting stack $STACK_NAME in ROLLBACK_COMPLETE before redeploy"
+    aws_cli cloudformation delete-stack --stack-name "$STACK_NAME"
+    aws_cli cloudformation wait stack-delete-complete --stack-name "$STACK_NAME"
+  fi
+}
+
 deploy_stack() {
   local backend_image_tag="$1"
   local deploy_args=(
@@ -27,6 +45,8 @@ deploy_stack() {
 
   aws_cli "${deploy_args[@]}"
 }
+
+reset_failed_stack_if_needed
 
 deploy_stack ""
 
