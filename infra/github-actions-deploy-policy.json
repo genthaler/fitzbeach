@@ -31,6 +31,8 @@
         "ecr:DescribeRepositories",
         "ecr:GetAuthorizationToken",
         "ecr:GetDownloadUrlForLayer",
+        "ecr:GetLifecyclePolicy",
+        "ecr:GetRepositoryPolicy",
         "ecr:InitiateLayerUpload",
         "ecr:ListImages",
         "ecr:PutImage",
