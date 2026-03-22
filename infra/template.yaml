@@ -126,6 +126,15 @@ Resources:
       FunctionUrlAuthType: NONE
       Principal: "*"
 
+  BackendFunctionInvokePermission:
+    Type: AWS::Lambda::Permission
+    Condition: HasBackendImageTag
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref BackendFunction
+      Principal: "*"
+      InvokedViaFunctionUrl: true
+
 Outputs:
   FrontendUrl:
     Description: CloudFront URL for the frontend

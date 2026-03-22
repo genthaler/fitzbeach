@@ -19,8 +19,8 @@ aws_cli() {
   aws "${aws_args[@]}" "$@"
 }
 
-sam_cli() {
-  sam "${sam_args[@]}" "$@"
+sam_validate() {
+  sam validate "${sam_args[@]}" "$@"
 }
 
 stack_output() {

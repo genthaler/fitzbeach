@@ -10,20 +10,22 @@ image_tag="${FITZBEACH_AWS_IMAGE_TAG:-$(date -u +%Y%m%d%H%M%S)}"
 
 deploy_stack() {
   local backend_image_tag="$1"
-  local parameter_overrides=("ProjectName=$PROJECT_NAME")
+  local deploy_args=(
+    cloudformation
+    deploy
+    --template-file "$repo_root/infra/template.yaml"
+    --stack-name "$STACK_NAME"
+    --capabilities CAPABILITY_IAM
+    --no-fail-on-empty-changeset
+    --parameter-overrides
+    "ProjectName=$PROJECT_NAME"
+  )
 
   if [[ -n "$backend_image_tag" ]]; then
-    parameter_overrides+=("BackendImageTag=$backend_image_tag")
+    deploy_args+=("BackendImageTag=$backend_image_tag")
   fi
 
-  sam_cli deploy \
-    --template-file "$repo_root/infra/template.yaml" \
-    --stack-name "$STACK_NAME" \
-    --capabilities CAPABILITY_IAM \
-    --no-confirm-changeset \
-    --no-fail-on-empty-changeset \
-    --parameter-overrides \
-    "${parameter_overrides[@]}"
+  aws_cli "${deploy_args[@]}"
 }
 
 deploy_stack ""

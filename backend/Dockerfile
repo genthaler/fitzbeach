@@ -1,12 +1,25 @@
-FROM fpco/stack-build:lts-22.43 AS build
+FROM haskell:9.6.6 AS build
 
 WORKDIR /opt/fitzbeach
 
-COPY stack.yaml stack.yaml.lock fitzbeach-backend.cabal ./
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
+        libffi-dev \
+        libgmp-dev \
+        pkg-config \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY fitzbeach-backend.cabal ./
+RUN cabal update
+
 COPY app app
 COPY src src
 
-RUN stack --stack-yaml stack.yaml --no-terminal build --copy-bins --local-bin-path /opt/fitzbeach/bin
+RUN cabal install exe:fitzbeach-backend \
+    --install-method=copy \
+    --installdir=/opt/fitzbeach/bin \
+    --overwrite-policy=always
 
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.9.1 AS adapter
 
