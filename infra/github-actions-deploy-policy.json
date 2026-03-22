@@ -98,6 +98,8 @@
         "cloudfront:GetOriginAccessControlConfig",
         "cloudfront:ListDistributions",
         "cloudfront:ListOriginAccessControls",
+        "cloudfront:TagResource",
+        "cloudfront:UntagResource",
         "cloudfront:UpdateDistribution",
         "cloudfront:UpdateOriginAccessControl"
       ],
