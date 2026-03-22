@@ -1,32 +1,47 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE TypeOperators #-}
 
 module Main where
 
-import Data.Aeson (object, (.=))
+import Api (API, HealthResponse (HealthResponse), api)
 import Data.Maybe (fromMaybe)
+import Network.Wai (Application, Middleware)
 import Network.Wai.Middleware.Cors (simpleCors)
+import Network.Wai.Handler.Warp (run)
+import Product (Product)
 import ProductSource (allProducts)
+import Servant ((:<|>) ((:<|>)), Handler, Server, serve)
 import System.Environment (lookupEnv)
 import Text.Read (readMaybe)
-import Web.Scotty (get, json, middleware, scotty)
 
 main :: IO ()
 main = do
     port <- getPort
     corsEnabled <- getCorsEnabled
+    run port (withOptionalCors corsEnabled (app server))
 
-    scotty port $ do
-        if corsEnabled then
-            middleware simpleCors
+app :: Server API -> Application
+app = serve api
 
-        else
-            pure ()
+server :: Server API
+server =
+    healthHandler :<|> productsHandler
 
-        get "/health" $
-            json (object ["status" .= ("healthy" :: String)])
+healthHandler :: Handler HealthResponse
+healthHandler =
+    pure (HealthResponse "healthy")
 
-        get "/products" $
-            json allProducts
+productsHandler :: Handler [Product]
+productsHandler =
+    pure allProducts
+
+withOptionalCors :: Bool -> Middleware
+withOptionalCors corsEnabled =
+    if corsEnabled then
+        simpleCors
+
+    else
+        id
 
 getPort :: IO Int
 getPort = do
