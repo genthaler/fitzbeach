@@ -36,6 +36,7 @@
         "ecr:InitiateLayerUpload",
         "ecr:ListImages",
         "ecr:PutImage",
+        "ecr:PutImageScanningConfiguration",
         "ecr:SetRepositoryPolicy",
         "ecr:TagResource",
         "ecr:DeleteRepositoryPolicy",
