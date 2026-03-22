@@ -1,8 +1,3 @@
----
-name: "elm"
-description: "Use when tasks involve Elm applications or libraries, especially The Elm Architecture, compiler-guided refactors, decoders and encoders, type-safe model changes, and small updates that preserve compilability. Prefer existing project patterns, explicit top-level types, and minimal changes."
----
-
 # Elm Skill
 
 ## When to use
@@ -36,31 +31,29 @@ For `elm-ui` layout and styling work, also use the `elm-ui` skill when available
    - Run the smallest relevant check first, usually the Elm build or the project's standard build command.
    - Fix compiler warnings or errors before expanding the change.
 
-## Common checks
-- `elm make src/Main.elm`
-- `npm run build`
-- `npm test`
-
-Use the checks that exist in the current project. Prefer the smallest command that validates the change.
-
-## TEA expectations
+## Fixing guidance
+- Use the checks that exist in the current project. Prefer the smallest command that validates the change.
 - Keep state transitions predictable and local.
 - Update all affected call sites when changing a type.
 - Update all branches when changing a custom type.
 - Check pattern matches for exhaustiveness.
 - Keep `init`, `update`, subscriptions, and `view` consistent.
-
-## Refactoring guidance
+- Prefer module names that describe the architectural role they play, not generic placeholders.
+- When a namespace represents a single feature, prefer the feature name itself for the top-level orchestration module, such as `Motorcycle` or `Robot`.
+- Use `.View` for modules that are focused on rendering and view helpers only.
+- Keep `.Model` for domain data, invariants, and lower-level state types, rather than top-level feature orchestration modules.
+- Keep `.Logic` for supporting state-transition helpers when a separate logic layer is justified.
+- Avoid `Main` for nested feature modules unless they are actual application entrypoints; in Elm codebases, `Main` strongly suggests a boot module.
+- When splitting a feature across modules, prefer names that make the boundary obvious at a glance, such as feature orchestration `Robot`, rendering `Robot.View`, domain `Robot.Model`, and supporting transitions `Robot.Logic`.
 - Prefer compiler-guided renames and type changes.
 - Avoid unnecessary module splits or architecture changes.
 - Preserve public names unless the task requires otherwise.
 - Do not leave placeholder implementations.
-
-## `elm-test` guidance
 - The test for a module should be in the same namespace as the tested module.
 
 ## Final checks
 - Imports are tidy.
 - Top-level types are present where expected by the project.
 - Pattern matches are exhaustive.
+- The relevant validation command has been run, using checks such as `elm make src/Main.elm`, `npm run build`, or `npm test` as appropriate.
 - The relevant build or test command passes, or any inability to run it is stated clearly.

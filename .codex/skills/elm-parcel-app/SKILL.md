@@ -1,8 +1,3 @@
----
-name: "elm-parcel-app"
-description: "Use when working on Elm apps booted with Parcel. Inspect `elm.json`, `src/Main.elm`, `index.js`, and `index.html`, keep the bootstrapping simple, and validate with the smallest relevant Parcel or Elm build command."
----
-
 # Elm Parcel App Skill
 
 ## When to use
@@ -27,7 +22,13 @@ description: "Use when working on Elm apps booted with Parcel. Inspect `elm.json
    - Prefer `elm make` for quick compile feedback.
    - Use `npm run build` or the project's Parcel build command when integration matters.
 
+## Fixing guidance
+- Re-check `index.js`, `index.html`, and the Elm module name together after any refactor that touches bootstrapping.
+- Keep `index.js` focused on starting the Elm app unless the repository already has explicit extra responsibilities there.
+- Prefer the smallest compile or build command that proves the boot path still works before moving on.
+
 ## Final checks
 - The app still mounts into the expected element.
 - Elm and JS entrypoints stay consistent.
+- Relevant validation has been run with `elm make`, `npm run build`, or the repo's Parcel command as appropriate.
 - The relevant build passes, or the inability to run it is stated clearly.

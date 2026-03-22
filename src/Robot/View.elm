@@ -1,4 +1,4 @@
-module Robot.View exposing (Controls, controlButton, page)
+module Robot.View exposing (Controls, controlButton, view)
 
 import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, maximum, none, paddingXY, px, row, spacing, text, width, wrappedRow)
 import Element.Background as Background
@@ -20,13 +20,13 @@ type alias Controls msg =
     }
 
 
-page :
+view :
     Bool
     -> Theme.Palette
     -> { a | robot : Robot.Robot, history : List Logic.HistoryEntry }
     -> Controls msg
     -> Element msg
-page compactLayout colors model controls =
+view compactLayout colors model controls =
     column
         [ width fill
         , spacing 28
@@ -123,9 +123,11 @@ gridRow compactLayout colors robot yCoordinate =
 gridCell : Bool -> Theme.Palette -> Robot.Robot -> Int -> Int -> Element msg
 gridCell compactLayout colors robot xCoordinate yCoordinate =
     let
+        isRobot : Bool
         isRobot =
             Robot.x robot == xCoordinate && Robot.y robot == yCoordinate
 
+        cellSize : Int
         cellSize =
             if compactLayout then
                 48

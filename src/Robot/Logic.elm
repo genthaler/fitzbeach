@@ -37,6 +37,7 @@ applyCommand :
     -> { a | robot : Robot.Robot, history : List HistoryEntry }
 applyCommand command model =
     let
+        updatedRobot : Robot.Robot
         updatedRobot =
             updateRobot command model.robot
     in

@@ -17,16 +17,22 @@ Performance optimizations:
 -}
 
 import Docs.ReviewAtDocs
+import NoInvalidRGBValues
 import NoConfusingPrefixOperator
+import NoDeprecated
 import NoDebug.Log
 import NoDebug.TodoOrToString
 import NoExposingEverything
 import NoImportingEverything
+import NoMissingSubscriptionsCall
+import NoTestValuesInProductionCode
 import NoMissingTypeAnnotation
 import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
 import NoPrematureLetComputation
+import NoRecursiveUpdate
 import NoSimpleLetBody
+import NoUselessSubscriptions
 import NoUnused.CustomTypeConstructorArgs
 import NoUnused.CustomTypeConstructors
 import NoUnused.Dependencies
@@ -43,21 +49,29 @@ config : List Rule
 config =
     -- Fast syntax-based rules first
     [ NoConfusingPrefixOperator.rule
+    , NoInvalidRGBValues.rule
     , NoDebug.Log.rule
     , NoDebug.TodoOrToString.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
+    , NoMissingTypeAnnotationInLetIn.rule
+        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoSimpleLetBody.rule
     , NoPrematureLetComputation.rule
-    
+
     -- Module structure rules (medium performance impact)
     , NoExposingEverything.rule
-        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoImportingEverything.rule []
+    , NoMissingSubscriptionsCall.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
+    , NoDeprecated.rule NoDeprecated.defaults
     , NoMissingTypeAnnotation.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoMissingTypeExpose.rule
-    
+    , NoRecursiveUpdate.rule
+    , NoTestValuesInProductionCode.rule
+        (NoTestValuesInProductionCode.startsWith "test_")
+    , NoUselessSubscriptions.rule
+
     -- Unused detection rules (more expensive, run later)
     , NoUnused.Variables.rule
     , NoUnused.Parameters.rule
@@ -68,12 +82,11 @@ config =
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     , NoUnused.Modules.rule
     , NoUnused.Dependencies.rule
-    
+
     -- Documentation rules (can be expensive on large codebases)
     , Docs.ReviewAtDocs.rule
         |> Rule.ignoreErrorsForDirectories [ "tests/" ]
-    
+
     -- Most expensive rules last
     , Simplify.rule Simplify.defaults
-        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
     ]

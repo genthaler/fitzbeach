@@ -7,7 +7,7 @@
 ## Scope
 
 This file defines repo-specific rules for `fitzbeach`.
-Use the local project skills for general Elm, `elm-review`, `elm-ui`, Parcel app, README maintenance, and git workflow guidance.
+Use the local project skills for general Elm, `elm-review`, `elm-ui`, ElmBook, GitHub Pages static app deployment, Nix-verified frontend workflow, Parcel app, README maintenance, and git workflow guidance.
 When a task involves skills, prefer repo-local skills under `./.codex/skills/` before falling back to global skills.
 
 ## Structure
@@ -31,9 +31,26 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - The ElmBook catalogue mounts into `<div id="app"></div>` in `book.html`.
 - If Elm dependencies are added later, keep them intentional and minimal.
 - Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
+- When creating a new project-local skill under `./.codex/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
+- When creating or updating a project-local skill, use the local `skill-authoring` skill.
+- Project-local `SKILL.md` files should follow this section order: title, when to use, when not to use, workflow, fixing guidance, final checks.
+- Project-local `SKILL.md` files should not use YAML frontmatter; keep skill metadata only in `agents/openai.yaml`.
+- When a task clearly matches a repo-local skill, reference that skill by name in the prompt rather than rewriting its workflow inline.
+- When the user asks to implement a change, prefer the local `implementation` skill as the default workflow and combine it with narrower domain skills only when needed.
+- When the user asks to fix a bug, address a finding, or correct a regression, prefer the local `fixing` skill as the default workflow and combine it with narrower domain skills only when needed.
+- When the user asks for a review, prefer the local `ui-review` skill for UI-focused review requests and findings-first review workflows.
+- When the user asks for a refactor, prefer the local `refactor-step` skill for bounded behavior-preserving cleanup work.
+- When using the task plan tool, prefer short user-visible milestones. Do not keep an inspection or analysis step in progress after the relevant files have been read. Separate editing, testing, verification, and commit steps.
+- Treat `.tool-versions` as an optional local `asdf` toolchain path and `flake.nix` as the CI and pinned verification path.
+- For tools shared by both `.tool-versions` and `flake.nix`, such as Node.js and Stack, keep versions aligned where practical and update both files together when intentionally changing them.
+- Do not add AWS deploy tooling to `flake.nix` unless the user explicitly asks for that complexity; prefer the normal shell toolchain for AWS CLI and Docker.
+  Reason: AWS CLI is easier to manage through local shell tooling or GitHub Actions setup, and Docker in CI depends on the runner daemon/runtime, so pinning those tools in Nix adds complexity without matching the benefit of pinning the app verification toolchain.
+- Local tool installation and version management remain the developer's responsibility; do not imply that `asdf` is required just because `.tool-versions` exists.
 
 ## Commands
 
+- Elm tooling may not be available on the base shell path in this repo. Prefer project scripts first, and if a direct Elm command is needed, run it through `nix develop -c ...`.
+- The canonical pinned verification command remains `nix develop -c npm run verify`, but if local disk limits make Nix impractical, direct `npm` commands are acceptable for local iteration as long as any inability to run the Nix command is stated clearly.
 - Install JS dependencies: `npm install`
 - Start dev server: `npm run dev`
 - Start ElmBook catalogue: `npm run book`
@@ -166,17 +183,27 @@ Optimise for readability, calmness, and polish.
 
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
-2. Run `nix develop -c npm run verify` successfully before considering the task complete. Direct intermediate `npm` or other commands are allowed. If the Nix-based verification cannot be run, state that clearly and explain why.
-3. After the task is complete, commit the changes.
+2. Run the repo's required final verification command, `nix develop -c npm run verify`, before considering a substantive code task complete. Direct intermediate `npm` or other commands are allowed. If the Nix-based verification cannot be run, state that clearly and explain why.
+3. Before making a repo commit for new work, create or switch to a branch whose name starts with `codex/` unless the user explicitly asks to stay on the current branch.
+4. After the task is complete, commit the changes.
 
 ## Skills
 
 ### Available local skills
 
 - `elm`: General Elm application and refactor work.
+- `elmbook`: ElmBook catalogues, chapters, shared demo state, and theme alignment.
 - `elm-review`: `elm-review` runs, rule fixes, and review config maintenance.
+- `elm-testing`: Add or improve Elm test coverage in this repo, especially around behavior seams, pure helpers, and feature/module contracts.
+- `implementation`: Default workflow for directed implementation tasks in this repo, keeping prompt overhead low and coordinating narrower skills when needed.
+- `fixing`: Default workflow for targeted bug fixes, review findings, and regression corrections in this repo, favouring the smallest defensible change.
+- `github-pages-static-app`: GitHub Pages deploy scripts, public path handling, and `gh-pages` publishing for static apps.
+- `nix-verified-frontend`: Nix dev shells, pinned verify commands, and aligned local/CI/deploy frontend workflows.
 - `elm-ui`: `mdgriffith/elm-ui` layout and styling work.
 - `elm-ui-review`: Calm, minimal `elm-ui` presentation review.
+- `skill-authoring`: Canonical format and workflow guidance for creating or revising repo-local skills.
+- `ui-review`: Findings-first UI review workflow for this repo, prioritising responsiveness, accessibility, regressions, and calm presentation consistency.
 - `elm-parcel-app`: Parcel bootstrapping and Elm app integration.
+- `refactor-step`: Incremental architecture or codebase cleanup workflow that preserves behaviour and keeps docs/tests aligned.
 - `readme-sync`: Keep `README.md` aligned with app behavior and commands.
-- `git`: Git status, diff review, and commit message guidance.
+- `git`: Git status, diff review, branch naming, and commit message guidance.

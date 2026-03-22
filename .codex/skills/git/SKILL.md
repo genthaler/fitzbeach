@@ -1,8 +1,3 @@
----
-name: "git"
-description: "Use when working with git status and diffs, especially when suggesting commit messages after approved file changes. Base suggestions on the current diff against `HEAD`, note unrelated working tree changes, and prefer short imperative commit messages with a change-type prefix."
----
-
 # Git Skill
 
 ## When to use
@@ -19,15 +14,19 @@ description: "Use when working with git status and diffs, especially when sugges
    - Read `git status --short` first.
    - Check `git diff --stat` or equivalent to understand the scope quickly.
    - Use the diff against `HEAD` when forming a commit summary.
-2. Call out unrelated changes before suggesting a commit message.
-3. Distinguish message suggestion from git actions.
+2. Check branch context before suggesting git actions.
+   - If the task involves creating a branch for new work, use a branch name that starts with `codex/`.
+   - If the current branch does not follow that rule, call it out before committing.
+3. Call out unrelated changes before suggesting a commit message.
+4. Distinguish message suggestion from git actions.
    - Suggest the commit message without assuming files should be staged or committed.
-4. Prefer short imperative commit messages.
-5. Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.
+5. Prefer short imperative commit messages.
+6. Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.
    - If you would normally default to Conventional Commits like `feat:`, `fix:`, or `refactor:`, override that habit here and use the initial-cap prefixes above instead.
 
 ## Expectations
 - Base the suggestion on the full current diff against `HEAD`, not only the most recent edit.
+- Keep branch guidance aligned with the repo rule that new work should happen on `codex/*` branches unless the user says otherwise.
 - Do not hide unrelated changes in the working tree.
 - Mention when unrelated changes should not be included in the suggested commit scope.
 - Keep the suggested message compact and descriptive.

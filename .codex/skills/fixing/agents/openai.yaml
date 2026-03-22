@@ -1,0 +1,2 @@
+name: fixing
+description: Default workflow for targeted bug fixes, review findings, and regression corrections in this repo, favouring the smallest defensible change.

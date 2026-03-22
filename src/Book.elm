@@ -1,4 +1,4 @@
-module Book exposing (SharedState, main)
+module Book exposing (SharedState, initialState, main, syncThemeMode)
 
 import Book.Fixtures
 import Book.MotorcycleChapter
@@ -34,17 +34,7 @@ main =
         |> ElmBook.withThemeOptions bookThemeOptions
         |> withStatefulOptions
             [ ElmBook.StatefulOptions.initialState initialState
-            , ElmBook.StatefulOptions.onDarkModeChange
-                (\darkMode state ->
-                    { state
-                        | themeMode =
-                            if darkMode then
-                                Theme.Dark
-
-                            else
-                                Theme.Light
-                    }
-                )
+            , ElmBook.StatefulOptions.onDarkModeChange syncThemeMode
             ]
         |> withChapterGroups
             [ ( "Foundations"
@@ -61,9 +51,22 @@ main =
             ]
 
 
+syncThemeMode : Bool -> SharedState -> SharedState
+syncThemeMode darkMode state =
+    { state
+        | themeMode =
+            if darkMode then
+                Theme.Dark
+
+            else
+                Theme.Light
+    }
+
+
 bookThemeOptions : List (ElmBook.ThemeOptions.ThemeOption (Element msg))
 bookThemeOptions =
     let
+        colors : Theme.Palette
         colors =
             Theme.palette Theme.Light
     in
@@ -80,6 +83,7 @@ bookThemeOptions =
 darkModeThemeOverride : Element msg
 darkModeThemeOverride =
     let
+        colors : Theme.Palette
         colors =
             Theme.palette Theme.Dark
     in

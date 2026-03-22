@@ -1,15 +1,33 @@
-name: Verify And Deploy
+name: AWS Deploy
 
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      aws_region:
+        description: AWS region override
+        required: false
+        type: string
+      stack_name:
+        description: Stack name override
+        required: false
+        type: string
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  AWS_REGION: ${{ inputs.aws_region || vars.AWS_REGION || 'ap-southeast-2' }}
+  FITZBEACH_AWS_STACK_NAME: ${{ inputs.stack_name || vars.FITZBEACH_AWS_STACK_NAME || 'fitzbeach-aws' }}
+  FITZBEACH_AWS_PROJECT_NAME: ${{ vars.FITZBEACH_AWS_PROJECT_NAME || 'fitzbeach' }}
 
 permissions:
-  contents: write
+  contents: read
+  id-token: write
+
+concurrency:
+  group: aws-deploy-${{ github.ref }}-${{ inputs.stack_name || vars.FITZBEACH_AWS_STACK_NAME || 'fitzbeach-aws' }}
+  cancel-in-progress: false
 
 jobs:
   verify-and-deploy:
@@ -18,29 +36,27 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
-      - name: Install Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24.5.0
+          cache: npm
 
       - name: Install npm dependencies
-        run: nix develop .#default -c npm ci
+        run: npm ci
 
       - name: Verify
-        run: nix develop .#default -c npm run verify
+        run: npm run verify
 
-      - name: Configure git remote for deploy
-        run: git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
 
-      - name: Configure git author for deploy
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Deploy infrastructure and backend
+        run: npm run aws:deploy
 
-      - name: Deploy
-        run: nix develop .#default -c npm run deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish frontend
+        run: npm run aws:frontend:publish

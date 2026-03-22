@@ -1,0 +1,182 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Fitzbeach AWS deployment
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: fitzbeach
+  BackendImageTag:
+    Type: String
+    Default: ""
+
+Conditions:
+  HasBackendImageTag: !Not [!Equals [!Ref BackendImageTag, ""]]
+
+Resources:
+  BackendRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub "${ProjectName}-backend"
+      EmptyOnDelete: true
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      RepositoryPolicyText:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowLambdaImagePull
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action:
+              - ecr:BatchGetImage
+              - ecr:GetDownloadUrlForLayer
+            Condition:
+              StringEquals:
+                aws:SourceAccount: !Ref AWS::AccountId
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  FrontendOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Description: !Sub "${ProjectName} frontend bucket access"
+        Name: !Sub "${ProjectName}-frontend-oac"
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  FrontendDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: http2
+        Origins:
+          - DomainName: !GetAtt FrontendBucket.RegionalDomainName
+            Id: frontendBucketOrigin
+            OriginAccessControlId: !GetAtt FrontendOriginAccessControl.Id
+            S3OriginConfig: {}
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          Compress: true
+          TargetOriginId: frontendBucketOrigin
+          ViewerProtocolPolicy: redirect-to-https
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+        PriceClass: PriceClass_100
+
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCloudFrontRead
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub "${FrontendBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${FrontendDistribution}"
+
+  BackendFunction:
+    Type: AWS::Lambda::Function
+    Condition: HasBackendImageTag
+    Properties:
+      Architectures:
+        - x86_64
+      Code:
+        ImageUri: !Sub "${BackendRepository.RepositoryUri}:${BackendImageTag}"
+      PackageType: Image
+      Role: !GetAtt BackendFunctionRole.Arn
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          APP_ENABLE_CORS: "false"
+          PORT: "8080"
+
+  BackendFunctionRole:
+    Type: AWS::IAM::Role
+    Condition: HasBackendImageTag
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  BackendFunctionUrl:
+    Type: AWS::Lambda::Url
+    Condition: HasBackendImageTag
+    Properties:
+      AuthType: NONE
+      Cors:
+        AllowHeaders:
+          - content-type
+        AllowMethods:
+          - GET
+        AllowOrigins:
+          - "*"
+      TargetFunctionArn: !GetAtt BackendFunction.Arn
+
+  BackendFunctionUrlPermission:
+    Type: AWS::Lambda::Permission
+    Condition: HasBackendImageTag
+    Properties:
+      Action: lambda:InvokeFunctionUrl
+      FunctionName: !Ref BackendFunction
+      FunctionUrlAuthType: NONE
+      Principal: "*"
+
+  BackendFunctionInvokePermission:
+    Type: AWS::Lambda::Permission
+    Condition: HasBackendImageTag
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref BackendFunction
+      Principal: "*"
+      InvokedViaFunctionUrl: true
+
+Outputs:
+  FrontendUrl:
+    Description: CloudFront URL for the frontend
+    Value: !Sub "https://${FrontendDistribution.DomainName}"
+  FrontendBucketName:
+    Description: S3 bucket for frontend assets
+    Value: !Ref FrontendBucket
+  FrontendDistributionId:
+    Description: CloudFront distribution ID for invalidations
+    Value: !Ref FrontendDistribution
+  BackendRepositoryUri:
+    Description: ECR repository URI for the backend image
+    Value: !GetAtt BackendRepository.RepositoryUri
+  BackendFunctionUrl:
+    Condition: HasBackendImageTag
+    Description: Lambda Function URL for the backend
+    Value: !GetAtt BackendFunctionUrl.FunctionUrl

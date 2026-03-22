@@ -18,6 +18,7 @@ chapter =
         |> renderStatefulComponent
             (\state ->
                 let
+                    colors : Theme.Palette
                     colors =
                         Theme.palette state.themeMode
                 in

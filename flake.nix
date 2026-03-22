@@ -16,10 +16,13 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            nodejs_22
+            nodejs_24
             elmPackages.elm
             elmPackages.elm-test
             elmPackages.elm-review
+            pkg-config
+            stack
+            zlib
             git
           ];
         };

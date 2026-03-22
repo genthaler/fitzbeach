@@ -1,8 +1,3 @@
----
-name: "elm-ui"
-description: "Use when tasks involve `mdgriffith/elm-ui`, including layout composition, spacing, typography, attribute helpers, and small UI changes in Elm projects. Prefer existing project helpers and visual patterns instead of introducing raw HTML or new styling systems."
----
-
 # Elm UI Skill
 
 ## When to use
@@ -32,7 +27,7 @@ description: "Use when tasks involve `mdgriffith/elm-ui`, including layout compo
    - Keep labels, button copy, focus states, and contrast clear.
 7. Validate the UI change with the project's normal build command.
 
-## Expectations
+## Fixing guidance
 - Prefer `elm-ui` primitives over raw HTML in Elm when the project already uses `elm-ui`.
 - Keep helper additions small and local.
 - Maintain accessible labels, focus states, and readable contrast.
@@ -42,4 +37,5 @@ description: "Use when tasks involve `mdgriffith/elm-ui`, including layout compo
 - Layout code is readable.
 - New helpers are justified and reused.
 - Interactive elements remain clear and accessible.
+- The relevant Elm or project build command has been run.
 - The relevant build passes, or the inability to run it is stated clearly.

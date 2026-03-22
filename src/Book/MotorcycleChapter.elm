@@ -2,7 +2,8 @@ module Book.MotorcycleChapter exposing (SharedState, chapter)
 
 import ElmBook.Chapter exposing (renderStatefulComponent)
 import ElmBook.ElmUI exposing (Chapter)
-import Motorcycle.Page
+import Motorcycle
+import Motorcycle.Model
 import View.Theme as Theme
 
 
@@ -15,9 +16,8 @@ chapter =
     ElmBook.Chapter.chapter "Motorcycle Panels"
         |> renderStatefulComponent
             (\state ->
-                Motorcycle.Page.view
+                Motorcycle.view
                     False
                     (Theme.palette state.themeMode)
-                    Motorcycle.Page.products
-                    False
+                    (Motorcycle.Model.Loaded Motorcycle.Model.sampleProducts)
             )
