@@ -50,6 +50,8 @@ If you use `direnv`, this repo also includes an `.envrc` so entering the directo
 
 The Nix shell stays focused on app verification and local development. The AWS deploy path intentionally uses your normal `aws`, `docker`, and shell environment rather than adding those tools to the flake.
 
+That split is deliberate: AWS CLI is easier to manage through your normal shell tooling or GitHub Actions setup, and Docker in CI depends on the runner's daemon/runtime anyway, so pinning those tools in Nix would add complexity without giving the same payoff as pinning the app verification toolchain.
+
 The pinned verification path for this repo is still `nix develop -c npm run verify`, and GitHub Actions runs that path in CI. If local disk pressure makes Nix impractical on your machine, use the direct commands below for day-to-day work and rely on CI for the canonical Nix-backed verification pass.
 
 Tooling split:

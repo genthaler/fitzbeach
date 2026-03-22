@@ -44,6 +44,7 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - Treat `.tool-versions` as the local `asdf` toolchain path and `flake.nix` as the CI and pinned verification path.
 - For tools shared by both `.tool-versions` and `flake.nix`, such as Node.js and Stack, keep versions aligned where practical and update both files together when intentionally changing them.
 - Do not add AWS deploy tooling to `flake.nix` unless the user explicitly asks for that complexity; prefer the normal shell toolchain for AWS CLI and Docker.
+  Reason: AWS CLI is easier to manage through local shell tooling or GitHub Actions setup, and Docker in CI depends on the runner daemon/runtime, so pinning those tools in Nix adds complexity without matching the benefit of pinning the app verification toolchain.
 
 ## Commands
 
