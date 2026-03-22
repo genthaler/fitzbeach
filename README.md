@@ -50,6 +50,8 @@ If you use `direnv`, this repo also includes an `.envrc` so entering the directo
 
 The Nix shell stays focused on app verification and local development. The AWS deploy path intentionally uses your normal `aws`, `docker`, and shell environment rather than adding those tools to the flake.
 
+The pinned verification path for this repo is still `nix develop -c npm run verify`, and GitHub Actions runs that path in CI. If local disk pressure makes Nix impractical on your machine, use the direct commands below for day-to-day work and rely on CI for the canonical Nix-backed verification pass.
+
 Install frontend dependencies:
 
 ```bash
@@ -211,6 +213,16 @@ npm run deploy
 
 `npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first. ElmBook validation is separate: run `nix develop -c npm run verify` before considering shared UI work complete.
 `npm run deploy` uses `gh-pages -d dist` and relies on `predeploy` to run `npm run verify` and then `npm run build:pages`, so the deployed app uses the `/fitzbeach/` GitHub Pages path prefix.
+
+If you are skipping the local Nix shell because of disk constraints, the closest direct equivalent is:
+
+```bash
+npm test
+npm run review
+npm run book:build
+```
+
+That is suitable for local iteration, but the Nix-based command in CI remains the canonical reproducible check.
 
 GitHub Actions now keeps Nix health checks separate and uses dedicated AWS deploy and destroy workflows for the CloudFormation-based AWS path.
 Separate GitHub Actions workflows also check `flake.lock` health on pushes and pull requests, and open a weekly PR to refresh `flake.lock`.
