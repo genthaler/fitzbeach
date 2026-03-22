@@ -355,13 +355,51 @@ These workflows use GitHub OIDC with AWS rather than long-lived access keys.
 
 One-time GitHub setup:
 
-- Create an AWS IAM role that trusts GitHub's OIDC provider for this repository
-- Grant that role permission for CloudFormation, Lambda, ECR, S3, CloudFront, and IAM role creation for this stack
-- Add the role ARN as the repository secret `AWS_DEPLOY_ROLE_ARN`
+- If your AWS account does not already have GitHub's OIDC provider, create it once:
+
+```bash
+aws iam create-open-id-connect-provider \
+  --url https://token.actions.githubusercontent.com \
+  --client-id-list sts.amazonaws.com \
+  --thumbprint-list 6938fd4d98bab03faadb97b34396831e3780aea1
+```
+
+- Copy [infra/github-actions-oidc-trust-policy.json](/Users/bonj/Developer/Elm/fitzbeach/infra/github-actions-oidc-trust-policy.json) and replace:
+  - `<AWS_ACCOUNT_ID>` with your AWS account ID
+  - `<GITHUB_OWNER>` with the GitHub owner or organisation
+  - `<GITHUB_REPO>` with this repository name
+  - If your default branch is not `master`, update the branch ref in the `sub` claim
+- Create the GitHub deploy role:
+
+```bash
+aws iam create-role \
+  --role-name fitzbeach-github-actions-deploy \
+  --assume-role-policy-document file://infra/github-actions-oidc-trust-policy.json
+```
+
+- Attach the deploy policy from [infra/github-actions-deploy-policy.json](/Users/bonj/Developer/Elm/fitzbeach/infra/github-actions-deploy-policy.json):
+
+```bash
+aws iam put-role-policy \
+  --role-name fitzbeach-github-actions-deploy \
+  --policy-name fitzbeach-github-actions-deploy \
+  --policy-document file://infra/github-actions-deploy-policy.json
+```
+
+- Add the role ARN as the repository secret:
+
+```text
+AWS_DEPLOY_ROLE_ARN=arn:aws:iam::<AWS_ACCOUNT_ID>:role/fitzbeach-github-actions-deploy
+```
+
 - Optionally add repository variables:
   - `AWS_REGION`
   - `FITZBEACH_AWS_STACK_NAME`
   - `FITZBEACH_AWS_PROJECT_NAME`
+
+- The example deploy policy is intentionally straightforward rather than tightly minimised. Tighten it later if you want stricter repository- or stack-scoped permissions.
+
+Sanity check the trust from GitHub by running the deploy workflow manually after the secret is configured. If OIDC is misconfigured, `aws-actions/configure-aws-credentials` will fail before any deploy step runs.
 
 Workflow behavior:
 
