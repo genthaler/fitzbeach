@@ -398,7 +398,9 @@ AWS_DEPLOY_ROLE_ARN=arn:aws:iam::<AWS_ACCOUNT_ID>:role/fitzbeach-github-actions-
   - `FITZBEACH_AWS_STACK_NAME`
   - `FITZBEACH_AWS_PROJECT_NAME`
 
-- The example deploy policy is intentionally straightforward rather than tightly minimised. Tighten it later if you want stricter repository- or stack-scoped permissions.
+- The example deploy policy is intentionally straightforward rather than tightly minimised.
+  For this demo, the priority is deterministic deployment, small diffs, and reviewer readability.
+  Tighten it later if you want stricter repository- or stack-scoped permissions.
 
 Sanity check the trust from GitHub by running the deploy workflow manually after the secret is configured. If OIDC is misconfigured, `aws-actions/configure-aws-credentials` will fail before any deploy step runs.
 
