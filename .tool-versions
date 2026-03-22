@@ -1,3 +1,4 @@
+# Local asdf toolchain for this repo. Keep shared versions aligned with flake.nix where practical.
 nodejs 24.5.0
 stack 3.7.1
 awscli 2.34.14
