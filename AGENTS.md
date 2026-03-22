@@ -49,8 +49,12 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 
 ## Commands
 
-- Elm tooling may not be available on the base shell path in this repo. Prefer project scripts first, and if a direct Elm command is needed, run it through `nix develop -c ...`.
-- The canonical pinned verification command remains `nix develop -c npm run verify`, but if local disk limits make Nix impractical, direct `npm` commands are acceptable for local iteration as long as any inability to run the Nix command is stated clearly.
+- Do not use `nix develop` for normal local development or local verification unless the user explicitly asks for Nix or CI-parity verification.
+- Prefer project scripts and direct local commands first for day-to-day work.
+- Elm tooling may not be available on the base shell path in this repo. Prefer project scripts first, and if a direct Elm command is needed, use the normal local shell toolchain before considering `nix develop -c ...`.
+- `nix develop -c npm run verify` remains the pinned CI verification path, but it is not the default local workflow.
+- For local verification, prefer direct commands such as `npm run verify` and `stack --stack-yaml backend/stack.yaml ...`.
+- If Nix is used, treat it as an explicit choice for pinned-environment validation rather than a routine prerequisite for local work.
 - Install JS dependencies: `npm install`
 - Start dev server: `npm run dev`
 - Start ElmBook catalogue: `npm run book`
@@ -183,7 +187,7 @@ Optimise for readability, calmness, and polish.
 
 Before finishing:
 1. Check that repo-specific structure and bootstrapping remain consistent.
-2. Run the repo's required final verification command, `nix develop -c npm run verify`, before considering a substantive code task complete. Direct intermediate `npm` or other commands are allowed. If the Nix-based verification cannot be run, state that clearly and explain why.
+2. For local work, run the most appropriate direct verification commands before considering a substantive code task complete, such as `npm run verify` and relevant direct backend checks. Use `nix develop -c npm run verify` only when the user explicitly asks for Nix or when CI-parity validation is specifically needed. If the direct local checks cannot be run, state that clearly and explain why.
 3. Before making a repo commit for new work, create or switch to a branch whose name starts with `codex/` unless the user explicitly asks to stay on the current branch.
 4. After the task is complete, commit the changes.
 
