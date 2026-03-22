@@ -41,10 +41,11 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - When the user asks for a review, prefer the local `ui-review` skill for UI-focused review requests and findings-first review workflows.
 - When the user asks for a refactor, prefer the local `refactor-step` skill for bounded behavior-preserving cleanup work.
 - When using the task plan tool, prefer short user-visible milestones. Do not keep an inspection or analysis step in progress after the relevant files have been read. Separate editing, testing, verification, and commit steps.
-- Treat `.tool-versions` as the local `asdf` toolchain path and `flake.nix` as the CI and pinned verification path.
+- Treat `.tool-versions` as an optional local `asdf` toolchain path and `flake.nix` as the CI and pinned verification path.
 - For tools shared by both `.tool-versions` and `flake.nix`, such as Node.js and Stack, keep versions aligned where practical and update both files together when intentionally changing them.
 - Do not add AWS deploy tooling to `flake.nix` unless the user explicitly asks for that complexity; prefer the normal shell toolchain for AWS CLI and Docker.
   Reason: AWS CLI is easier to manage through local shell tooling or GitHub Actions setup, and Docker in CI depends on the runner daemon/runtime, so pinning those tools in Nix adds complexity without matching the benefit of pinning the app verification toolchain.
+- Local tool installation and version management remain the developer's responsibility; do not imply that `asdf` is required just because `.tool-versions` exists.
 
 ## Commands
 

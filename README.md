@@ -56,9 +56,11 @@ The pinned verification path for this repo is still `nix develop -c npm run veri
 
 Tooling split:
 
-- `.tool-versions` is the local `asdf` path for contributors who manage tools that way
+- `.tool-versions` is an optional local `asdf` path for contributors who manage tools that way
 - `flake.nix` is the CI and pinned verification path
 - For tools shared by both, such as Node.js and Stack, keep the versions aligned where practical
+
+Local tool installation and version management remain the responsibility of the developer. This repo does not require `asdf`; `.tool-versions` is provided only as a convenience for contributors who already use it.
 
 Install frontend dependencies:
 
