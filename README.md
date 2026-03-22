@@ -52,6 +52,12 @@ The Nix shell stays focused on app verification and local development. The AWS d
 
 The pinned verification path for this repo is still `nix develop -c npm run verify`, and GitHub Actions runs that path in CI. If local disk pressure makes Nix impractical on your machine, use the direct commands below for day-to-day work and rely on CI for the canonical Nix-backed verification pass.
 
+Tooling split:
+
+- `.tool-versions` is the local `asdf` path for contributors who manage tools that way
+- `flake.nix` is the CI and pinned verification path
+- For tools shared by both, such as Node.js and Stack, keep the versions aligned where practical
+
 Install frontend dependencies:
 
 ```bash
