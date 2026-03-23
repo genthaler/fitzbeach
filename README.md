@@ -483,10 +483,6 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 
 The boundary between domain and UI is deliberate: movement logic stays in the domain module, robot feature orchestration lives in the top-level feature module, and the app layer handles routing and subscriptions. The first backend step follows the same approach by keeping the static product source separate from the Haskell HTTP handlers.
 
-## Why Elm
-
-Elm is a good fit for a small interactive exercise like this because it keeps state transitions explicit, makes invalid states harder to represent, and supports refactoring with strong compiler feedback. For a constrained problem, that helps keep the implementation small and predictable.
-
 ## Possible future enhancements
 
 - Persist command history between sessions
