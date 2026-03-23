@@ -1,0 +1,4 @@
+interface:
+  display_name: "Haskell Backend Skill"
+  short_description: "Maintain the Stack and Servant backend"
+  default_prompt: "Modify the Haskell backend in this repo using the existing Stack, Servant, WAI, and smoke-test workflow while keeping Cabal and Docker packaging aligned."

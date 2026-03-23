@@ -1,0 +1,4 @@
+interface:
+  display_name: "AWS Static Lambda Skill"
+  short_description: "Maintain the AWS deploy path for this repo"
+  default_prompt: "Modify this repo's AWS deployment flow across CloudFormation, shell scripts, GitHub Actions, and documentation while preserving the existing Lambda container plus S3 and CloudFront architecture unless explicitly asked to change it."
