@@ -1,17 +1,12 @@
-{-# LANGUAGE TypeApplications #-}
-
 module Main where
 
-import Api (HealthResponse)
+import Codegen.Elm.Definitions (definitions)
 import qualified Data.HashMap.Strict as HashMap
-import Language.Haskell.To.Elm (jsonDefinitions)
-import qualified Language.Elm.Pretty as Pretty
-import qualified Language.Elm.Definition as Elm
 import qualified Language.Elm.Simplification as Simplification
-import Prettyprinter (Doc)
+import qualified Language.Elm.Pretty as Pretty
 import Prettyprinter (defaultLayoutOptions, layoutPretty)
+import Prettyprinter (Doc)
 import Prettyprinter.Render.Text (renderStrict)
-import Product (Product)
 import Control.Monad (forM_)
 import System.Directory (createDirectoryIfMissing, doesDirectoryExist, removePathForcibly)
 import System.FilePath ((<.>), joinPath)
@@ -33,11 +28,6 @@ main = do
         pure ()
     createDirectoryIfMissing True outputDir
     forM_ (HashMap.toList modules) (uncurry writeGeneratedModule)
-
-definitions :: [Elm.Definition]
-definitions =
-    jsonDefinitions @Product
-        ++ jsonDefinitions @HealthResponse
 
 writeGeneratedModule :: [Text.Text] -> Doc ann -> IO ()
 writeGeneratedModule moduleName moduleContents = do
