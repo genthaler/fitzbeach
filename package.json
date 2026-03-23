@@ -7,6 +7,7 @@
     "backend:ghci": "stack --stack-yaml backend/stack.yaml ghci",
     "backend:ghci:main": "stack --stack-yaml backend/stack.yaml ghci --ghci-options -e --ghci-options :main",
     "backend:run": "stack --stack-yaml backend/stack.yaml run",
+    "backend:test": "stack --stack-yaml backend/stack.yaml test",
     "backend:watch": "stack --stack-yaml backend/stack.yaml build --file-watch --exec fitzbeach-backend",
     "book": "parcel book.html",
     "book:build": "parcel build book.html --dist-dir dist-book",
@@ -24,7 +25,7 @@
     "aws:status": "./scripts/aws-status.sh",
     "review": "elm-review",
     "review:fix": "elm-review --fix-all-without-prompt",
-    "verify": "npm test && npm run review && npm run book:build",
+    "verify": "npm test && npm run review && npm run backend:test && npm run book:build",
     "predeploy": "npm run verify && npm run build:pages",
     "deploy": "gh-pages -d dist"
   },

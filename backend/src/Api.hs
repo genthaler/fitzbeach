@@ -8,7 +8,7 @@ module Api
     , api
     ) where
 
-import Data.Aeson (ToJSON)
+import Data.Aeson (FromJSON, ToJSON)
 import Data.Proxy (Proxy (Proxy))
 import GHC.Generics (Generic)
 import Product (Product)
@@ -20,6 +20,7 @@ data HealthResponse = HealthResponse
     deriving (Eq, Show, Generic)
 
 instance ToJSON HealthResponse
+instance FromJSON HealthResponse
 
 type API =
        "health" :> Get '[JSON] HealthResponse
