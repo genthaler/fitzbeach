@@ -1,4 +1,4 @@
-module View exposing (Page(..), page, themeToggleDescription, toggleThemeMode)
+module View exposing (Page(..), page)
 
 import Element exposing (Element)
 import Motorcycle
@@ -7,7 +7,6 @@ import Robot
 import Robot.View
 import ServiceHealth
 import View.Theme as Theme
-import View.ThemeToggle as ThemeToggle
 
 
 type Page
@@ -37,13 +36,3 @@ page model colors compactLayout robotControls =
 
         RobotPage ->
             Robot.View.view compactLayout colors model.robot robotControls
-
-
-toggleThemeMode : Theme.Mode -> Theme.Mode
-toggleThemeMode =
-    ThemeToggle.toggleThemeMode
-
-
-themeToggleDescription : Theme.Mode -> String
-themeToggleDescription =
-    ThemeToggle.themeToggleDescription
