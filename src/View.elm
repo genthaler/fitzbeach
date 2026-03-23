@@ -5,6 +5,7 @@ import Motorcycle
 import Motorcycle.Model as Motorcycle
 import Robot
 import Robot.View
+import ServiceHealth
 import View.Theme as Theme
 import View.ThemeToggle as ThemeToggle
 
@@ -16,7 +17,8 @@ type Page
 
 page :
     { a
-        | motorcycleProducts : Motorcycle.ProductState
+        | serviceHealth : ServiceHealth.ServiceHealth
+        , motorcycleProducts : Motorcycle.ProductState
         , robot : Robot.Model
         , currentPage : Page
     }
@@ -30,6 +32,7 @@ page model colors compactLayout robotControls =
             Motorcycle.view
                 compactLayout
                 colors
+                model.serviceHealth
                 model.motorcycleProducts
 
         RobotPage ->

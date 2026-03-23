@@ -5,17 +5,17 @@ module Product
     ( Product(..)
     ) where
 
-import Data.Aeson (ToJSON)
-import Data.Aeson (FromJSON)
+import Data.Aeson (FromJSON, ToJSON)
+import Data.Text (Text)
 import GHC.Generics (Generic)
 
 data Product = Product
     { id :: Int
-    , name :: String
-    , category :: String
+    , name :: Text
+    , category :: Text
     , priceCents :: Int
-    , currency :: String
-    , imageUrl :: String
+    , currency :: Text
+    , imageUrl :: Text
     }
     deriving (Eq, Show, Generic)
 

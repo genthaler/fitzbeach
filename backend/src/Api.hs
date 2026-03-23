@@ -10,12 +10,13 @@ module Api
 
 import Data.Aeson (FromJSON, ToJSON)
 import Data.Proxy (Proxy (Proxy))
+import Data.Text (Text)
 import GHC.Generics (Generic)
 import Product (Product)
 import Servant ((:<|>), (:>), Get, JSON)
 
 data HealthResponse = HealthResponse
-    { status :: String
+    { status :: Text
     }
     deriving (Eq, Show, Generic)
 

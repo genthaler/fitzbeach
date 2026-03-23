@@ -1,34 +1,13 @@
-module Motorcycle.Model exposing (Product, ProductState(..), priceLabel, productDecoder, sampleProducts)
+module Motorcycle.Model exposing (ProductState(..), priceLabel, sampleProducts)
 
-import Json.Decode as Decode exposing (Decoder)
+import Generated.Api.Product exposing (Product)
 import String
-
-
-type alias Product =
-    { id : Int
-    , name : String
-    , category : String
-    , priceCents : Int
-    , currency : String
-    , imageUrl : String
-    }
 
 
 type ProductState
     = Loading
     | Loaded (List Product)
     | Failed String
-
-
-productDecoder : Decoder Product
-productDecoder =
-    Decode.map6 Product
-        (Decode.field "id" Decode.int)
-        (Decode.field "name" Decode.string)
-        (Decode.field "category" Decode.string)
-        (Decode.field "priceCents" Decode.int)
-        (Decode.field "currency" Decode.string)
-        (Decode.field "imageUrl" Decode.string)
 
 
 priceLabel : Product -> String

@@ -137,6 +137,37 @@ curl http://localhost:8080/health
 curl http://localhost:8080/products
 ```
 
+## API code generation
+
+Shared Elm transport types are generated from Haskell backend transport types.
+The Haskell source of truth for the current generated Elm modules is:
+
+- `backend/src/Product.hs`
+- `backend/src/Api.hs` for `HealthResponse`
+
+Generated Elm files are checked in under:
+
+- `src/Generated/Api/Product.elm`
+- `src/Generated/Api/HealthResponse.elm`
+
+HTTP request orchestration remains handwritten in Elm under `src/Api/`.
+
+Regenerate the checked-in Elm transport modules from the repo root with:
+
+```bash
+npm run api:generate
+```
+
+That command runs the dedicated backend codegen executable and overwrites the generated Elm files deterministically.
+
+To check for stale generated files, run:
+
+```bash
+npm run api:check-generated
+```
+
+`npm run verify` includes that drift check before the Elm and backend test steps, so CI fails if generated Elm is out of date with the backend transport types.
+
 Start the frontend development server from the repo root in a second terminal:
 
 ```bash
@@ -183,7 +214,7 @@ Run the full verification suite:
 nix develop -c npm run verify
 ```
 
-That command runs `npm test`, `npm run review`, and `npm run book:build` inside the pinned Nix shell.
+That command runs `npm run api:check-generated`, `npm test`, `npm run review`, `npm run backend:test`, and `npm run book:build` inside the pinned Nix shell.
 
 If you prefer not to enter the Nix shell first, use:
 
@@ -227,8 +258,10 @@ npm run deploy
 If you are skipping the local Nix shell because of disk constraints, the closest direct equivalent is:
 
 ```bash
+npm run api:check-generated
 npm test
 npm run review
+npm run backend:test
 npm run book:build
 ```
 
