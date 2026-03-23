@@ -1,4 +1,4 @@
-module Motorcycle.Api exposing (getProducts)
+module Api.Products exposing (getProducts)
 
 import Generated.Api.Product exposing (Product, productDecoder)
 import Http

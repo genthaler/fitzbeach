@@ -13,12 +13,12 @@ module Main exposing
 import Browser
 import Browser.Events
 import Api.Health
+import Api.Products
 import Generated.Api.HealthResponse exposing (HealthResponse)
 import Generated.Api.Product exposing (Product)
 import Html
 import Http
 import Json.Decode as Decode
-import Motorcycle.Api
 import Motorcycle.Model as Motorcycle
 import Robot
 import Robot.Logic as RobotLogic
@@ -211,7 +211,7 @@ loadHealth apiBaseUrl =
 
 loadProducts : String -> Cmd Msg
 loadProducts apiBaseUrl =
-    Motorcycle.Api.getProducts apiBaseUrl ReceiveProducts
+    Api.Products.getProducts apiBaseUrl ReceiveProducts
 
 
 shouldRetryHealth : ServiceHealth -> Bool
