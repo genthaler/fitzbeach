@@ -4,7 +4,7 @@
   "scripts": {
     "clean": "shx rm -rf .parcel-cache dist dist-book",
     "backend:build": "stack --stack-yaml backend/stack.yaml build",
-    "backend:codegen": "stack --stack-yaml backend/stack.yaml exec fitzbeach-backend-codegen",
+    "backend:codegen": "stack --stack-yaml backend/stack.yaml run fitzbeach-backend-codegen",
     "backend:ghci": "stack --stack-yaml backend/stack.yaml ghci",
     "backend:ghci:main": "stack --stack-yaml backend/stack.yaml ghci --ghci-options -e --ghci-options :main",
     "backend:run": "stack --stack-yaml backend/stack.yaml run",
