@@ -12,6 +12,7 @@ module Main exposing
 
 import Browser
 import Browser.Events
+import Generated.Api.Product exposing (Product)
 import Html
 import Http
 import Json.Decode as Decode
@@ -42,7 +43,7 @@ type Msg
     | SetTheme Theme.Mode
     | SelectPage View.Page
     | ResizeViewport Int Int
-    | ReceiveProducts (Result Http.Error (List Motorcycle.Product))
+    | ReceiveProducts (Result Http.Error (List Product))
 
 
 type alias Viewport =
@@ -191,7 +192,7 @@ shouldRetryProducts productState =
             False
 
 
-productStateFromResult : String -> Result Http.Error (List Motorcycle.Product) -> Motorcycle.ProductState
+productStateFromResult : String -> Result Http.Error (List Product) -> Motorcycle.ProductState
 productStateFromResult apiBaseUrl result =
     case result of
         Ok products ->

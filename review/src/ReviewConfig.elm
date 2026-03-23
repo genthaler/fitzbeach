@@ -79,8 +79,9 @@ config =
     , NoUnused.CustomTypeConstructorArgs.rule
     , NoUnused.CustomTypeConstructors.rule []
     , NoUnused.Exports.rule
-        |> Rule.ignoreErrorsForDirectories [ "tests/" ]
+        |> Rule.ignoreErrorsForDirectories [ "tests/", "src/Generated/" ]
     , NoUnused.Modules.rule
+        |> Rule.ignoreErrorsForDirectories [ "src/Generated/" ]
     , NoUnused.Dependencies.rule
 
     -- Documentation rules (can be expensive on large codebases)

@@ -4,7 +4,8 @@ import Element exposing (Element, alignBottom, clip, column, el, fill, height, i
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import Motorcycle.Model as MotorcycleModel exposing (Product, ProductState(..))
+import Generated.Api.Product exposing (Product)
+import Motorcycle.Model as MotorcycleModel exposing (ProductState(..))
 import String
 import View.Theme as Theme
 

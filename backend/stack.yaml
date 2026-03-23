@@ -4,3 +4,7 @@ notify-if-nix-on-path: false
 
 packages:
   - .
+
+extra-deps:
+  - haskell-to-elm-0.3.2.0@sha256:441d57a2ffc23dbf25cd6f9991aaaac8ce671b6b4c5077f6fb35e25a84258dc4,4594
+  - elm-syntax-0.3.3.0@sha256:4a03c1778c38b9c924e7e9aca07de294ec675bafa9d9184e91a574c50a3ca40c,2312
