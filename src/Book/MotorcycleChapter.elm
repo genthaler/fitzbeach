@@ -4,6 +4,7 @@ import ElmBook.Chapter exposing (renderStatefulComponent)
 import ElmBook.ElmUI exposing (Chapter)
 import Motorcycle
 import Motorcycle.Model
+import ServiceHealth
 import View.Theme as Theme
 
 
@@ -19,5 +20,6 @@ chapter =
                 Motorcycle.view
                     False
                     (Theme.palette state.themeMode)
+                    (ServiceHealth.Available "healthy")
                     (Motorcycle.Model.Loaded Motorcycle.Model.sampleProducts)
             )

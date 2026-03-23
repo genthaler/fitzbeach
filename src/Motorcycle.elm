@@ -6,19 +6,20 @@ import Element.Border as Border
 import Element.Font as Font
 import Generated.Api.Product exposing (Product)
 import Motorcycle.Model as MotorcycleModel exposing (ProductState(..))
+import ServiceHealth exposing (ServiceHealth(..))
 import String
 import View.Theme as Theme
 
 
-view : Bool -> Theme.Palette -> ProductState -> Element msg
-view compactLayout colors productState =
+view : Bool -> Theme.Palette -> ServiceHealth -> ProductState -> Element msg
+view compactLayout colors serviceHealth productState =
     column
         [ width fill
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
         [ pageHeading compactLayout colors "Motorcycle"
-        , statusPanel compactLayout colors productState
+        , statusPanel compactLayout colors serviceHealth productState
         , productPanelLayout compactLayout colors productState
         ]
 
@@ -48,22 +49,34 @@ pageHeading compactLayout colors labelText =
         ]
 
 
-statusPanel : Bool -> Theme.Palette -> ProductState -> Element msg
-statusPanel compactLayout colors productState =
+statusPanel : Bool -> Theme.Palette -> ServiceHealth -> ProductState -> Element msg
+statusPanel compactLayout colors serviceHealth productState =
     let
-        message : String
-        message =
+        healthMessage : String
+        healthMessage =
+            case serviceHealth of
+                Checking ->
+                    "Health check in progress."
+
+                Available status ->
+                    "Service status: " ++ status ++ "."
+
+                Unavailable reason ->
+                    "Health check failed. " ++ reason
+
+        productsMessage : String
+        productsMessage =
             case productState of
                 Loading ->
-                    "Loading products from the local service."
+                    " Loading products from the local service."
 
                 Loaded loadedProducts ->
-                    "Collection loaded. "
+                    " Collection loaded. "
                         ++ String.fromInt (List.length loadedProducts)
                         ++ " products available."
 
                 Failed reason ->
-                    "Product service unavailable. " ++ reason
+                    " Product service unavailable. " ++ reason
     in
     el
         [ Font.size 14
@@ -81,7 +94,7 @@ statusPanel compactLayout colors productState =
                 20
             )
         ]
-        (text message)
+        (text (healthMessage ++ productsMessage))
 
 
 productPanelLayout : Bool -> Theme.Palette -> ProductState -> Element msg

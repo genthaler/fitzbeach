@@ -1,11 +1,13 @@
 module MainTest exposing (tests)
 
 import Expect
+import Generated.Api.HealthResponse exposing (HealthResponse)
 import Http
 import Main exposing (Msg(..), defaultApiBaseUrl, initModel, keyboardCommandsEnabled, update)
 import Motorcycle.Model
 import Robot
 import Robot.Logic exposing (Command(..))
+import ServiceHealth
 import Test exposing (Test, describe, test)
 import View
 import View.Theme as Theme
@@ -18,7 +20,36 @@ tests =
             \_ ->
                 Expect.all
                     [ \_ -> Expect.equal View.MotorcyclePage initModel.currentPage
+                    , \_ -> Expect.equal ServiceHealth.Checking initModel.serviceHealth
                     , \_ -> Expect.equal Motorcycle.Model.Loading initModel.motorcycleProducts
+                    ]
+                    ()
+        , test "successful health responses mark the service as available" <|
+            \_ ->
+                let
+                    response : HealthResponse
+                    response =
+                        { status = "healthy" }
+
+                    ( updatedModel, _ ) =
+                        update (ReceiveHealth (Ok response)) initModel
+                in
+                Expect.all
+                    [ \_ -> Expect.equal (ServiceHealth.Available "healthy") updatedModel.serviceHealth
+                    , \_ -> Expect.equal initModel.robot updatedModel.robot
+                    , \_ -> Expect.equal initModel.currentPage updatedModel.currentPage
+                    ]
+                    ()
+        , test "failed health responses store an unavailable service state" <|
+            \_ ->
+                let
+                    ( updatedModel, _ ) =
+                        update (ReceiveHealth (Err Http.NetworkError)) initModel
+                in
+                Expect.all
+                    [ \_ -> Expect.equal (ServiceHealth.Unavailable ("Check that the product service is reachable at " ++ defaultApiBaseUrl ++ ".")) updatedModel.serviceHealth
+                    , \_ -> Expect.equal initModel.robot updatedModel.robot
+                    , \_ -> Expect.equal initModel.currentPage updatedModel.currentPage
                     ]
                     ()
         , test "keyboard commands are enabled only on the robot page" <|
@@ -62,6 +93,7 @@ tests =
                         { initModel
                             | themeMode = Theme.Dark
                             , currentPage = View.RobotPage
+                            , serviceHealth = ServiceHealth.Available "healthy"
                         }
 
                     ( updatedModel, _ ) =
@@ -74,6 +106,7 @@ tests =
                             updatedModel.robot
                     , \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal View.RobotPage updatedModel.currentPage
+                    , \_ -> Expect.equal dirtyModel.serviceHealth updatedModel.serviceHealth
                     , \_ -> Expect.equal dirtyModel.motorcycleProducts updatedModel.motorcycleProducts
                     ]
                     ()
@@ -84,6 +117,7 @@ tests =
                         { initModel
                             | themeMode = Theme.Dark
                             , currentPage = View.RobotPage
+                            , serviceHealth = ServiceHealth.Available "healthy"
                         }
 
                     ( updatedModel, _ ) =
@@ -93,6 +127,7 @@ tests =
                     [ \_ -> Expect.equal (Robot.update Robot.TurnLeft dirtyModel.robot) updatedModel.robot
                     , \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal View.RobotPage updatedModel.currentPage
+                    , \_ -> Expect.equal dirtyModel.serviceHealth updatedModel.serviceHealth
                     , \_ -> Expect.equal dirtyModel.motorcycleProducts updatedModel.motorcycleProducts
                     , \_ -> Expect.equal dirtyModel.viewport updatedModel.viewport
                     ]
@@ -116,6 +151,7 @@ tests =
                     [ \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal dirtyModel.robot updatedModel.robot
                     , \_ -> Expect.equal dirtyModel.currentPage updatedModel.currentPage
+                    , \_ -> Expect.equal dirtyModel.serviceHealth updatedModel.serviceHealth
                     , \_ -> Expect.equal dirtyModel.motorcycleProducts updatedModel.motorcycleProducts
                     , \_ -> Expect.equal dirtyModel.viewport updatedModel.viewport
                     ]
@@ -138,6 +174,7 @@ tests =
                     , \_ -> Expect.equal dirtyModel.robot updatedModel.robot
                     , \_ -> Expect.equal Theme.Dark updatedModel.themeMode
                     , \_ -> Expect.equal dirtyModel.currentPage updatedModel.currentPage
+                    , \_ -> Expect.equal dirtyModel.serviceHealth updatedModel.serviceHealth
                     , \_ -> Expect.equal dirtyModel.motorcycleProducts updatedModel.motorcycleProducts
                     ]
                     ()
@@ -157,6 +194,7 @@ tests =
                     [ \_ -> Expect.equal View.RobotPage updatedModel.currentPage
                     , \_ -> Expect.equal progressedModel.robot updatedModel.robot
                     , \_ -> Expect.equal progressedModel.themeMode updatedModel.themeMode
+                    , \_ -> Expect.equal progressedModel.serviceHealth updatedModel.serviceHealth
                     , \_ -> Expect.equal progressedModel.motorcycleProducts updatedModel.motorcycleProducts
                     ]
                     ()

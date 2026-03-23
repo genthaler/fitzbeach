@@ -12,6 +12,8 @@ module Main exposing
 
 import Browser
 import Browser.Events
+import Api.Health
+import Generated.Api.HealthResponse exposing (HealthResponse)
 import Generated.Api.Product exposing (Product)
 import Html
 import Http
@@ -20,6 +22,7 @@ import Motorcycle.Api
 import Motorcycle.Model as Motorcycle
 import Robot
 import Robot.Logic as RobotLogic
+import ServiceHealth exposing (ServiceHealth(..))
 import String
 import View
 import View.Shell as Shell
@@ -30,6 +33,7 @@ type alias Model =
     { robot : Robot.Model
     , themeMode : Theme.Mode
     , currentPage : View.Page
+    , serviceHealth : ServiceHealth
     , motorcycleProducts : Motorcycle.ProductState
     , apiBaseUrl : String
     , viewport : Viewport
@@ -43,6 +47,7 @@ type Msg
     | SetTheme Theme.Mode
     | SelectPage View.Page
     | ResizeViewport Int Int
+    | ReceiveHealth (Result Http.Error HealthResponse)
     | ReceiveProducts (Result Http.Error (List Product))
 
 
@@ -78,7 +83,7 @@ init flags =
         model =
             { initModel | apiBaseUrl = apiBaseUrl }
     in
-    ( model, loadProducts apiBaseUrl )
+    ( model, Cmd.batch [ loadHealth apiBaseUrl, loadProducts apiBaseUrl ] )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -101,9 +106,19 @@ update msg model =
                 retryProducts : Bool
                 retryProducts =
                     selectedPage == View.MotorcyclePage && shouldRetryProducts model.motorcycleProducts
+
+                retryHealth : Bool
+                retryHealth =
+                    selectedPage == View.MotorcyclePage && shouldRetryHealth model.serviceHealth
             in
             ( { model
                 | currentPage = selectedPage
+                , serviceHealth =
+                    if retryHealth then
+                        Checking
+
+                    else
+                        model.serviceHealth
                 , motorcycleProducts =
                     if retryProducts then
                         Motorcycle.Loading
@@ -111,8 +126,19 @@ update msg model =
                     else
                         model.motorcycleProducts
               }
-            , if retryProducts then
-                loadProducts model.apiBaseUrl
+            , if retryProducts || retryHealth then
+                Cmd.batch
+                    [ if retryHealth then
+                        loadHealth model.apiBaseUrl
+
+                      else
+                        Cmd.none
+                    , if retryProducts then
+                        loadProducts model.apiBaseUrl
+
+                      else
+                        Cmd.none
+                    ]
 
               else
                 Cmd.none
@@ -120,6 +146,9 @@ update msg model =
 
         ResizeViewport width height ->
             ( { model | viewport = { width = width, height = height } }, Cmd.none )
+
+        ReceiveHealth result ->
+            ( { model | serviceHealth = healthStateFromResult model.apiBaseUrl result }, Cmd.none )
 
         ReceiveProducts result ->
             ( { model | motorcycleProducts = productStateFromResult model.apiBaseUrl result }, Cmd.none )
@@ -130,6 +159,7 @@ initModel =
     { robot = Robot.initialModel
     , themeMode = Theme.Light
     , currentPage = View.MotorcyclePage
+    , serviceHealth = Checking
     , motorcycleProducts = Motorcycle.Loading
     , apiBaseUrl = defaultApiBaseUrl
     , viewport = { width = 0, height = 0 }
@@ -174,9 +204,27 @@ keyPressToMsg key =
             IgnoreKeyPress
 
 
+loadHealth : String -> Cmd Msg
+loadHealth apiBaseUrl =
+    Api.Health.getHealth apiBaseUrl ReceiveHealth
+
+
 loadProducts : String -> Cmd Msg
 loadProducts apiBaseUrl =
     Motorcycle.Api.getProducts apiBaseUrl ReceiveProducts
+
+
+shouldRetryHealth : ServiceHealth -> Bool
+shouldRetryHealth serviceHealth =
+    case serviceHealth of
+        Unavailable _ ->
+            True
+
+        Checking ->
+            False
+
+        Available _ ->
+            False
 
 
 shouldRetryProducts : Motorcycle.ProductState -> Bool
@@ -200,6 +248,16 @@ productStateFromResult apiBaseUrl result =
 
         Err error ->
             Motorcycle.Failed (httpErrorMessage apiBaseUrl error)
+
+
+healthStateFromResult : String -> Result Http.Error HealthResponse -> ServiceHealth
+healthStateFromResult apiBaseUrl result =
+    case result of
+        Ok response ->
+            Available response.status
+
+        Err error ->
+            Unavailable (httpErrorMessage apiBaseUrl error)
 
 
 httpErrorMessage : String -> Http.Error -> String
