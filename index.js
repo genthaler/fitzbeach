@@ -1,4 +1,4 @@
-import { Elm } from "./src/Main.elm";
+import { Elm } from "./frontend/Main.elm";
 
 const apiBaseUrl = (process.env.API_BASE_URL || "http://localhost:8080").replace(/\/$/, "");
 

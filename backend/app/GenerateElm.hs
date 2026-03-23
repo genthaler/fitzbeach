@@ -15,7 +15,7 @@ import qualified Data.Text.IO as Text
 
 main :: IO ()
 main = do
-    let outputDir = joinPath ["src", "Generated", "Api"]
+    let outputDir = joinPath ["frontend", "Generated", "Api"]
         modules =
             Pretty.modules
                 (Simplification.simplifyDefinition <$> definitions)
@@ -32,5 +32,5 @@ main = do
 writeGeneratedModule :: [Text.Text] -> Doc ann -> IO ()
 writeGeneratedModule moduleName moduleContents = do
     let path =
-            joinPath ("src" : map Text.unpack moduleName) <.> "elm"
+            joinPath ("frontend" : map Text.unpack moduleName) <.> "elm"
     Text.writeFile path (renderStrict (layoutPretty defaultLayoutOptions moduleContents))

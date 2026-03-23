@@ -25,7 +25,7 @@
     "aws:frontend:publish": "./scripts/aws-frontend-publish.sh",
     "aws:status": "./scripts/aws-status.sh",
     "api:generate": "npm run backend:codegen",
-    "api:check-generated": "npm run api:generate && git diff --exit-code -- src/Generated/Api",
+    "api:check-generated": "npm run api:generate && git diff --exit-code -- frontend/Generated/Api",
     "review": "elm-review",
     "review:fix": "elm-review --fix-all-without-prompt",
     "verify": "npm run api:check-generated && npm test && npm run review && npm run backend:test && npm run book:build",
