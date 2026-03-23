@@ -47,6 +47,30 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
   Reason: AWS CLI is easier to manage through local shell tooling or GitHub Actions setup, and Docker in CI depends on the runner daemon/runtime, so pinning those tools in Nix adds complexity without matching the benefit of pinning the app verification toolchain.
 - Local tool installation and version management remain the developer's responsibility; do not imply that `asdf` is required just because `.tool-versions` exists.
 
+## Thread Roles
+
+### Architect
+
+Use for planning, repo exploration, architecture decisions, and acceptance criteria.
+Do not implement unless explicitly instructed.
+
+### Builder
+
+Use for implementing approved plans in small validated steps.
+Prefer minimal diffs and run relevant checks.
+
+### Fixer
+
+Use for debugging, root-cause analysis, and regression repair.
+Prefer reproducing issues before editing.
+
+## Subagent Policy
+
+- Spawn subagents only for bounded work that can run independently in parallel.
+- Good fits include codebase exploration, test drafting, edge-case review, and performance or security review.
+- Do not spawn subagents for trivial tasks or when a single focused pass is enough.
+- Always summarize subagent findings back into the parent thread.
+
 ## Commands
 
 - Do not use `nix develop` for normal local development or local verification unless the user explicitly asks for Nix or CI-parity verification.
@@ -193,21 +217,33 @@ Before finishing:
 
 ## Skills
 
-### Available local skills
+### Workflow defaults
 
-- `elm`: General Elm application and refactor work.
-- `elmbook`: ElmBook catalogues, chapters, shared demo state, and theme alignment.
-- `elm-review`: `elm-review` runs, rule fixes, and review config maintenance.
-- `elm-testing`: Add or improve Elm test coverage in this repo, especially around behavior seams, pure helpers, and feature/module contracts.
 - `implementation`: Default workflow for directed implementation tasks in this repo, keeping prompt overhead low and coordinating narrower skills when needed.
 - `fixing`: Default workflow for targeted bug fixes, review findings, and regression corrections in this repo, favouring the smallest defensible change.
-- `github-pages-static-app`: GitHub Pages deploy scripts, public path handling, and `gh-pages` publishing for static apps.
-- `nix-verified-frontend`: Nix dev shells, pinned verify commands, and aligned local/CI/deploy frontend workflows.
-- `elm-ui`: `mdgriffith/elm-ui` layout and styling work.
-- `elm-ui-review`: Calm, minimal `elm-ui` presentation review.
-- `skill-authoring`: Canonical format and workflow guidance for creating or revising repo-local skills.
-- `ui-review`: Findings-first UI review workflow for this repo, prioritising responsiveness, accessibility, regressions, and calm presentation consistency.
-- `elm-parcel-app`: Parcel bootstrapping and Elm app integration.
 - `refactor-step`: Incremental architecture or codebase cleanup workflow that preserves behaviour and keeps docs/tests aligned.
+
+### Elm and UI work
+
+- `elm`: General Elm application and refactor work.
+- `elm-ui`: `mdgriffith/elm-ui` layout and styling work.
+- `elmbook`: ElmBook catalogues, chapters, shared demo state, and theme alignment.
+- `elm-parcel-app`: Parcel bootstrapping and Elm app integration.
+
+### Quality and review
+
+- `elm-review`: `elm-review` runs, rule fixes, and review config maintenance.
+- `elm-testing`: Add or improve Elm test coverage in this repo, especially around behavior seams, pure helpers, and feature/module contracts.
+- `elm-ui-review`: Calm, minimal `elm-ui` presentation review.
+- `ui-review`: Findings-first UI review workflow for this repo, prioritising responsiveness, accessibility, regressions, and calm presentation consistency.
+
+### Tooling and platform
+
+- `nix-verified-frontend`: Nix dev shells, pinned verify commands, and aligned local/CI/deploy frontend workflows.
+- `github-pages-static-app`: GitHub Pages deploy scripts, public path handling, and `gh-pages` publishing for static apps.
+
+### Documentation and repo maintenance
+
+- `skill-authoring`: Canonical format and workflow guidance for creating or revising repo-local skills.
 - `readme-sync`: Keep `README.md` aligned with app behavior and commands.
 - `git`: Git status, diff review, branch naming, and commit message guidance.
