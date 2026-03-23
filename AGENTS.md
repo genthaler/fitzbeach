@@ -7,7 +7,7 @@
 ## Scope
 
 This file defines repo-specific rules for `fitzbeach`.
-Use the local project skills for general Elm, `elm-review`, `elm-ui`, ElmBook, GitHub Pages static app deployment, Nix-verified frontend workflow, Parcel app, README maintenance, and git workflow guidance.
+Use the local project skills for general Elm, the Haskell backend, AWS static and Lambda deployment, `elm-review`, `elm-ui`, ElmBook, GitHub Pages static app deployment, Nix-verified frontend workflow, Parcel app, README maintenance, and git workflow guidance.
 When a task involves skills, prefer repo-local skills under `./.codex/skills/` before falling back to global skills.
 
 ## Structure
@@ -239,8 +239,10 @@ Before finishing:
 
 ### Tooling and platform
 
+- `haskell-backend`: Stack, Cabal, Servant, WAI, Docker, and smoke-test workflow for the Haskell backend.
 - `nix-verified-frontend`: Nix dev shells, pinned verify commands, and aligned local/CI/deploy frontend workflows.
 - `github-pages-static-app`: GitHub Pages deploy scripts, public path handling, and `gh-pages` publishing for static apps.
+- `aws-static-lambda`: CloudFormation, Lambda container, Function URL, S3, CloudFront, AWS shell scripts, and GitHub OIDC deploy workflow for this repo.
 
 ### Documentation and repo maintenance
 
