@@ -6,6 +6,7 @@
 - Fix path-prefix issues for apps served from `https://<user>.github.io/<repo>/`.
 - Document or review a GitHub Pages release workflow.
 - Validate that the published build directory and deploy command are consistent.
+- Work on the GitHub Pages deployment target specifically when the repo has other deploy targets as well.
 
 Use alongside framework-specific skills when the app build itself is changing.
 Use alongside `readme-sync` when deployment instructions or contributor workflow change.
@@ -13,12 +14,14 @@ Use alongside `readme-sync` when deployment instructions or contributor workflow
 ## When not to use
 - When the task is limited to app code with no deploy workflow or public-path impact.
 - When the deployment target is not GitHub Pages.
+- When the task involves the AWS deploy path, CloudFormation, Lambda, S3, CloudFront, or GitHub OIDC workflow; use `aws-static-lambda` instead.
 - When the request is only to review UI or domain logic.
 
 ## Workflow
 1. Inspect the existing deploy path first.
    - Read `package.json` or equivalent task runner config.
    - Identify the normal production build, any Pages-specific build, and the publish directory.
+   - If the repo also has non-Pages deploy targets, identify which scripts and docs belong only to the GitHub Pages path and avoid mixing them with the other deployment system.
 2. Separate normal build concerns from Pages concerns.
    - Keep the standard production build available for non-Pages environments when possible.
    - Add a dedicated Pages build only when a repository path prefix or other deploy-specific setting is required.
@@ -44,6 +47,7 @@ Use alongside `readme-sync` when deployment instructions or contributor workflow
 - Forgetting the repository path prefix, causing broken asset URLs after deploy.
 - Publishing the wrong output directory.
 - Letting `deploy` bypass tests, lint, or review checks that the project expects.
+- Mixing GitHub Pages script or documentation changes into a separate deployment path such as the repo's AWS workflow.
 - Documenting a deploy flow that does not match the scripts on disk.
 - Run the smallest relevant command first, then the full predeploy path when validating a release workflow change.
 
