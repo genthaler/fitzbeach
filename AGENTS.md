@@ -30,6 +30,8 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - `book.js` should continue to initialise `Elm.Book`.
 - The ElmBook catalogue mounts into `<div id="app"></div>` in `book.html`.
 - If Elm dependencies are added later, keep them intentional and minimal.
+- Keep the Elm frontend and Haskell backend in sync.
+  When changing backend routes, JSON payloads, or API assumptions, update the Elm client, decoders, tests, and relevant docs in the same change.
 - Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
 - When creating a new project-local skill under `./.codex/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
 - When creating or updating a project-local skill, use the local `skill-authoring` skill.
