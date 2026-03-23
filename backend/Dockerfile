@@ -15,6 +15,7 @@ RUN cabal update
 
 COPY app app
 COPY src src
+COPY test test
 
 RUN cabal install exe:fitzbeach-backend \
     --install-method=copy \
