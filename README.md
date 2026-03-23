@@ -62,6 +62,8 @@ Tooling split:
 
 Local tool installation and version management remain the responsibility of the developer. This repo does not require `asdf`; `.tool-versions` is provided only as a convenience for contributors who already use it.
 
+Repo-facing backend npm scripts use a repo-local Stack root at `.stack-root/` so Stack state stays inside the workspace rather than writing to `~/.stack`.
+
 Install frontend dependencies:
 
 ```bash
