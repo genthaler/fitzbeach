@@ -17,16 +17,21 @@
 2. Check branch context before suggesting git actions.
    - If the task involves creating a branch for new work, use a branch name that starts with `codex/`.
    - If the current branch does not follow that rule, call it out before committing.
-3. Call out unrelated changes before suggesting a commit message.
-4. Distinguish message suggestion from git actions.
+3. After a PR merges, encourage branch cleanup.
+   - Suggest switching back to `master`, fast-forwarding it to `origin/master`, and deleting the merged `codex/*` branch locally.
+   - If the branch has been pushed and merged, suggest deleting the remote branch too.
+   - Treat this as follow-up cleanup guidance, not as implicit permission to run destructive git commands without the user asking.
+4. Call out unrelated changes before suggesting a commit message.
+5. Distinguish message suggestion from git actions.
    - Suggest the commit message without assuming files should be staged or committed.
-5. Prefer short imperative commit messages.
-6. Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.
+6. Prefer short imperative commit messages.
+7. Prefix commit messages with a change type such as `Feature:`, `Refactor:`, `Style:`, `Documentation:`, `Fix:`, or `Chore:`.
    - If you would normally default to Conventional Commits like `feat:`, `fix:`, or `refactor:`, override that habit here and use the initial-cap prefixes above instead.
 
 ## Expectations
 - Base the suggestion on the full current diff against `HEAD`, not only the most recent edit.
 - Keep branch guidance aligned with the repo rule that new work should happen on `codex/*` branches unless the user says otherwise.
+- After a merged PR, suggest the normal local and remote branch cleanup steps unless the user indicates they want to keep the branch around.
 - Do not hide unrelated changes in the working tree.
 - Mention when unrelated changes should not be included in the suggested commit scope.
 - Keep the suggested message compact and descriptive.
