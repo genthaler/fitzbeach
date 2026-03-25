@@ -3,6 +3,7 @@ frontend/.parcel-cache
 frontend/dist
 frontend/dist-book
 frontend/elm-stuff
+frontend/review/elm-stuff
 .DS_Store
 backend/.stack-work/
 .stack-root/
