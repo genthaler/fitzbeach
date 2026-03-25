@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
-source "$repo_root/scripts/aws-common.sh"
+source "$repo_root/aws/scripts/aws-common.sh"
 
 api_base_url="${FITZBEACH_API_BASE_URL:-}"
 

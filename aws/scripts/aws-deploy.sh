@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
-source "$repo_root/scripts/aws-common.sh"
+source "$repo_root/aws/scripts/aws-common.sh"
 
 image_tag="${FITZBEACH_AWS_IMAGE_TAG:-$(date -u +%Y%m%d%H%M%S)}"
 
@@ -31,7 +31,7 @@ deploy_stack() {
   local deploy_args=(
     cloudformation
     deploy
-    --template-file "$repo_root/infra/template.yaml"
+    --template-file "$repo_root/aws/infra/template.yaml"
     --stack-name "$STACK_NAME"
     --capabilities CAPABILITY_IAM
     --no-fail-on-empty-changeset
