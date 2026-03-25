@@ -19,4 +19,4 @@ fi
 
 cd "$repo_root"
 npm run clean
-API_BASE_URL="$api_base_url" npx parcel build index.html
+API_BASE_URL="$api_base_url" npm run build

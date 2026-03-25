@@ -8,6 +8,7 @@ import Generated.Api.Product exposing (Product)
 import Motorcycle.Model as MotorcycleModel exposing (ProductState(..))
 import ServiceHealth exposing (ServiceHealth(..))
 import String
+import View.PageHeading as PageHeading
 import View.Theme as Theme
 
 
@@ -18,34 +19,9 @@ view compactLayout colors serviceHealth productState =
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
-        [ pageHeading compactLayout colors "Motorcycle"
+        [ PageHeading.view compactLayout colors "Motorcycle"
         , statusPanel compactLayout colors serviceHealth productState
         , productPanelLayout compactLayout colors productState
-        ]
-
-
-pageHeading : Bool -> Theme.Palette -> String -> Element msg
-pageHeading compactLayout colors labelText =
-    column
-        [ width fill
-        , spacing 8
-        ]
-        [ el
-            [ Font.size
-                (if compactLayout then
-                    30
-
-                 else
-                    36
-                )
-            ]
-            (text labelText)
-        , el
-            [ width fill
-            , height (px 1)
-            , Background.color colors.panelBorder
-            ]
-            Element.none
         ]
 
 

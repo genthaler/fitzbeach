@@ -62,6 +62,8 @@ Tooling split:
 
 Local tool installation and version management remain the responsibility of the developer. This repo does not require `asdf`; `.tool-versions` is provided only as a convenience for contributors who already use it.
 
+Repo-facing backend npm scripts use a repo-local Stack root at `.stack-root/` so Stack state stays inside the workspace rather than writing to `~/.stack`.
+
 Install frontend dependencies:
 
 ```bash
@@ -147,10 +149,10 @@ The Haskell source of truth for the current generated Elm modules is:
 
 Generated Elm files are checked in under:
 
-- `src/Generated/Api/Product.elm`
-- `src/Generated/Api/HealthResponse.elm`
+- `frontend/src/Generated/Api/Product.elm`
+- `frontend/src/Generated/Api/HealthResponse.elm`
 
-HTTP request orchestration remains handwritten in Elm under `src/Api/`.
+HTTP request orchestration remains handwritten in Elm under `frontend/src/Api/`.
 
 Regenerate the checked-in Elm transport modules from the repo root with:
 
@@ -246,7 +248,7 @@ Run the deploy checks and production build:
 npm run predeploy
 ```
 
-Publish the current `dist/` output to GitHub Pages:
+Publish the current `frontend/dist/` output to GitHub Pages:
 
 ```bash
 npm run deploy
@@ -335,7 +337,7 @@ Build the frontend against the deployed Function URL:
 npm run aws:frontend:build
 ```
 
-Upload `dist/` to S3 and invalidate CloudFront:
+Upload `frontend/dist/` to S3 and invalidate CloudFront:
 
 ```bash
 npm run aws:frontend:publish
@@ -456,36 +458,32 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 
 ## Architecture notes
 
-- `src/Main.elm` owns application state, subscriptions, and top-level message routing.
+- `frontend/src/Main.elm` owns application state, subscriptions, and top-level message routing.
 - `backend/app/Main.hs` starts the Haskell service, exposes `/health` and `/products`, and can run both locally and inside the Lambda container.
 - `backend/src/Product.hs` defines the backend `Product` JSON shape shared conceptually with the Elm frontend.
 - `backend/src/ProductSource.hs` keeps the current static in-memory product list separate from the HTTP layer so it can be replaced later by DynamoDB or another store.
 - `backend/Dockerfile` builds the Lambda-compatible backend container image.
 - `infra/template.yaml` defines the ECR repository, Lambda Function URL, private frontend bucket, and CloudFront distribution for CloudFormation-based AWS deployment.
-- `src/Book.elm` is a separate ElmBook entrypoint for documented UI examples.
-- `src/Book/` contains ElmBook fixtures and chapters.
-- `book.js` boots the compiled ElmBook app into `#app`.
-- `book.html` is the minimal HTML shell for the ElmBook catalogue.
-- `src/Motorcycle.elm` contains the Motorcycle feature rendering.
-- `src/Motorcycle/Api.elm` contains the frontend HTTP request for loading products from the configured backend base URL.
-- `src/Motorcycle/Model.elm` contains the Motorcycle feature product model, JSON decoder, and local sample data used by ElmBook.
-- `src/Robot.elm` contains the robot feature state and update orchestration.
-- `src/Robot/Model.elm` contains the robot domain model and movement rules.
-- `src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.
-- `src/Robot/View.elm` contains the robot page UI and board rendering.
-- `src/View.elm` contains page selection and rendering for the top-level routes.
-- `src/View/Shell.elm` contains the shared application shell, header, navigation, theme toggle placement, and responsive frame layout.
-- `src/View/ThemeToggle.elm` contains the reusable theme toggle component shared by the app and ElmBook.
-- `src/View/Theme.elm` centralises the shared color palette.
+- `frontend/src/Book.elm` is a separate ElmBook entrypoint for documented UI examples.
+- `frontend/src/Book/` contains ElmBook fixtures and chapters.
+- `frontend/book.js` boots the compiled ElmBook app into `#app`.
+- `frontend/book.html` is the minimal HTML shell for the ElmBook catalogue.
+- `frontend/src/Motorcycle.elm` contains the Motorcycle feature rendering.
+- `frontend/src/Motorcycle/Api.elm` contains the frontend HTTP request for loading products from the configured backend base URL.
+- `frontend/src/Motorcycle/Model.elm` contains the Motorcycle feature product model, JSON decoder, and local sample data used by ElmBook.
+- `frontend/src/Robot.elm` contains the robot feature state and update orchestration.
+- `frontend/src/Robot/Model.elm` contains the robot domain model and movement rules.
+- `frontend/src/Robot/Logic.elm` contains robot command parsing, history handling, and command application.
+- `frontend/src/Robot/View.elm` contains the robot page UI and board rendering.
+- `frontend/src/View.elm` contains page selection and rendering for the top-level routes.
+- `frontend/src/View/Shell.elm` contains the shared application shell, header, navigation, theme toggle placement, and responsive frame layout.
+- `frontend/src/View/ThemeToggle.elm` contains the reusable theme toggle component shared by the app and ElmBook.
+- `frontend/src/View/Theme.elm` centralises the shared color palette.
 - `scripts/aws-*.sh` keep the AWS build, deploy, publish, status, and teardown flow readable from `package.json`.
 - `.github/workflows/` contains Nix health, AWS deploy, AWS destroy, and lockfile maintenance workflows.
-- `tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
+- `frontend/tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 
 The boundary between domain and UI is deliberate: movement logic stays in the domain module, robot feature orchestration lives in the top-level feature module, and the app layer handles routing and subscriptions. The first backend step follows the same approach by keeping the static product source separate from the Haskell HTTP handlers.
-
-## Why Elm
-
-Elm is a good fit for a small interactive exercise like this because it keeps state transitions explicit, makes invalid states harder to represent, and supports refactoring with strong compiler feedback. For a constrained problem, that helps keep the implementation small and predictable.
 
 ## Possible future enhancements
 

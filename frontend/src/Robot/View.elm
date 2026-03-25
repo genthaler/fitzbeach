@@ -8,6 +8,7 @@ import Element.Input as Input
 import Html.Attributes as HtmlAttributes
 import Robot.Logic as Logic
 import Robot.Model as Robot
+import View.PageHeading as PageHeading
 import View.Theme as Theme
 
 
@@ -32,35 +33,10 @@ view compactLayout colors model controls =
         , spacing 28
         , Element.paddingEach { top = 24, right = 0, bottom = 0, left = 0 }
         ]
-        [ pageHeading compactLayout colors "Robot"
+        [ PageHeading.view compactLayout colors "Robot"
         , board compactLayout colors model.robot
         , controlRow colors model.robot controls
         , commandHistory colors (List.map .command model.history)
-        ]
-
-
-pageHeading : Bool -> Theme.Palette -> String -> Element msg
-pageHeading compactLayout colors labelText =
-    column
-        [ width fill
-        , spacing 8
-        ]
-        [ el
-            [ Font.size
-                (if compactLayout then
-                    30
-
-                 else
-                    36
-                )
-            ]
-            (text labelText)
-        , el
-            [ width fill
-            , height (px 1)
-            , Background.color colors.panelBorder
-            ]
-            none
         ]
 
 

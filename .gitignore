@@ -1,8 +1,9 @@
 node_modules
-.parcel-cache
-dist
-dist-book
-elm-stuff
+frontend/.parcel-cache
+frontend/dist
+frontend/dist-book
+frontend/elm-stuff
+frontend/review/elm-stuff
 .DS_Store
 backend/.stack-work/
 .stack-root/
