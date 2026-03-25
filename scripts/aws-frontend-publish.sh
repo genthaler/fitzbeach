@@ -11,5 +11,5 @@ source "$repo_root/scripts/aws-common.sh"
 bucket_name="$(stack_output FrontendBucketName)"
 distribution_id="$(stack_output FrontendDistributionId)"
 
-aws_cli s3 sync "$repo_root/dist/" "s3://$bucket_name" --delete
+aws_cli s3 sync "$repo_root/frontend/dist/" "s3://$bucket_name" --delete
 aws_cli cloudfront create-invalidation --distribution-id "$distribution_id" --paths "/*" >/dev/null
