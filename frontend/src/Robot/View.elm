@@ -35,7 +35,7 @@ view compactLayout colors model controls =
         ]
         [ PageHeading.view compactLayout colors "Robot"
         , board compactLayout colors model.robot
-        , controlRow colors model.robot controls
+        , controlRow colors model controls
         , commandHistory colors (List.map .command model.history)
         ]
 
@@ -176,15 +176,19 @@ robotMarker compactLayout colors robot =
         )
 
 
-controlRow : Theme.Palette -> Robot.Robot -> Controls msg -> Element msg
-controlRow colors robot controls =
+controlRow :
+    Theme.Palette
+    -> { a | robot : Robot.Robot, history : List Logic.HistoryEntry }
+    -> Controls msg
+    -> Element msg
+controlRow colors model controls =
     wrappedRow
         [ centerX
         , spacing 12
         ]
         [ controlButton colors
             "Move Forward"
-            (if Logic.canApplyCommand Logic.MoveForwardCommand robot then
+            (if Logic.canApplyCommand Logic.MoveForwardCommand model.robot then
                 Just controls.moveForward
 
              else
@@ -192,7 +196,14 @@ controlRow colors robot controls =
             )
         , controlButton colors "Turn Left" (Just controls.turnLeft)
         , controlButton colors "Turn Right" (Just controls.turnRight)
-        , controlButton colors "Undo" (Just controls.undo)
+        , controlButton colors
+            "Undo"
+            (if Logic.canUndo model.history then
+                Just controls.undo
+
+             else
+                Nothing
+            )
         , controlButton colors "Reset" (Just controls.reset)
         ]
 

@@ -2,7 +2,7 @@ module Robot.LogicTest exposing (tests)
 
 import Expect
 import Robot
-import Robot.Logic exposing (Command(..), applyCommand, canApplyCommand, commandFromKey, undo)
+import Robot.Logic exposing (Command(..), applyCommand, canApplyCommand, canUndo, commandFromKey, undo)
 import Robot.Model exposing (Direction(..), Robot, facing, fromCoordinates, initialRobot, y)
 import Test exposing (Test, describe, test)
 
@@ -95,6 +95,17 @@ tests =
         , test "undo with empty history is a no-op" <|
             \_ ->
                 Expect.equal Robot.initialModel (undo Robot.initialModel)
+        , test "canUndo only allows undo when history exists" <|
+            \_ ->
+                let
+                    movedModel =
+                        applyCommand MoveForwardCommand Robot.initialModel
+                in
+                Expect.all
+                    [ \_ -> Expect.equal False (canUndo Robot.initialModel.history)
+                    , \_ -> Expect.equal True (canUndo movedModel.history)
+                    ]
+                    ()
         , test "commandFromKey maps supported keys and rejects others" <|
             \_ ->
                 Expect.all
