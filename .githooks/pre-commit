@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+current_branch="$(git symbolic-ref --quiet --short HEAD || true)"
+
+if [[ "$current_branch" == "main" ]]; then
+  echo "Direct commits to main are blocked in this repo. Create a branch and open a PR instead." >&2
+  exit 1
+fi
+
+exit 0
