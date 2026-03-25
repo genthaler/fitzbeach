@@ -404,14 +404,22 @@ aws iam create-open-id-connect-provider \
   - `<AWS_ACCOUNT_ID>` with your AWS account ID
   - `<GITHUB_OWNER>` with the GitHub owner or organisation
   - `<GITHUB_REPO>` with this repository name
-  - The default template trusts `refs/heads/main` only
-  - If your default deploy branch changes, update the `sub` claim to match that branch ref
+  - The default template trusts both `refs/heads/main` and `refs/heads/master` to make the branch rename migration safe
+  - Once your AWS deploy role has been updated and all automation is using `main`, you can remove the legacy `master` ref from the trust policy
 - Create the GitHub deploy role:
 
 ```bash
 aws iam create-role \
   --role-name fitzbeach-github-actions-deploy \
   --assume-role-policy-document file://aws/infra/github-actions-oidc-trust-policy.json
+```
+
+- If the role already exists, update its assume-role policy after a branch rename:
+
+```bash
+aws iam update-assume-role-policy \
+  --role-name fitzbeach-github-actions-deploy \
+  --policy-document file://aws/infra/github-actions-oidc-trust-policy.json
 ```
 
 - Attach the deploy policy from [aws/infra/github-actions-deploy-policy.json](/Users/bonj/Developer/Elm/fitzbeach/aws/infra/github-actions-deploy-policy.json):
