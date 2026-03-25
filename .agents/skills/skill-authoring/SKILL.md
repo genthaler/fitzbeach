@@ -4,7 +4,7 @@ Create or revise repo-local Codex skills using a consistent structure so they ar
 
 ## When to use
 
-- When creating a new repo-local skill under `./.codex/skills/`
+- When creating a new repo-local skill under `./.agents/skills/`
 - When revising the structure or wording of an existing repo-local skill
 - When normalising multiple local skills to a shared format
 

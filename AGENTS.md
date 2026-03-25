@@ -8,7 +8,7 @@
 
 This file defines repo-specific rules for `fitzbeach`.
 Use the local project skills for general Elm, the Haskell backend, AWS static and Lambda deployment, `elm-review`, `elm-ui`, ElmBook, GitHub Pages static app deployment, Nix-verified frontend workflow, Parcel app, README maintenance, and git workflow guidance.
-When a task involves skills, prefer repo-local skills under `./.codex/skills/` before falling back to global skills.
+When a task involves skills, prefer repo-local skills under `./.agents/skills/` before falling back to global skills.
 
 ## Structure
 
@@ -33,7 +33,7 @@ When a task involves skills, prefer repo-local skills under `./.codex/skills/` b
 - Keep the Elm frontend and Haskell backend in sync.
   When changing backend routes, JSON payloads, or API assumptions, update the Elm client, decoders, tests, and relevant docs in the same change.
 - Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
-- When creating a new project-local skill under `./.codex/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
+- When creating a new project-local skill under `./.agents/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
 - When creating or updating a project-local skill, use the local `skill-authoring` skill.
 - Project-local `SKILL.md` files should follow this section order: title, when to use, when not to use, workflow, fixing guidance, final checks.
 - Project-local `SKILL.md` files should not use YAML frontmatter; keep skill metadata only in `agents/openai.yaml`.

@@ -58,6 +58,7 @@ Tooling split:
 
 - `.tool-versions` is an optional local `asdf` path for contributors who manage tools that way
 - `flake.nix` is the CI and pinned verification path
+- repo-local Codex skills live under `.agents/skills/`, following the documented repository skill layout
 - For tools shared by both, such as Node.js and Stack, keep the versions aligned where practical
 
 Local tool installation and version management remain the responsibility of the developer. This repo does not require `asdf`; `.tool-versions` is provided only as a convenience for contributors who already use it.
