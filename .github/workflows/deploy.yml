@@ -3,7 +3,7 @@ name: AWS Deploy
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
     inputs:
       aws_region:

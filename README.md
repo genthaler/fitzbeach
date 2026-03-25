@@ -384,7 +384,7 @@ That command empties the frontend bucket and then deletes the CloudFormation sta
 
 The repo includes:
 
-- `.github/workflows/deploy.yml` to verify and deploy on pushes to `master`, and to support manual deploy runs
+- `.github/workflows/deploy.yml` to verify and deploy on pushes to `main`, and to support manual deploy runs
 - `.github/workflows/destroy.yml` for manual teardown runs
 
 These workflows use GitHub OIDC with AWS rather than long-lived access keys.
@@ -404,7 +404,7 @@ aws iam create-open-id-connect-provider \
   - `<AWS_ACCOUNT_ID>` with your AWS account ID
   - `<GITHUB_OWNER>` with the GitHub owner or organisation
   - `<GITHUB_REPO>` with this repository name
-  - The default template trusts `refs/heads/master` only
+  - The default template trusts `refs/heads/main` only
   - If your default deploy branch changes, update the `sub` claim to match that branch ref
 - Create the GitHub deploy role:
 
@@ -438,7 +438,7 @@ AWS_DEPLOY_ROLE_ARN=arn:aws:iam::<AWS_ACCOUNT_ID>:role/fitzbeach-github-actions-
   For this demo, the priority is deterministic deployment, small diffs, and reviewer readability.
   Tighten it later if you want stricter repository- or stack-scoped permissions.
 
-Sanity check the trust from GitHub by running the deploy workflow manually after the secret is configured. If OIDC is misconfigured, `aws-actions/configure-aws-credentials` will fail before any deploy step runs.
+Validate the trust from GitHub by running the deploy workflow manually after the secret is configured. If OIDC is misconfigured, `aws-actions/configure-aws-credentials` will fail before any deploy step runs.
 
 Workflow behavior:
 
