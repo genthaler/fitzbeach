@@ -1,4 +1,4 @@
-module Robot.Logic exposing (Command(..), HistoryEntry, applyCommand, canApplyCommand, commandFromKey, label, undo)
+module Robot.Logic exposing (Command(..), HistoryEntry, applyCommand, canApplyCommand, canUndo, commandFromKey, label, undo)
 
 import Robot.Model as Robot
 
@@ -58,6 +58,11 @@ applyCommand command model =
 canApplyCommand : Command -> Robot.Robot -> Bool
 canApplyCommand command robot =
     updateRobot command robot /= robot
+
+
+canUndo : List HistoryEntry -> Bool
+canUndo history =
+    not (List.isEmpty history)
 
 
 undo :
