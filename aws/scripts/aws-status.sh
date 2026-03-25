@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/aws-common.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/aws/scripts/aws-common.sh"
 
 if ! aws_cli cloudformation describe-stacks --stack-name "$STACK_NAME" >/dev/null 2>&1; then
   echo "Stack $STACK_NAME does not exist."

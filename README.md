@@ -280,7 +280,7 @@ This repo also includes a container-based AWS deployment path with:
 - Elm static assets in a private S3 bucket behind CloudFront
 - A Haskell backend deployed as an AWS Lambda container image
 - A public Lambda Function URL for `/health` and `/products`
-- One CloudFormation template at `infra/template.yaml` for the AWS resources
+- One CloudFormation template at `aws/infra/template.yaml` for the AWS resources
 
 ### AWS prerequisites
 
@@ -399,7 +399,7 @@ aws iam create-open-id-connect-provider \
   --thumbprint-list 6938fd4d98bab03faadb97b34396831e3780aea1
 ```
 
-- Copy [infra/github-actions-oidc-trust-policy.json](/Users/bonj/Developer/Elm/fitzbeach/infra/github-actions-oidc-trust-policy.json) and replace:
+- Copy [aws/infra/github-actions-oidc-trust-policy.json](/Users/bonj/Developer/Elm/fitzbeach/aws/infra/github-actions-oidc-trust-policy.json) and replace:
   - `<AWS_ACCOUNT_ID>` with your AWS account ID
   - `<GITHUB_OWNER>` with the GitHub owner or organisation
   - `<GITHUB_REPO>` with this repository name
@@ -410,16 +410,16 @@ aws iam create-open-id-connect-provider \
 ```bash
 aws iam create-role \
   --role-name fitzbeach-github-actions-deploy \
-  --assume-role-policy-document file://infra/github-actions-oidc-trust-policy.json
+  --assume-role-policy-document file://aws/infra/github-actions-oidc-trust-policy.json
 ```
 
-- Attach the deploy policy from [infra/github-actions-deploy-policy.json](/Users/bonj/Developer/Elm/fitzbeach/infra/github-actions-deploy-policy.json):
+- Attach the deploy policy from [aws/infra/github-actions-deploy-policy.json](/Users/bonj/Developer/Elm/fitzbeach/aws/infra/github-actions-deploy-policy.json):
 
 ```bash
 aws iam put-role-policy \
   --role-name fitzbeach-github-actions-deploy \
   --policy-name fitzbeach-github-actions-deploy \
-  --policy-document file://infra/github-actions-deploy-policy.json
+  --policy-document file://aws/infra/github-actions-deploy-policy.json
 ```
 
 - Add the role ARN as the repository secret:
@@ -442,7 +442,7 @@ Sanity check the trust from GitHub by running the deploy workflow manually after
 Workflow behavior:
 
 - The deploy workflow runs `npm ci`, `npm run verify`, `npm run aws:deploy`, and `npm run aws:frontend:publish`
-- The destroy workflow is manual-only and runs `./scripts/aws-destroy.sh`
+- The destroy workflow is manual-only and runs `./aws/scripts/aws-destroy.sh`
 - Both workflows use the same shell scripts as local development so the CI path stays aligned with local commands
 
 Current verification status:
@@ -463,7 +463,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `backend/src/Product.hs` defines the backend `Product` JSON shape shared conceptually with the Elm frontend.
 - `backend/src/ProductSource.hs` keeps the current static in-memory product list separate from the HTTP layer so it can be replaced later by DynamoDB or another store.
 - `backend/Dockerfile` builds the Lambda-compatible backend container image.
-- `infra/template.yaml` defines the ECR repository, Lambda Function URL, private frontend bucket, and CloudFront distribution for CloudFormation-based AWS deployment.
+- `aws/infra/template.yaml` defines the ECR repository, Lambda Function URL, private frontend bucket, and CloudFront distribution for CloudFormation-based AWS deployment.
 - `frontend/src/Book.elm` is a separate ElmBook entrypoint for documented UI examples.
 - `frontend/src/Book/` contains ElmBook fixtures and chapters.
 - `frontend/book.js` boots the compiled ElmBook app into `#app`.
@@ -479,7 +479,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `frontend/src/View/Shell.elm` contains the shared application shell, header, navigation, theme toggle placement, and responsive frame layout.
 - `frontend/src/View/ThemeToggle.elm` contains the reusable theme toggle component shared by the app and ElmBook.
 - `frontend/src/View/Theme.elm` centralises the shared color palette.
-- `scripts/aws-*.sh` keep the AWS build, deploy, publish, status, and teardown flow readable from `package.json`.
+- `aws/scripts/aws-*.sh` keep the AWS build, deploy, publish, status, and teardown flow readable from `package.json`.
 - `.github/workflows/` contains Nix health, AWS deploy, AWS destroy, and lockfile maintenance workflows.
 - `frontend/tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 

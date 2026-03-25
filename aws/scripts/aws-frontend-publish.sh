@@ -2,11 +2,11 @@
 
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
-source "$repo_root/scripts/aws-common.sh"
+source "$repo_root/aws/scripts/aws-common.sh"
 
-"$repo_root/scripts/aws-frontend-build.sh"
+"$repo_root/aws/scripts/aws-frontend-build.sh"
 
 bucket_name="$(stack_output FrontendBucketName)"
 distribution_id="$(stack_output FrontendDistributionId)"

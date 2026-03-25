@@ -2,12 +2,12 @@
 
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
-source "$repo_root/scripts/aws-common.sh"
+source "$repo_root/aws/scripts/aws-common.sh"
 
 aws_cli cloudformation validate-template \
-  --template-body "file://$repo_root/infra/template.yaml" >/dev/null
+  --template-body "file://$repo_root/aws/infra/template.yaml" >/dev/null
 
 docker build \
   --platform linux/amd64 \

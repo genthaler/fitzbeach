@@ -49,4 +49,4 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
 
       - name: Destroy stack
-        run: ./scripts/aws-destroy.sh
+        run: ./aws/scripts/aws-destroy.sh
