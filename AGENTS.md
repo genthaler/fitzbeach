@@ -216,6 +216,7 @@ Before finishing:
 2. For local work, run the most appropriate direct verification commands before considering a substantive code task complete, such as `npm run verify` and relevant direct backend checks. Use `nix develop -c npm run verify` only when the user explicitly asks for Nix or when CI-parity validation is specifically needed. If the direct local checks cannot be run, state that clearly and explain why.
 3. Before making a repo commit for new work, create or switch to a branch whose name starts with `codex/` unless the user explicitly asks to stay on the current branch.
 4. After the task is complete, commit the changes.
+5. Treat `main` as PR-only. Do not plan to land changes by committing directly on `main`; push a branch and open a PR instead.
 
 ## Skills
 

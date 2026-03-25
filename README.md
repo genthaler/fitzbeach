@@ -65,6 +65,8 @@ Local tool installation and version management remain the responsibility of the 
 
 Repo-facing backend npm scripts use a backend-local Stack root at `backend/.stack-root/`, so Stack state stays inside the backend workspace area and out of the repo root.
 
+Git workflow note: `main` is protected and PR-only. New changes should land from a branch via pull request rather than direct commits or pushes to `main`.
+
 Install frontend dependencies:
 
 ```bash

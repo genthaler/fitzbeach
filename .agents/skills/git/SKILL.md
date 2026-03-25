@@ -17,8 +17,9 @@
 2. Check branch context before suggesting git actions.
    - If the task involves creating a branch for new work, use a branch name that starts with `codex/`.
    - If the current branch does not follow that rule, call it out before committing.
+   - Treat `main` as PR-only. New work should not be committed directly to `main`.
 3. After a PR merges, encourage branch cleanup.
-   - Suggest switching back to `master`, fast-forwarding it to `origin/master`, and deleting the merged `codex/*` branch locally.
+   - Suggest switching back to `main`, fast-forwarding it to `origin/main`, and deleting the merged `codex/*` branch locally.
    - If the branch has been pushed and merged, suggest deleting the remote branch too.
    - Treat this as follow-up cleanup guidance, not as implicit permission to run destructive git commands without the user asking.
 4. Call out unrelated changes before suggesting a commit message.
@@ -31,6 +32,7 @@
 ## Expectations
 - Base the suggestion on the full current diff against `HEAD`, not only the most recent edit.
 - Keep branch guidance aligned with the repo rule that new work should happen on `codex/*` branches unless the user says otherwise.
+- Keep guidance aligned with the protected-branch rule that `main` changes land via PR rather than direct commits or pushes.
 - After a merged PR, suggest the normal local and remote branch cleanup steps unless the user indicates they want to keep the branch around.
 - Do not hide unrelated changes in the working tree.
 - Mention when unrelated changes should not be included in the suggested commit scope.
