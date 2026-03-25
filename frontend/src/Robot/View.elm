@@ -1,6 +1,6 @@
 module Robot.View exposing (Controls, controlButton, view)
 
-import Element exposing (Element, alpha, centerX, centerY, column, el, fill, height, maximum, none, paddingXY, px, row, spacing, text, width, wrappedRow)
+import Element exposing (Element, alpha, centerX, centerY, column, el, fill, focused, height, maximum, none, paddingXY, px, rgba, row, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -232,6 +232,9 @@ controlButton colors labelText onPress =
                 , Font.color colors.detailText
                 , alpha 0.65
                 , Element.htmlAttribute (HtmlAttributes.disabled True)
+                , focused
+                    [ Border.shadow { offset = ( 0, 0 ), blur = 0, size = 0, color = rgba 0 0 0 0 }
+                    ]
                 ]
         )
         { onPress = onPress
