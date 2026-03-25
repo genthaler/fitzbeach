@@ -5,5 +5,7 @@ frontend/dist-book
 frontend/elm-stuff
 frontend/review/elm-stuff
 .DS_Store
+**/.DS_Store
+.zed/
 backend/.stack-work/
-.stack-root/
+backend/.stack-root/
