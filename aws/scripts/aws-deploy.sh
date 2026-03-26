@@ -68,4 +68,4 @@ deploy_stack "$image_tag"
 
 cd "$repo_root"
 npm run aws:build:pages
-npm exec gh-pages -d frontend/dist
+npm exec -- gh-pages -d frontend/dist
