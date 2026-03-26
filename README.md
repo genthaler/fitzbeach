@@ -73,7 +73,7 @@ Install frontend dependencies:
 npm install
 ```
 
-The repo root now uses npm workspaces. The `frontend/` workspace owns the Parcel and Elm toolchain, the `backend/` workspace owns the Stack-oriented scripts, and the root `package.json` keeps the repo-facing commands such as `npm run dev`, `npm run build`, and `npm run verify`.
+The repo root now uses npm workspaces. The `frontend/` workspace owns the Parcel and Elm toolchain, the `backend/` workspace owns the Stack-oriented scripts, and the root `package.json` keeps the cross-workspace commands such as `npm run frontend:dev`, `npm run frontend:build`, and `npm run verify`.
 
 Build the local Haskell product service:
 
@@ -178,7 +178,7 @@ npm run api:check-generated
 Start the frontend development server from the repo root in a second terminal:
 
 ```bash
-npm run dev
+npm run frontend:dev
 ```
 
 That root command delegates to the `frontend` workspace rather than shelling into `frontend/` manually.
@@ -202,13 +202,13 @@ npm run book
 Create a production build:
 
 ```bash
-npm run build
+npm run frontend:build
 ```
 
 Create the GitHub Pages redirect build:
 
 ```bash
-npm run build:pages
+npm run aws:build:pages
 ```
 
 That command builds a small redirect page to the deployed AWS frontend. It reads `FrontendUrl` from the current AWS stack unless `FITZBEACH_PAGES_REDIRECT_URL` is set explicitly.
@@ -225,7 +225,7 @@ Run the full verification suite:
 nix develop -c npm run verify
 ```
 
-That command runs `npm run api:check-generated`, `npm test`, `npm run review`, `npm run backend:test`, and `npm run book:build` inside the pinned Nix shell.
+That command runs `npm run api:check-generated`, `npm run frontend:test`, `npm run frontend:review`, `npm run backend:test`, and `npm run book:build` inside the pinned Nix shell.
 
 If you prefer not to enter the Nix shell first, use:
 
@@ -236,19 +236,19 @@ nix develop -c sh -lc 'npm run verify'
 Run the unit tests:
 
 ```bash
-npm test
+npm run frontend:test
 ```
 
 Run `elm-review`:
 
 ```bash
-npm run review
+npm run frontend:review
 ```
 
 Apply safe automatic review fixes:
 
 ```bash
-npm run review:fix
+npm run frontend:review:fix
 ```
 
 Run the deploy checks and production build:
@@ -269,8 +269,8 @@ If you are skipping the local Nix shell because of disk constraints, the closest
 
 ```bash
 npm run api:check-generated
-npm test
-npm run review
+npm run frontend:test
+npm run frontend:review
 npm run backend:test
 npm run book:build
 ```

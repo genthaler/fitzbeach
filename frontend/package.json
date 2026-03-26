@@ -2,6 +2,7 @@
   "name": "frontend",
   "private": true,
   "scripts": {
+    "clean": "shx rm -rf .parcel-cache dist dist-book elm-stuff",
     "book": "parcel book.html --cache-dir .parcel-cache",
     "book:build": "parcel build book.html --cache-dir .parcel-cache --dist-dir dist-book",
     "build": "parcel build index.html --cache-dir .parcel-cache --dist-dir dist",
@@ -15,6 +16,7 @@
     "elm": "^0.19.1-6",
     "elm-review": "^2.13.3",
     "elm-test": "^0.19.1-revision17",
-    "parcel": "^2.15.4"
+    "parcel": "^2.15.4",
+    "shx": "^0.4.0"
   }
 }
