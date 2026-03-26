@@ -73,6 +73,8 @@ Install frontend dependencies:
 npm install
 ```
 
+The repo root now uses npm workspaces. The `frontend/` workspace owns the Parcel and Elm toolchain, while the root `package.json` keeps the repo-facing commands such as `npm run dev`, `npm run build`, and `npm run verify`.
+
 Build the local Haskell product service:
 
 ```bash
@@ -178,6 +180,8 @@ Start the frontend development server from the repo root in a second terminal:
 ```bash
 npm run dev
 ```
+
+That root command delegates to the `frontend` workspace rather than shelling into `frontend/` manually.
 
 Then open the Parcel app and load the default `Motorcycle` page. It will request products from `http://localhost:8080/products`.
 

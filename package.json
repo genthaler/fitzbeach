@@ -1,6 +1,9 @@
 {
   "name": "fitzbeach",
   "private": true,
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
     "clean": "shx rm -rf .parcel-cache frontend/.parcel-cache frontend/dist frontend/dist-book frontend/elm-stuff",
     "backend:build": "stack --stack-yaml backend/stack.yaml --stack-root \"$PWD/backend/.stack-root\" build",
@@ -10,13 +13,13 @@
     "backend:run": "stack --stack-yaml backend/stack.yaml --stack-root \"$PWD/backend/.stack-root\" run",
     "backend:test": "stack --stack-yaml backend/stack.yaml --stack-root \"$PWD/backend/.stack-root\" test",
     "backend:watch": "stack --stack-yaml backend/stack.yaml --stack-root \"$PWD/backend/.stack-root\" build --file-watch --exec fitzbeach-backend",
-    "book": "sh -c 'cd frontend && parcel book.html --cache-dir .parcel-cache'",
-    "book:build": "sh -c 'cd frontend && parcel build book.html --cache-dir .parcel-cache --dist-dir dist-book'",
-    "test": "sh -c 'cd frontend && elm-test'",
-    "dev": "sh -c 'cd frontend && parcel index.html --cache-dir .parcel-cache'",
+    "book": "npm --workspace frontend run book",
+    "book:build": "npm --workspace frontend run book:build",
+    "test": "npm --workspace frontend run test",
+    "dev": "npm --workspace frontend run dev",
     "dev:all": "concurrently --kill-others-on-fail --names backend,frontend \"npm:backend:watch\" \"npm:dev\"",
     "prebuild": "npm run clean",
-    "build": "sh -c 'cd frontend && parcel build index.html --cache-dir .parcel-cache --dist-dir dist'",
+    "build": "npm --workspace frontend run build",
     "build:pages": "./aws/scripts/pages-redirect-build.sh",
     "aws:build": "./aws/scripts/aws-build.sh",
     "aws:deploy": "./aws/scripts/aws-deploy.sh",
@@ -26,20 +29,15 @@
     "aws:status": "./aws/scripts/aws-status.sh",
     "api:generate": "npm run backend:codegen",
     "api:check-generated": "npm run api:generate && git diff --exit-code -- frontend/src/Generated/Api",
-    "review": "sh -c 'cd frontend && elm-review --config review'",
-    "review:fix": "sh -c 'cd frontend && elm-review --config review --fix-all-without-prompt'",
+    "review": "npm --workspace frontend run review",
+    "review:fix": "npm --workspace frontend run review:fix",
     "verify": "npm run api:check-generated && npm test && npm run review && npm run backend:test && npm run book:build",
     "predeploy": "npm run verify && npm run build:pages",
     "deploy": "gh-pages -d frontend/dist"
   },
   "devDependencies": {
-    "@parcel/transformer-elm": "^2.16.4",
     "concurrently": "^9.2.1",
-    "elm": "^0.19.1-6",
-    "elm-review": "^2.13.3",
-    "elm-test": "^0.19.1-revision17",
     "gh-pages": "^5.0.0",
-    "parcel": "^2.15.4",
     "shx": "^0.4.0"
   }
 }
