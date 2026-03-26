@@ -162,7 +162,7 @@ HTTP request orchestration remains handwritten in Elm under `frontend/src/Api/`.
 Regenerate the checked-in Elm transport modules from the repo root with:
 
 ```bash
-npm run api:generate
+npm run -w backend codegen
 ```
 
 That command runs the dedicated backend codegen executable and overwrites the generated Elm files deterministically.
@@ -196,7 +196,7 @@ That command uses `concurrently` to start both processes and stop the other one 
 Start the ElmBook documentation app:
 
 ```bash
-npm run book
+npm run -w frontend book
 ```
 
 Create a production build:
@@ -216,7 +216,7 @@ That command builds a small redirect page to the deployed AWS frontend. It reads
 Create a production ElmBook build:
 
 ```bash
-npm run book:build
+npm run -w frontend book:build
 ```
 
 Run the full verification suite:
@@ -225,7 +225,7 @@ Run the full verification suite:
 nix develop -c npm run verify
 ```
 
-That command runs `npm run api:check-generated`, `npm run -w frontend test`, `npm run -w frontend review`, `npm run -w backend test`, and `npm run book:build` inside the pinned Nix shell.
+That command runs `npm run api:check-generated`, `npm run -w frontend test`, `npm run -w frontend review`, `npm run -w backend test`, and `npm run -w frontend book:build` inside the pinned Nix shell.
 
 If you prefer not to enter the Nix shell first, use:
 
@@ -272,7 +272,7 @@ npm run api:check-generated
 npm run -w frontend test
 npm run -w frontend review
 npm run -w backend test
-npm run book:build
+npm run -w frontend book:build
 ```
 
 That is suitable for local iteration, but the Nix-based command in CI remains the canonical reproducible check.

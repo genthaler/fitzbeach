@@ -6,9 +6,6 @@
     "frontend"
   ],
   "scripts": {
-    "book": "npm -w frontend run book",
-    "book:build": "npm -w frontend run book:build",
-    "clean": "npm run -w frontend clean",
     "dev:all": "concurrently --kill-others-on-fail --names backend,frontend \"npm run -w backend watch\" \"npm run -w frontend dev\"",
     "aws:build": "./aws/scripts/aws-build.sh",
     "aws:build:pages": "./aws/scripts/pages-redirect-build.sh",
@@ -17,9 +14,8 @@
     "aws:frontend:build": "./aws/scripts/aws-frontend-build.sh",
     "aws:frontend:publish": "./aws/scripts/aws-frontend-publish.sh",
     "aws:status": "./aws/scripts/aws-status.sh",
-    "api:generate": "npm run -w backend codegen",
-    "api:check-generated": "npm run api:generate && git diff --exit-code -- frontend/src/Generated/Api",
-    "verify": "npm run api:check-generated && npm run -w frontend test && npm run -w frontend review && npm run -w backend test && npm run book:build",
+    "api:check-generated": "npm run -w backend codegen && git diff --exit-code -- frontend/src/Generated/Api",
+    "verify": "npm run api:check-generated && npm run -w frontend test && npm run -w frontend review && npm run -w backend test && npm run -w frontend book:build",
     "predeploy": "npm run verify && npm run aws:build:pages",
     "deploy": "gh-pages -d frontend/dist"
   },
