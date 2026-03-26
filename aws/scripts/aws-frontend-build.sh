@@ -18,5 +18,5 @@ if [[ -z "$api_base_url" || "$api_base_url" == "None" ]]; then
 fi
 
 cd "$repo_root"
-npm run frontend:clean
-API_BASE_URL="$api_base_url" npm run frontend:build
+npm run -w frontend clean
+API_BASE_URL="$api_base_url" npm run -w frontend build

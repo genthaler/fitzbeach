@@ -73,12 +73,12 @@ Install frontend dependencies:
 npm install
 ```
 
-The repo root now uses npm workspaces. The `frontend/` workspace owns the Parcel and Elm toolchain, the `backend/` workspace owns the Stack-oriented scripts, and the root `package.json` keeps the cross-workspace commands such as `npm run frontend:dev`, `npm run frontend:build`, and `npm run verify`.
+The repo root now uses npm workspaces. The `frontend/` workspace owns the Parcel and Elm toolchain, the `backend/` workspace owns the Stack-oriented scripts, and the root `package.json` keeps the cross-workspace orchestration such as `npm run dev:all` and `npm run verify`.
 
 Build the local Haskell product service:
 
 ```bash
-npm run backend:build
+npm run -w backend build
 ```
 
 Or directly with Stack:
@@ -90,7 +90,7 @@ stack --stack-yaml backend/stack.yaml build
 Start the local Haskell product service:
 
 ```bash
-npm run backend:run
+npm run -w backend run
 ```
 
 Or directly with Stack:
@@ -102,7 +102,7 @@ stack --stack-yaml backend/stack.yaml run
 Restart the backend automatically when Haskell files change:
 
 ```bash
-npm run backend:watch
+npm run -w backend watch
 ```
 
 Or directly with Stack:
@@ -114,7 +114,7 @@ stack --stack-yaml backend/stack.yaml build --file-watch --exec fitzbeach-backen
 Open the backend in GHCi for local iteration:
 
 ```bash
-npm run backend:ghci
+npm run -w backend ghci
 ```
 
 Or directly with Stack:
@@ -132,7 +132,7 @@ Then run the server from the GHCi prompt with:
 Or start the server directly through GHCi in one command:
 
 ```bash
-npm run backend:ghci:main
+npm run -w backend ghci:main
 ```
 
 That starts the API on `http://localhost:8080`.
@@ -178,7 +178,7 @@ npm run api:check-generated
 Start the frontend development server from the repo root in a second terminal:
 
 ```bash
-npm run frontend:dev
+npm run -w frontend dev
 ```
 
 That root command delegates to the `frontend` workspace rather than shelling into `frontend/` manually.
@@ -202,7 +202,7 @@ npm run book
 Create a production build:
 
 ```bash
-npm run frontend:build
+npm run -w frontend build
 ```
 
 Create the GitHub Pages redirect build:
@@ -225,7 +225,7 @@ Run the full verification suite:
 nix develop -c npm run verify
 ```
 
-That command runs `npm run api:check-generated`, `npm run frontend:test`, `npm run frontend:review`, `npm run backend:test`, and `npm run book:build` inside the pinned Nix shell.
+That command runs `npm run api:check-generated`, `npm run -w frontend test`, `npm run -w frontend review`, `npm run -w backend test`, and `npm run book:build` inside the pinned Nix shell.
 
 If you prefer not to enter the Nix shell first, use:
 
@@ -236,19 +236,19 @@ nix develop -c sh -lc 'npm run verify'
 Run the unit tests:
 
 ```bash
-npm run frontend:test
+npm run -w frontend test
 ```
 
 Run `elm-review`:
 
 ```bash
-npm run frontend:review
+npm run -w frontend review
 ```
 
 Apply safe automatic review fixes:
 
 ```bash
-npm run frontend:review:fix
+npm run -w frontend review:fix
 ```
 
 Run the deploy checks and production build:
@@ -269,9 +269,9 @@ If you are skipping the local Nix shell because of disk constraints, the closest
 
 ```bash
 npm run api:check-generated
-npm run frontend:test
-npm run frontend:review
-npm run backend:test
+npm run -w frontend test
+npm run -w frontend review
+npm run -w backend test
 npm run book:build
 ```
 
