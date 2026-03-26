@@ -2,7 +2,7 @@
 
 A small Elm application with a restrained main menu and two pages: a `Motorcycle` product-style landing page backed by a local Haskell service for development, and a `Robot` page with the existing 5x5 robot game.
 
-Live site: https://genthaler.github.io/fitzbeach/
+Live site: the AWS frontend. `https://genthaler.github.io/fitzbeach/` redirects there.
 
 ## Features
 
@@ -201,11 +201,13 @@ Create a production build:
 npm run build
 ```
 
-Create a GitHub Pages production build with the repo path prefix:
+Create the GitHub Pages redirect build:
 
 ```bash
 npm run build:pages
 ```
+
+That command builds a small redirect page to the deployed AWS frontend. It reads `FrontendUrl` from the current AWS stack unless `FITZBEACH_PAGES_REDIRECT_URL` is set explicitly.
 
 Create a production ElmBook build:
 
@@ -257,8 +259,7 @@ Publish the current `frontend/dist/` output to GitHub Pages:
 npm run deploy
 ```
 
-`npm run deploy` uses `gh-pages -d dist` and relies on the `predeploy` script to run tests, `elm-review`, and the production build first. ElmBook validation is separate: run `nix develop -c npm run verify` before considering shared UI work complete.
-`npm run deploy` uses `gh-pages -d dist` and relies on `predeploy` to run `npm run verify` and then `npm run build:pages`, so the deployed app uses the `/fitzbeach/` GitHub Pages path prefix.
+`npm run deploy` uses `gh-pages -d frontend/dist` and relies on the `predeploy` script to run tests and then build a small redirect page that sends `https://genthaler.github.io/fitzbeach/` to the current AWS frontend URL. ElmBook validation is separate: run `nix develop -c npm run verify` before considering shared UI work complete.
 
 If you are skipping the local Nix shell because of disk constraints, the closest direct equivalent is:
 
@@ -362,6 +363,8 @@ That command includes:
 - `BackendFunctionUrl` for the Lambda Function URL
 - `FrontendBucketName` for the S3 bucket
 - `BackendRepositoryUri` for the ECR repository
+
+If `aws:status` reports that the stack does not exist, check that your AWS login, account, region, and optional `AWS_PROFILE` point at the same environment used for deploys.
 
 ### Test the deployed backend
 
