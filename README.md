@@ -333,7 +333,7 @@ Deploy the stack:
 npm run aws:deploy
 ```
 
-`npm run aws:deploy` performs the first-run bootstrap for the ECR repository automatically, pushes a fresh backend image tag, and then updates the Lambda function to use that image.
+`npm run aws:deploy` performs the first-run bootstrap for the ECR repository automatically, pushes a fresh backend image tag, updates the Lambda function to use that image, rebuilds the GitHub Pages redirect against the current `FrontendUrl`, and publishes that redirect to GitHub Pages.
 
 `npm run aws:build` uses `aws cloudformation validate-template` before the Docker build, so AWS credentials need to be available even for the validation step.
 
