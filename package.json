@@ -6,7 +6,8 @@
     "frontend"
   ],
   "scripts": {
-    "dev:all": "concurrently --kill-others-on-fail --names backend,frontend \"npm run -w backend watch\" \"npm run -w frontend dev\"",
+    "predev": "npm run -w backend codegen",
+    "dev": "concurrently --kill-others-on-fail --names backend,frontend \"npm run -w backend watch\" \"npm run -w frontend dev\"",
     "aws:build": "./aws/scripts/aws-build.sh",
     "aws:build:pages": "./aws/scripts/pages-redirect-build.sh",
     "aws:deploy": "./aws/scripts/aws-deploy.sh",
