@@ -5,6 +5,7 @@
     "clean": "shx rm -rf .parcel-cache dist dist-book elm-stuff",
     "book": "parcel book.html --cache-dir .parcel-cache",
     "book:build": "parcel build book.html --cache-dir .parcel-cache --dist-dir dist-book",
+    "prebuild": "npm run clean",
     "build": "parcel build index.html --cache-dir .parcel-cache --dist-dir dist",
     "dev": "parcel index.html --cache-dir .parcel-cache",
     "review": "elm-review --config review",

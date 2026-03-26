@@ -18,7 +18,6 @@
     "frontend:test": "npm --workspace frontend run test",
     "frontend:review": "npm --workspace frontend run review",
     "frontend:review:fix": "npm --workspace frontend run review:fix",
-    "prefrontend:build": "npm run frontend:clean",
     "frontend:build": "npm --workspace frontend run build",
     "book": "npm --workspace frontend run book",
     "book:build": "npm --workspace frontend run book:build",
