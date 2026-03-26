@@ -34,8 +34,8 @@ main = do
 findFrontendRoot :: IO FilePath
 findFrontendRoot = do
     let candidates =
-            [ "frontend"
-            , joinPath ["..", "frontend"]
+            [ joinPath ["..", "frontend"]
+            , "frontend"
             ]
     existing <- filterM doesDirectoryExist candidates
     case existing of
