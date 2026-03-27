@@ -5,7 +5,7 @@ import {
 } from "./lib/context.mjs";
 import { awsCli } from "./lib/aws.mjs";
 import { getAwsContext } from "./lib/env.mjs";
-import { run } from "./lib/exec.mjs";
+import { dockerCli } from "./lib/tools.mjs";
 
 async function main() {
   const context = getAwsContext();
@@ -17,7 +17,7 @@ async function main() {
     `file://${awsTemplatePath}`,
   ], { stdout: "ignore" });
 
-  await run("docker", [
+  await dockerCli([
     "build",
     "--platform",
     "linux/amd64",

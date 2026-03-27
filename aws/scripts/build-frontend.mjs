@@ -1,7 +1,7 @@
 import { repoRoot } from "./lib/context.mjs";
 import { getAwsContext } from "./lib/env.mjs";
 import { stackOutput } from "./lib/aws.mjs";
-import { run } from "./lib/exec.mjs";
+import { npmCli } from "./lib/tools.mjs";
 
 async function main() {
   const context = getAwsContext();
@@ -18,8 +18,8 @@ async function main() {
     process.exit(1);
   }
 
-  await run("npm", ["run", "-w", "frontend", "clean"], { cwd: repoRoot });
-  await run("npm", ["run", "-w", "frontend", "build"], {
+  await npmCli(["run", "-w", "frontend", "clean"], { cwd: repoRoot });
+  await npmCli(["run", "-w", "frontend", "build"], {
     cwd: repoRoot,
     env: {
       ...process.env,
