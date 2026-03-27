@@ -1,7 +1,7 @@
 import { backendDir, backendDockerfilePath, frontendDistDir, repoRoot, awsTemplatePath } from "./lib/context.mjs";
 import { awsCli, awsCliCapture, stackOutput, stackStatus } from "./lib/aws.mjs";
 import { getAwsContext, getImageTag } from "./lib/env.mjs";
-import { githubActionsGitEnv, mergeEnvs } from "./lib/git.mjs";
+import { githubActionsGitEnv, githubActionsRepo, mergeEnvs } from "./lib/git.mjs";
 import { dockerCli, npmCli } from "./lib/tools.mjs";
 
 async function deployStack(context, backendImageTag = "") {
@@ -76,7 +76,14 @@ async function main() {
   await deployStack(context, imageTag);
 
   await npmCli(["run", "-w", "aws", "build:pages"], { cwd: repoRoot });
-  await npmCli(["exec", "-w", "aws", "--", "gh-pages", "-d", frontendDistDir], {
+  const ghPagesArgs = ["exec", "-w", "aws", "--", "gh-pages", "-d", frontendDistDir];
+  const repo = githubActionsRepo();
+
+  if (repo) {
+    ghPagesArgs.push("--repo", repo);
+  }
+
+  await npmCli(ghPagesArgs, {
     cwd: repoRoot,
     env: mergeEnvs(process.env, githubActionsGitEnv()),
   });
