@@ -42,7 +42,12 @@ When a task involves skills, prefer repo-local skills under `./.agents/skills/` 
 - When the user asks to fix a bug, address a finding, or correct a regression, prefer the local `fixing` skill as the default workflow and combine it with narrower domain skills only when needed.
 - When the user asks for a review, prefer the local `ui-review` skill for UI-focused review requests and findings-first review workflows.
 - When the user asks for a refactor, prefer the local `refactor-step` skill for bounded behavior-preserving cleanup work.
-- When using the task plan tool, prefer short user-visible milestones. Do not keep an inspection or analysis step in progress after the relevant files have been read. Separate editing, testing, verification, and commit steps.
+- When using the task plan tool, prefer short user-visible milestones.
+- Update the plan as work progresses, not only at the end.
+- Do not keep an inspection or analysis step in progress after the relevant files have been read.
+- Mark steps completed one at a time as they finish instead of batch-completing the whole plan at closeout.
+- Keep at most one step in progress.
+- Separate editing, testing, verification, and commit steps.
 - Treat `.tool-versions` as an optional local `asdf` toolchain path and `flake.nix` as the CI and pinned verification path.
 - For tools shared by both `.tool-versions` and `flake.nix`, such as Node.js and Stack, keep versions aligned where practical and update both files together when intentionally changing them.
 - Do not add AWS deploy tooling to `flake.nix` unless the user explicitly asks for that complexity; prefer the normal shell toolchain for AWS CLI and Docker.
