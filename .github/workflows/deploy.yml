@@ -22,7 +22,7 @@ env:
   FITZBEACH_AWS_PROJECT_NAME: ${{ vars.FITZBEACH_AWS_PROJECT_NAME || 'fitzbeach' }}
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 concurrency:
@@ -57,6 +57,8 @@ jobs:
 
       - name: Deploy infrastructure and backend
         run: npm run -w aws deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish frontend
         run: npm run -w aws publish
