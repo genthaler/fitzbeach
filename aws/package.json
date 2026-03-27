@@ -2,13 +2,13 @@
   "name": "aws",
   "private": true,
   "scripts": {
-    "build": "./scripts/aws-build.sh",
-    "build:frontend": "./scripts/aws-frontend-build.sh",
-    "build:pages": "./scripts/pages-redirect-build.sh",
-    "deploy": "./scripts/aws-deploy.sh",
-    "destroy": "./scripts/aws-destroy.sh",
-    "publish": "./scripts/aws-frontend-publish.sh",
-    "status": "./scripts/aws-status.sh"
+    "build": "node ./scripts/build.mjs",
+    "build:frontend": "node ./scripts/build-frontend.mjs",
+    "build:pages": "node ./scripts/build-pages.mjs",
+    "deploy": "node ./scripts/deploy.mjs",
+    "destroy": "node ./scripts/destroy.mjs",
+    "publish": "node ./scripts/publish.mjs",
+    "status": "node ./scripts/status.mjs"
   },
   "devDependencies": {
     "gh-pages": "^5.0.0"

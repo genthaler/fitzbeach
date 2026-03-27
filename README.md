@@ -445,13 +445,13 @@ Validate the trust from GitHub by running the deploy workflow manually after the
 Workflow behavior:
 
 - The deploy workflow runs `npm ci`, `npm run verify`, `npm run -w aws deploy`, and `npm run -w aws publish`
-- The destroy workflow is manual-only and runs `./aws/scripts/aws-destroy.sh`
-- Both workflows use the same shell scripts as local development so the CI path stays aligned with local commands
+- The destroy workflow is manual-only and runs `npm run -w aws destroy`
+- Both workflows use the same npm workspace commands as local development so the CI path stays aligned with local commands
 
 Current verification status:
 
 - The GitHub Actions deploy workflow has been exercised successfully against AWS with GitHub OIDC authentication
-- The GitHub Actions destroy workflow uses the same role and shell scripts, but has not been exercised in GitHub Actions here because it is intentionally destructive
+- The GitHub Actions destroy workflow uses the same role and npm workspace command path, but has not been exercised in GitHub Actions here because it is intentionally destructive
 
 ## Design notes
 
@@ -482,7 +482,7 @@ The ElmBook catalogue follows the same theme language. Its chrome uses the app p
 - `frontend/src/View/Shell.elm` contains the shared application shell, header, navigation, theme toggle placement, and responsive frame layout.
 - `frontend/src/View/ThemeToggle.elm` contains the reusable theme toggle component shared by the app and ElmBook.
 - `frontend/src/View/Theme.elm` centralises the shared color palette.
-- `aws/scripts/aws-*.sh` keep the AWS build, deploy, publish, status, and teardown flow readable from `package.json`.
+- `aws/scripts/*.mjs` and `aws/scripts/lib/` keep the AWS build, deploy, publish, status, and teardown flow readable from `package.json`.
 - `.github/workflows/` contains Nix health, AWS deploy, AWS destroy, and lockfile maintenance workflows.
 - `frontend/tests/` mirrors the source namespaces with focused Elm unit tests for main app state, view helpers, robot movement, robot command behavior, and theme helpers.
 
