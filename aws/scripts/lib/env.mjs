@@ -29,18 +29,3 @@ export function getImageTag() {
   const timestamp = new Date().toISOString().replace(/[-:]/g, "");
   return timestamp.slice(0, 8) + timestamp.slice(9, 15);
 }
-
-export function withGitHubActionsGitIdentity(baseEnv = process.env) {
-  if (!process.env.GITHUB_ACTIONS) {
-    return baseEnv;
-  }
-
-  return {
-    ...baseEnv,
-    GIT_AUTHOR_NAME: "GitHub Actions",
-    GIT_AUTHOR_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com",
-    GIT_COMMITTER_NAME: "GitHub Actions",
-    GIT_COMMITTER_EMAIL:
-      "41898282+github-actions[bot]@users.noreply.github.com",
-  };
-}

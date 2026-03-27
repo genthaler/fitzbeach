@@ -1,8 +1,8 @@
 import { backendDir, backendDockerfilePath, frontendDistDir, repoRoot, awsTemplatePath } from "./lib/context.mjs";
-import { awsCli, stackOutput, stackStatus } from "./lib/aws.mjs";
+import { awsCli, awsCliCapture, stackOutput, stackStatus } from "./lib/aws.mjs";
 import { getAwsContext, getImageTag } from "./lib/env.mjs";
-import { capture, run } from "./lib/exec.mjs";
 import { githubActionsGitEnv, mergeEnvs } from "./lib/git.mjs";
+import { dockerCli, npmCli } from "./lib/tools.mjs";
 
 async function deployStack(context, backendImageTag = "") {
   const args = [
@@ -52,25 +52,15 @@ async function main() {
   const repositoryUri = await stackOutput(context, "BackendRepositoryUri");
   const registryHost = repositoryUri.split("/")[0];
 
-  const loginPassword = await capture(
-    "aws",
-    [
-      "--region",
-      context.region,
-      ...(context.profile ? ["--profile", context.profile] : []),
-      "ecr",
-      "get-login-password",
-    ],
-    { stderr: "inherit" },
-  );
+  const loginPassword = await awsCliCapture(context, ["ecr", "get-login-password"], {
+    stderr: "inherit",
+  });
 
-  await run(
-    "docker",
-    ["login", "--username", "AWS", "--password-stdin", registryHost],
-    { input: loginPassword.stdout },
-  );
+  await dockerCli(["login", "--username", "AWS", "--password-stdin", registryHost], {
+    input: loginPassword.stdout,
+  });
 
-  await run("docker", [
+  await dockerCli([
     "build",
     "--platform",
     "linux/amd64",
@@ -81,12 +71,12 @@ async function main() {
     backendDir,
   ]);
 
-  await run("docker", ["push", `${repositoryUri}:${imageTag}`]);
+  await dockerCli(["push", `${repositoryUri}:${imageTag}`]);
 
   await deployStack(context, imageTag);
 
-  await run("npm", ["run", "-w", "aws", "build:pages"], { cwd: repoRoot });
-  await run("npm", ["exec", "-w", "aws", "--", "gh-pages", "-d", frontendDistDir], {
+  await npmCli(["run", "-w", "aws", "build:pages"], { cwd: repoRoot });
+  await npmCli(["exec", "-w", "aws", "--", "gh-pages", "-d", frontendDistDir], {
     cwd: repoRoot,
     env: mergeEnvs(process.env, githubActionsGitEnv()),
   });

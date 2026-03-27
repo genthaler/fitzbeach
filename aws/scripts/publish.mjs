@@ -1,12 +1,12 @@
 import { frontendDistDir, repoRoot } from "./lib/context.mjs";
 import { awsCli, stackOutput } from "./lib/aws.mjs";
 import { getAwsContext } from "./lib/env.mjs";
-import { run } from "./lib/exec.mjs";
+import { npmCli } from "./lib/tools.mjs";
 
 async function main() {
   const context = getAwsContext();
 
-  await run("npm", ["run", "-w", "aws", "build:frontend"], { cwd: repoRoot });
+  await npmCli(["run", "-w", "aws", "build:frontend"], { cwd: repoRoot });
 
   const bucketName = await stackOutput(context, "FrontendBucketName");
   const distributionId = await stackOutput(context, "FrontendDistributionId");
