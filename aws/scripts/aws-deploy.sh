@@ -68,4 +68,12 @@ deploy_stack "$image_tag"
 
 cd "$repo_root"
 npm run -w aws build:pages
+
+if [[ -n "${GITHUB_ACTIONS:-}" ]]; then
+  export GIT_AUTHOR_NAME="GitHub Actions"
+  export GIT_AUTHOR_EMAIL="41898282+github-actions[bot]@users.noreply.github.com"
+  export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+  export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+fi
+
 npm exec -w aws -- gh-pages -d "$repo_root/frontend/dist"
