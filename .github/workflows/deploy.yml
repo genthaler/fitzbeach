@@ -56,7 +56,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
 
       - name: Deploy infrastructure and backend
-        run: npm run aws:deploy
+        run: npm run -w aws deploy
 
       - name: Publish frontend
-        run: npm run aws:frontend:publish
+        run: npm run -w aws publish

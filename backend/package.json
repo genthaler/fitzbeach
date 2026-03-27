@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "private": true,
+  "scripts": {
+    "build": "stack --stack-yaml stack.yaml --stack-root \"$PWD/.stack-root\" build",
+    "codegen": "stack --stack-yaml stack.yaml --stack-root \"$PWD/.stack-root\" run fitzbeach-backend-codegen",
+    "ghci": "stack --stack-yaml stack.yaml --stack-root \"$PWD/.stack-root\" ghci",
+    "ghci:main": "stack --stack-yaml stack.yaml --stack-root \"$PWD/.stack-root\" ghci --ghci-options -e --ghci-options :main",
+    "run": "stack --stack-yaml stack.yaml --stack-root \"$PWD/.stack-root\" run",
+    "test": "stack --stack-yaml stack.yaml --stack-root \"$PWD/.stack-root\" test",
+    "watch": "stack --stack-yaml stack.yaml --stack-root \"$PWD/.stack-root\" build --file-watch --exec fitzbeach-backend"
+  }
+}

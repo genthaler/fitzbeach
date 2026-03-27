@@ -8,7 +8,7 @@ executable fitzbeach-backend
   hs-source-dirs:   app, src
   other-modules:    Api, BackendApp, Product, ProductSource
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -threaded
   build-depends:
       aeson >=2.1 && <2.3
     , base >=4.18 && <5

@@ -1,0 +1,16 @@
+{
+  "name": "aws",
+  "private": true,
+  "scripts": {
+    "build": "./scripts/aws-build.sh",
+    "build:frontend": "./scripts/aws-frontend-build.sh",
+    "build:pages": "./scripts/pages-redirect-build.sh",
+    "deploy": "./scripts/aws-deploy.sh",
+    "destroy": "./scripts/aws-destroy.sh",
+    "publish": "./scripts/aws-frontend-publish.sh",
+    "status": "./scripts/aws-status.sh"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
+  }
+}
