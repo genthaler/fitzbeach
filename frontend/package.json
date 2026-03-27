@@ -3,14 +3,16 @@
   "private": true,
   "scripts": {
     "clean": "shx rm -rf .parcel-cache dist dist-book elm-stuff",
+    "test": "elm-test",
+    "dev": "parcel index.html --cache-dir .parcel-cache",
     "book": "parcel book.html --cache-dir .parcel-cache",
     "book:build": "parcel build book.html --cache-dir .parcel-cache --dist-dir dist-book",
-    "prebuild": "npm run clean",
-    "build": "parcel build index.html --cache-dir .parcel-cache --dist-dir dist",
-    "dev": "parcel index.html --cache-dir .parcel-cache",
     "review": "elm-review --config review",
     "review:fix": "elm-review --config review --fix-all-without-prompt",
-    "test": "elm-test"
+    "preverify": "npm run clean",
+    "verify": "npm run review && npm run test && npm run book:build",
+    "prebuild": "npm run verify",
+    "build": "parcel build index.html --cache-dir .parcel-cache --dist-dir dist"
   },
   "devDependencies": {
     "@parcel/transformer-elm": "^2.16.4",

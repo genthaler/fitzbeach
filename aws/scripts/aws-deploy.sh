@@ -67,5 +67,5 @@ docker push "$repository_uri:$image_tag"
 deploy_stack "$image_tag"
 
 cd "$repo_root"
-npm run aws:build:pages
-npm exec -- gh-pages -d frontend/dist
+npm run -w aws build:pages
+npm exec -w aws -- gh-pages -d frontend/dist

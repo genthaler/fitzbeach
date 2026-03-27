@@ -73,7 +73,7 @@ Install frontend dependencies:
 npm install
 ```
 
-The repo root now uses npm workspaces. The `frontend/` workspace owns the Parcel and Elm toolchain, the `backend/` workspace owns the Stack-oriented scripts, and the root `package.json` keeps the cross-workspace orchestration such as `npm run dev:all` and `npm run verify`.
+The repo root uses npm workspaces. The `frontend/` workspace owns the Parcel and Elm toolchain, the `backend/` workspace owns the Stack-oriented scripts, and the root `package.json` keeps the cross-workspace orchestration such as `npm run dev:all` and `npm run verify`.
 
 Build the local Haskell product service:
 
@@ -167,14 +167,6 @@ npm run -w backend codegen
 
 That command runs the dedicated backend codegen executable and overwrites the generated Elm files deterministically.
 
-To check for stale generated files, run:
-
-```bash
-npm run api:check-generated
-```
-
-`npm run verify` includes that drift check before the Elm and backend test steps, so CI fails if generated Elm is out of date with the backend transport types.
-
 Start the frontend development server from the repo root in a second terminal:
 
 ```bash
@@ -208,7 +200,7 @@ npm run -w frontend build
 Create the GitHub Pages redirect build:
 
 ```bash
-npm run aws:build:pages
+npm run -w aws build:pages
 ```
 
 That command builds a small redirect page to the deployed AWS frontend. It reads `FrontendUrl` from the current AWS stack unless `FITZBEACH_PAGES_REDIRECT_URL` is set explicitly.
@@ -225,7 +217,7 @@ Run the full verification suite:
 nix develop -c npm run verify
 ```
 
-That command runs `npm run api:check-generated`, `npm run -w frontend test`, `npm run -w frontend review`, `npm run -w backend test`, and `npm run -w frontend book:build` inside the pinned Nix shell.
+That command runs `npm run -w backend codegen`, `npm run -w frontend test`, `npm run -w frontend review`, `npm run -w frontend book:build`, and `npm run -w backend test` inside the pinned Nix shell.
 
 If you prefer not to enter the Nix shell first, use:
 
@@ -251,33 +243,27 @@ Apply safe automatic review fixes:
 npm run -w frontend review:fix
 ```
 
-Run the deploy checks and production build:
+For local deploy validation, run:
 
 ```bash
-npm run predeploy
+npm run verify
 ```
 
-Publish the current `frontend/dist/` output to GitHub Pages:
-
-```bash
-npm run deploy
-```
-
-`npm run deploy` uses `gh-pages -d frontend/dist` and relies on the `predeploy` script to run tests and then build a small redirect page that sends `https://genthaler.github.io/fitzbeach/` to the current AWS frontend URL. ElmBook validation is separate: run `nix develop -c npm run verify` before considering shared UI work complete.
+GitHub Pages redirect publishing happens as part of `npm run -w aws deploy` after the AWS stack update exposes the current `FrontendUrl`. ElmBook validation is included in `npm run verify`.
 
 If you are skipping the local Nix shell because of disk constraints, the closest direct equivalent is:
 
 ```bash
-npm run api:check-generated
+npm run -w backend codegen
 npm run -w frontend test
 npm run -w frontend review
-npm run -w backend test
 npm run -w frontend book:build
+npm run -w backend test
 ```
 
 That is suitable for local iteration, but the Nix-based command in CI remains the canonical reproducible check.
 
-GitHub Actions now keeps Nix health checks separate and uses dedicated AWS deploy and destroy workflows for the CloudFormation-based AWS path.
+GitHub Actions keep Nix health checks separate and uses dedicated AWS deploy and destroy workflows for the CloudFormation-based AWS path.
 Separate GitHub Actions workflows also check `flake.lock` health on pushes and pull requests, and open a weekly PR to refresh `flake.lock`.
 Lockfile update PRs created with the default `GITHUB_TOKEN` do not automatically trigger other workflows; if you want CI on those PRs, rerun or reopen them manually, or switch that workflow to a PAT-backed token.
 
@@ -304,7 +290,7 @@ The AWS helper scripts read these environment variables:
 - `AWS_REGION` or `FITZBEACH_AWS_REGION` for the AWS region. Default: `ap-southeast-2`
 - `AWS_PROFILE` or `FITZBEACH_AWS_PROFILE` for the AWS profile. Optional
 - `FITZBEACH_AWS_IMAGE_TAG` to override the backend image tag during deploy. Optional
-- `FITZBEACH_API_BASE_URL` to override the frontend API base URL during `aws:frontend:build`. Optional
+- `FITZBEACH_API_BASE_URL` to override the frontend API base URL during `npm run -w aws build:frontend`. Optional
 
 Example setup:
 
@@ -324,41 +310,41 @@ npm install
 Validate the CloudFormation template and build the Lambda image locally:
 
 ```bash
-npm run aws:build
+npm run -w aws build
 ```
 
 Deploy the stack:
 
 ```bash
-npm run aws:deploy
+npm run -w aws deploy
 ```
 
-`npm run aws:deploy` performs the first-run bootstrap for the ECR repository automatically, pushes a fresh backend image tag, updates the Lambda function to use that image, rebuilds the GitHub Pages redirect against the current `FrontendUrl`, and publishes that redirect to GitHub Pages.
+`npm run -w aws deploy` performs the first-run bootstrap for the ECR repository automatically, pushes a fresh backend image tag, updates the Lambda function to use that image, rebuilds the GitHub Pages redirect against the current `FrontendUrl`, and publishes that redirect to GitHub Pages.
 
-`npm run aws:build` uses `aws cloudformation validate-template` before the Docker build, so AWS credentials need to be available even for the validation step.
+`npm run -w aws build` uses `aws cloudformation validate-template` before the Docker build, so AWS credentials need to be available even for the validation step.
 
 ### Publish the frontend
 
 Build the frontend against the deployed Function URL:
 
 ```bash
-npm run aws:frontend:build
+npm run -w aws build:frontend
 ```
 
 Upload `frontend/dist/` to S3 and invalidate CloudFront:
 
 ```bash
-npm run aws:frontend:publish
+npm run -w aws publish
 ```
 
-`npm run aws:frontend:publish` already runs `npm run aws:frontend:build` first, so the publish path is usually the only command you need.
+`npm run -w aws publish` already runs `npm run -w aws build:frontend` first, so the publish path is usually the only command you need.
 
 ### Find the deployed URLs
 
 Print the stack outputs:
 
 ```bash
-npm run aws:status
+npm run -w aws status
 ```
 
 That command includes:
@@ -368,23 +354,23 @@ That command includes:
 - `FrontendBucketName` for the S3 bucket
 - `BackendRepositoryUri` for the ECR repository
 
-If `aws:status` reports that the stack does not exist, check that your AWS login, account, region, and optional `AWS_PROFILE` point at the same environment used for deploys.
+If `npm run -w aws status` reports that the stack does not exist, check that your AWS login, account, region, and optional `AWS_PROFILE` point at the same environment used for deploys.
 
 ### Test the deployed backend
 
-Once the stack is up, use the Function URL from `npm run aws:status`:
+Once the stack is up, use the Function URL from `npm run -w aws status`:
 
 ```bash
 curl "$FUNCTION_URL/health"
 curl "$FUNCTION_URL/products"
 ```
 
-Open the CloudFront URL from `npm run aws:status` to test the deployed frontend.
+Open the CloudFront URL from `npm run -w aws status` to test the deployed frontend.
 
 ### Tear everything down
 
 ```bash
-npm run aws:destroy
+npm run -w aws destroy
 ```
 
 That command empties the frontend bucket and then deletes the CloudFormation stack.
@@ -458,7 +444,7 @@ Validate the trust from GitHub by running the deploy workflow manually after the
 
 Workflow behavior:
 
-- The deploy workflow runs `npm ci`, `npm run verify`, `npm run aws:deploy`, and `npm run aws:frontend:publish`
+- The deploy workflow runs `npm ci`, `npm run verify`, `npm run -w aws deploy`, and `npm run -w aws publish`
 - The destroy workflow is manual-only and runs `./aws/scripts/aws-destroy.sh`
 - Both workflows use the same shell scripts as local development so the CI path stays aligned with local commands
 

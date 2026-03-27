@@ -2,27 +2,17 @@
   "name": "fitzbeach",
   "private": true,
   "workspaces": [
+    "aws",
     "backend",
     "frontend"
   ],
   "scripts": {
     "predev": "npm run -w backend codegen",
     "dev": "concurrently --kill-others-on-fail --names backend,frontend \"npm run -w backend watch\" \"npm run -w frontend dev\"",
-    "aws:build": "./aws/scripts/aws-build.sh",
-    "aws:build:pages": "./aws/scripts/pages-redirect-build.sh",
-    "aws:deploy": "./aws/scripts/aws-deploy.sh",
-    "aws:destroy": "./aws/scripts/aws-destroy.sh",
-    "aws:frontend:build": "./aws/scripts/aws-frontend-build.sh",
-    "aws:frontend:publish": "./aws/scripts/aws-frontend-publish.sh",
-    "aws:status": "./aws/scripts/aws-status.sh",
-    "api:check-generated": "npm run -w backend codegen && git diff --exit-code -- frontend/src/Generated/Api",
-    "verify": "npm run api:check-generated && npm run -w frontend test && npm run -w frontend review && npm run -w backend test && npm run -w frontend book:build",
-    "predeploy": "npm run verify && npm run aws:build:pages",
-    "deploy": "gh-pages -d frontend/dist"
+    "verify": "npm run -w backend codegen && npm run -w frontend verify && npm run -w backend test"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
-    "gh-pages": "^5.0.0",
     "shx": "^0.4.0"
   }
 }
