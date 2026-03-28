@@ -42,8 +42,8 @@ For generic workflow skills such as git guidance, refactoring, README maintenanc
 - Project-local `SKILL.md` files should not use YAML frontmatter; keep skill metadata only in `agents/openai.yaml`.
 - Keep shared workflow skills shared when possible. If a project-local skill duplicates a shared skill, keep only the repo-specific delta locally or remove the local fork.
 - When a task clearly matches a repo-local skill, reference that skill by name in the prompt rather than rewriting its workflow inline.
-- When the user asks to implement a change, prefer the local `implementation` skill as the default workflow and combine it with narrower domain skills only when needed.
-- When the user asks to fix a bug, address a finding, or correct a regression, prefer the local `fixing` skill as the default workflow and combine it with narrower domain skills only when needed.
+- When the user asks to implement a change, prefer the shared `implementation` skill as the default workflow and combine it with narrower repo-specific skills only when needed.
+- When the user asks to fix a bug, address a finding, or correct a regression, prefer the shared `fixing` skill as the default workflow and combine it with narrower repo-specific skills only when needed.
 - When the user asks for a review, prefer the local `ui-review` skill for UI-focused review requests and findings-first review workflows.
 - When the user asks for a refactor, prefer the shared `refactoring` skill unless the task clearly needs a repo-specific local skill instead.
 - When using the task plan tool, prefer short user-visible milestones.
@@ -233,8 +233,8 @@ Before finishing:
 
 ### Workflow defaults
 
-- `implementation`: Default workflow for directed implementation tasks in this repo, keeping prompt overhead low and coordinating narrower skills when needed.
-- `fixing`: Default workflow for targeted bug fixes, review findings, and regression corrections in this repo, favouring the smallest defensible change.
+- Shared `implementation`: Default workflow for directed implementation tasks in this repo, combined with narrower repo-specific skills when needed.
+- Shared `fixing`: Default workflow for targeted bug fixes, review findings, and regression corrections in this repo, combined with narrower repo-specific skills when needed.
 
 ### Elm and UI work
 
@@ -259,4 +259,4 @@ Before finishing:
 
 ### Documentation and repo maintenance
 
-- `readme-sync`: Keep `README.md` aligned with app behavior and commands.
+- Shared `readme-sync`: Keep `README.md` aligned with app behavior and commands.

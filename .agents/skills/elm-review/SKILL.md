@@ -7,7 +7,7 @@
 - Add, remove, or tune `elm-review` rules and re-validate the codebase.
 
 Use alongside the `elm` skill when review fixes require non-trivial Elm refactors.
-Use alongside the `readme-sync` skill if review commands or contributor workflow change.
+Use alongside the shared `readme-sync` skill if review commands or contributor workflow change.
 
 ## When not to use
 - When the task is general Elm implementation work without a review or static-analysis concern.

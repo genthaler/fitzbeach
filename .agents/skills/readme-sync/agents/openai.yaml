@@ -1,4 +1,0 @@
-interface:
-  display_name: "README Sync"
-  short_description: "Keep README aligned"
-  default_prompt: "Check whether this change requires a README update and keep the documentation aligned with the current project state."

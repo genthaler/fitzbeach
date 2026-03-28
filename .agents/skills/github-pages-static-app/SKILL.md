@@ -9,7 +9,7 @@
 - Work on the GitHub Pages deployment target specifically when the repo has other deploy targets as well.
 
 Use alongside framework-specific skills when the app build itself is changing.
-Use alongside `readme-sync` when deployment instructions or contributor workflow change.
+Use alongside the shared `readme-sync` skill when deployment instructions or contributor workflow change.
 
 ## When not to use
 - When the task is limited to app code with no deploy workflow or public-path impact.

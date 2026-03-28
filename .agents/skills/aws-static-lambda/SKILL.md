@@ -8,7 +8,7 @@
 - Change GitHub Actions deploy or destroy workflows for the AWS path.
 - Debug issues involving the Lambda container backend, Function URL, S3 frontend bucket, CloudFront distribution, or GitHub OIDC deploy role.
 
-Use alongside `readme-sync` when AWS operator instructions change and alongside `fixing` when investigating a broken deploy or teardown path.
+Use alongside the shared `readme-sync` skill when AWS operator instructions change and the shared `fixing` skill when investigating a broken deploy or teardown path.
 
 ## When not to use
 
