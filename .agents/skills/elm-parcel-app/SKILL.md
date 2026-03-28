@@ -2,7 +2,7 @@
 
 ## When to use
 - Modify an Elm browser app that is bundled with Parcel.
-- Debug simple bootstrapping issues between Elm, `index.js`, and `index.html`.
+- Debug simple bootstrapping issues between Elm, `frontend/index.js`, and `frontend/index.html`.
 - Make small app changes while preserving the existing Parcel setup.
 
 ## When not to use
@@ -11,24 +11,24 @@
 
 ## Workflow
 1. Check the app entrypoints first.
-   - Read `elm.json`, `src/Main.elm`, `index.js`, and `index.html`.
+   - Read `frontend/elm.json`, `frontend/src/Main.elm`, `frontend/index.js`, and `frontend/index.html`.
    - Confirm the Elm module being initialised matches the HTML mount point.
-   - Re-check that `index.html`, `index.js`, and the Elm module name still agree after refactors.
+   - Re-check that `frontend/index.html`, `frontend/index.js`, and the Elm module name still agree after refactors.
 2. Preserve the simple setup.
-   - Keep `index.js` limited to bootstrapping unless the project already does more.
+   - Keep `frontend/index.js` limited to bootstrapping unless the project already does more.
    - Avoid adding extra framework or bundler complexity unless required.
    - Avoid changing bundler config unless the task clearly requires it.
 3. Validate with the smallest useful command.
    - Prefer `elm make` for quick compile feedback.
-   - Use `npm run build` or the project's Parcel build command when integration matters.
+   - Use `npm run -w frontend build` or the project's Parcel build command when integration matters.
 
 ## Fixing guidance
-- Re-check `index.js`, `index.html`, and the Elm module name together after any refactor that touches bootstrapping.
-- Keep `index.js` focused on starting the Elm app unless the repository already has explicit extra responsibilities there.
+- Re-check `frontend/index.js`, `frontend/index.html`, and the Elm module name together after any refactor that touches bootstrapping.
+- Keep `frontend/index.js` focused on starting the Elm app unless the repository already has explicit extra responsibilities there.
 - Prefer the smallest compile or build command that proves the boot path still works before moving on.
 
 ## Final checks
 - The app still mounts into the expected element.
 - Elm and JS entrypoints stay consistent.
-- Relevant validation has been run with `elm make`, `npm run build`, or the repo's Parcel command as appropriate.
+- Relevant validation has been run with `elm make`, `npm run -w frontend build`, or the repo's Parcel command as appropriate.
 - The relevant build passes, or the inability to run it is stated clearly.

@@ -7,13 +7,12 @@
 - Update the Stack, Cabal, or Docker setup for the backend.
 - Add or adjust backend smoke tests under `backend/test/`.
 
-Use alongside `fixing` for backend regressions and alongside `readme-sync` when backend commands or workflow docs change.
+Use alongside the shared `fixing` skill for backend regressions and the shared `readme-sync` skill when backend commands or workflow docs change.
 
 ## When not to use
 
 - When the task is limited to Elm, Parcel, or GitHub Pages frontend work.
 - When the task is purely AWS infrastructure or deploy automation without backend code or packaging changes.
-- When the task is only repo-local skill authoring; use `skill-authoring` instead.
 
 ## Workflow
 

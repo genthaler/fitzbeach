@@ -7,7 +7,7 @@
 - Add, remove, or tune `elm-review` rules and re-validate the codebase.
 
 Use alongside the `elm` skill when review fixes require non-trivial Elm refactors.
-Use alongside the `readme-sync` skill if review commands or contributor workflow change.
+Use alongside the shared `readme-sync` skill if review commands or contributor workflow change.
 
 ## When not to use
 - When the task is general Elm implementation work without a review or static-analysis concern.
@@ -20,10 +20,10 @@ Use alongside the `readme-sync` skill if review commands or contributor workflow
    - Read `review/src/ReviewConfig.elm` before changing rules or interpreting failures.
    - If present, note directory-specific exceptions such as relaxed rules for `tests/`.
 2. Run the smallest relevant review command.
-   - Prefer the project's wrapper script, usually `npm run review`.
+   - Prefer the project's wrapper script, usually `npm run -w frontend review`.
    - Use auto-fix only when the task allows mechanical edits and the rule is safe to apply broadly.
 3. Fix violations with minimal churn.
-   - If the task allows mechanical edits, run `npm run review:fix` before applying manual fixes.
+   - If the task allows mechanical edits, run `npm run -w frontend review:fix` before applying manual fixes.
    - Prefer local edits over broad rewrites.
    - Preserve public APIs unless the task requires a change.
    - If a rule reveals dead code, remove the dead code and update callers or tests coherently.
@@ -32,8 +32,8 @@ Use alongside the `readme-sync` skill if review commands or contributor workflow
    - Keep exceptions narrow and explicit.
    - When changing rule behavior, explain the reason in code if it is not obvious from the config.
 5. Re-run validation after edits.
-   - Re-run `npm run review`.
-   - Run the next smallest relevant check if review fixes touched behavior, usually `npm test` or the build command.
+   - Re-run `npm run -w frontend review`.
+   - Run the next smallest relevant check if review fixes touched behavior, usually `npm run -w frontend test` or `npm run -w frontend build`.
 
 ## Fixing guidance
 - `NoUnused.*`: remove the unused code, or thread the value through if it is genuinely needed.
@@ -51,4 +51,4 @@ Use alongside the `readme-sync` skill if review commands or contributor workflow
 - `elm-review` passes before the task is complete, or any remaining failure is stated clearly as a blocker.
 - Elm code still compiles conceptually with the project's existing architecture and naming.
 - Any config change in `review/src/ReviewConfig.elm` is deliberate, narrow, and explained.
-- Relevant validation has been rerun using commands such as `npm run review`, `npm run review:fix`, `npm test`, or `npm run build` as appropriate.
+- Relevant validation has been rerun using commands such as `npm run -w frontend review`, `npm run -w frontend review:fix`, `npm run -w frontend test`, or `npm run -w frontend build` as appropriate.

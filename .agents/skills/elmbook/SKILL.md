@@ -46,5 +46,5 @@ Use alongside the `elm-ui` skill when the documented components are built with `
 ## Final checks
 - ElmBook still boots from its dedicated entrypoint.
 - New or updated chapters use existing component and theme patterns.
-- Relevant validation has been run with commands such as `npm run book`, `npm run book:build`, or `npm run verify` as appropriate.
+- Relevant validation has been run with commands such as `npm run -w frontend book`, `npm run -w frontend book:build`, or `npm run verify` as appropriate.
 - The ElmBook build passes, or any inability to run it is stated clearly.

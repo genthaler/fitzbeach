@@ -13,7 +13,7 @@ For `elm-ui` layout and styling work, also use the `elm-ui` skill when available
 
 ## Workflow
 1. Inspect the project shape first.
-   - Read `elm.json` and the relevant Elm modules.
+   - Read `frontend/elm.json` and the relevant Elm modules.
    - Prefer existing naming, module structure, helper patterns, and TEA flow over new abstractions.
 2. Keep changes small and compiler-friendly.
    - Prefer explicit top-level type annotations.
@@ -55,5 +55,5 @@ For `elm-ui` layout and styling work, also use the `elm-ui` skill when available
 - Imports are tidy.
 - Top-level types are present where expected by the project.
 - Pattern matches are exhaustive.
-- The relevant validation command has been run, using checks such as `elm make src/Main.elm`, `npm run build`, or `npm test` as appropriate.
+- The relevant validation command has been run, using checks such as `elm make frontend/src/Main.elm`, `npm run -w frontend build`, or `npm run -w frontend test` as appropriate.
 - The relevant build or test command passes, or any inability to run it is stated clearly.
