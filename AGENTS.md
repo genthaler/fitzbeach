@@ -7,8 +7,8 @@
 ## Scope
 
 This file defines repo-specific rules for `fitzbeach`.
-Use repo-local skills for project-specific domains such as Elm, the Haskell backend, AWS static and Lambda deployment, `elm-review`, `elm-ui`, ElmBook, GitHub Pages static app deployment, Nix-verified frontend workflow, Parcel app, and UI review.
-For generic workflow skills such as git guidance, refactoring, README maintenance, and skill authoring, prefer the shared user-level skills unless this repo has an intentional local override.
+Use repo-local skills for project-specific domains such as Elm, the Haskell backend, AWS static and Lambda deployment, `elm-review`, `elm-ui`, ElmBook, Nix-verified frontend workflow, Parcel app, and UI review.
+For generic workflow skills such as git guidance, refactoring, README maintenance, skill authoring, and GitHub Pages static app guidance, prefer the shared user-level skills unless this repo has an intentional local override.
 
 ## Structure
 
@@ -36,6 +36,9 @@ For generic workflow skills such as git guidance, refactoring, README maintenanc
 - Keep the Elm frontend and Haskell backend in sync.
   When changing backend routes, JSON payloads, or API assumptions, update the Elm client, decoders, tests, and relevant docs in the same change.
 - Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
+- In this repo, GitHub Pages is only used for the redirect page, not the main frontend deployment.
+- Keep the GitHub Pages redirect flow separate from the CloudFront frontend build:
+  `frontend/redirect.html` is the template, `npm run -w aws build:pages` builds the redirect output into `frontend/dist`, and `npm run -w aws deploy` publishes it after the deployed CloudFront URL is known.
 - When creating a new project-local skill under `./.agents/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
 - When creating or updating a project-local skill, use the shared `skill-authoring` skill.
 - Project-local `SKILL.md` files should follow this section order: title, when to use, when not to use, workflow, fixing guidance, final checks.
@@ -254,7 +257,6 @@ Before finishing:
 
 - `haskell-backend`: Stack, Cabal, Servant, WAI, Docker, and smoke-test workflow for the Haskell backend.
 - `nix-verified-frontend`: Nix dev shells, pinned verify commands, and aligned local/CI/deploy frontend workflows.
-- `github-pages-static-app`: GitHub Pages deploy scripts, public path handling, and `gh-pages` publishing for static apps.
 - `aws-static-lambda`: CloudFormation, Lambda container, Function URL, S3, CloudFront, AWS shell scripts, and GitHub OIDC deploy workflow for this repo.
 
 ### Documentation and repo maintenance

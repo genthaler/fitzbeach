@@ -1,4 +1,0 @@
-interface:
-  display_name: "GitHub Pages Static App"
-  short_description: "Deploy static apps to Pages"
-  default_prompt: "Use $github-pages-static-app to update this static app's GitHub Pages workflow, including build scripts, path prefixes, and gh-pages publishing."
