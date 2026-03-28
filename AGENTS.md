@@ -35,6 +35,7 @@ For generic workflow skills such as git guidance, refactoring, README maintenanc
 - If Elm dependencies are added later, keep them intentional and minimal.
 - Keep the Elm frontend and Haskell backend in sync.
   When changing backend routes, JSON payloads, or API assumptions, update the Elm client, decoders, tests, and relevant docs in the same change.
+- Keep Elm tests in the matching namespace under `frontend/tests/`. The test for a module should be in the same namespace as the tested module.
 - Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
 - In this repo, GitHub Pages is only used for the redirect page, not the main frontend deployment.
 - Keep the GitHub Pages redirect flow separate from the CloudFront frontend build:
@@ -249,7 +250,6 @@ Before finishing:
 ### Quality and review
 
 - `elm-review`: `elm-review` runs, rule fixes, and review config maintenance.
-- `elm-testing`: Add or improve Elm test coverage in this repo, especially around behavior seams, pure helpers, and feature/module contracts.
 - `elm-ui-review`: Calm, minimal `elm-ui` presentation review.
 - `ui-review`: Findings-first UI review workflow for this repo, prioritising responsiveness, accessibility, regressions, and calm presentation consistency.
 
