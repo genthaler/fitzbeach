@@ -7,7 +7,7 @@
 - Update the Stack, Cabal, or Docker setup for the backend.
 - Add or adjust backend smoke tests under `backend/test/`.
 
-Use alongside the shared `fixing` skill for backend regressions and the shared `readme-sync` skill when backend commands or workflow docs change.
+Use alongside a narrow corrective workflow for backend regressions and a README update pass when backend commands or workflow docs change.
 
 ## When not to use
 

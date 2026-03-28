@@ -8,12 +8,12 @@
 - Change GitHub Actions deploy or destroy workflows for the AWS path.
 - Debug issues involving the Lambda container backend, Function URL, S3 frontend bucket, CloudFront distribution, or GitHub OIDC deploy role.
 
-Use alongside the shared `readme-sync` skill when AWS operator instructions change and the shared `fixing` skill when investigating a broken deploy or teardown path.
+Use alongside a README update pass when AWS operator instructions change and a narrow corrective workflow when investigating a broken deploy or teardown path.
 
 ## When not to use
 
 - When the task is limited to local backend code with no infrastructure or deploy impact.
-- When the deployment target is GitHub Pages only; use `github-pages-static-app` instead.
+- When the deployment target is GitHub Pages only, follow GitHub Pages-specific deployment guidance rather than this AWS workflow.
 - When the task is purely frontend UI or Elm application work with no AWS workflow changes.
 
 ## Workflow
