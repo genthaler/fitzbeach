@@ -11,7 +11,7 @@ Execute a targeted corrective change in this repo, treating the reported problem
 ## When not to use
 
 - When the task is primarily new feature implementation; use `implementation` instead
-- When the task is primarily a bounded structural cleanup with no corrective focus; use `refactor-step` instead
+- When the task is primarily a bounded structural cleanup with no corrective focus; use the shared `refactoring` skill instead
 - When the task is a review or investigation with no requested code changes
 
 ## Workflow
@@ -27,7 +27,7 @@ Execute a targeted corrective change in this repo, treating the reported problem
 
 - If multiple possible fixes exist, prefer the one with the smallest blast radius and the clearest behavioral contract.
 - If a bug cannot be tested directly, add the narrowest pure helper or regression seam that makes the fix defensible.
-- If the work starts turning into a feature or refactor, switch to `implementation` or `refactor-step` instead of expanding the fix scope silently.
+- If the work starts turning into a feature or refactor, switch to `implementation` or the shared `refactoring` skill instead of expanding the fix scope silently.
 
 ## Final checks
 

@@ -11,7 +11,7 @@ Execute a directed implementation task in this repo with minimal prompt overhead
 ## When not to use
 
 - When the task is primarily a bug fix or regression correction; use `fixing` instead
-- When the task is primarily a bounded structural cleanup; use `refactor-step` instead
+- When the task is primarily a bounded structural cleanup; use the shared `refactoring` skill instead
 - When the task is a review, audit, or analysis with no requested code changes
 
 ## Workflow

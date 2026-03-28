@@ -21,7 +21,7 @@ Add or improve Elm test coverage in this repo, especially around behavior seams,
 3. Keep behavior unchanged. If a helper is extracted for testability, keep it narrow and tied to the existing feature seam.
 4. Place tests in the matching namespace under `tests/`, following the repo convention that the test for a module should be in the same namespace as the tested module.
 5. Prefer testing behavior contracts over implementation detail. Focus on state transitions, pure decisions, and feature boundaries rather than brittle rendering internals.
-6. Run `npm test` first, then follow the repo-wide final verification requirement from `AGENTS.md` once the targeted tests pass.
+6. Run `npm run -w frontend test` first, then follow the repo-wide final verification requirement from `AGENTS.md` once the targeted tests pass.
 
 ## Fixing guidance
 
@@ -34,5 +34,5 @@ Add or improve Elm test coverage in this repo, especially around behavior seams,
 
 - The new or updated tests live in the matching namespace under `tests/`.
 - The changed behavior seam is covered directly and narrowly.
-- `npm test` has been run.
+- `npm run -w frontend test` has been run.
 - The repo-wide final verification requirement from `AGENTS.md` has been met, or any inability to run it is stated clearly.

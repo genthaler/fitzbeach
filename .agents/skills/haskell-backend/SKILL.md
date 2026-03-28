@@ -13,7 +13,7 @@ Use alongside `fixing` for backend regressions and alongside `readme-sync` when 
 
 - When the task is limited to Elm, Parcel, or GitHub Pages frontend work.
 - When the task is purely AWS infrastructure or deploy automation without backend code or packaging changes.
-- When the task is only repo-local skill authoring; use `skill-authoring` instead.
+- When the task is only repo-local skill authoring; use the shared `skill-authoring` skill instead.
 
 ## Workflow
 

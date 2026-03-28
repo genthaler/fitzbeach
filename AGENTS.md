@@ -7,41 +7,45 @@
 ## Scope
 
 This file defines repo-specific rules for `fitzbeach`.
-Use the local project skills for general Elm, the Haskell backend, AWS static and Lambda deployment, `elm-review`, `elm-ui`, ElmBook, GitHub Pages static app deployment, Nix-verified frontend workflow, Parcel app, README maintenance, and git workflow guidance.
-When a task involves skills, prefer repo-local skills under `./.agents/skills/` before falling back to global skills.
+Use repo-local skills for project-specific domains such as Elm, the Haskell backend, AWS static and Lambda deployment, `elm-review`, `elm-ui`, ElmBook, GitHub Pages static app deployment, Nix-verified frontend workflow, Parcel app, and UI review.
+For generic workflow skills such as git guidance, refactoring, README maintenance, and skill authoring, prefer the shared user-level skills unless this repo has an intentional local override.
 
 ## Structure
 
-- `src/Main.elm`: Elm entry point and UI
-- `src/Book.elm`: ElmBook entry point for the component catalogue
-- `src/Book/`: ElmBook fixtures and chapters
-- `index.js`: boots the compiled Elm app into `#app`
-- `index.html`: minimal HTML shell for Parcel
-- `book.js`: boots the compiled ElmBook app into `#app`
-- `book.html`: minimal HTML shell for the ElmBook catalogue
-- `package.json`: JS tooling only
+- `frontend/src/Main.elm`: Elm entry point and UI
+- `frontend/src/Book.elm`: ElmBook entry point for the component catalogue
+- `frontend/src/Book/`: ElmBook fixtures and chapters
+- `frontend/index.js`: boots the compiled Elm app into `#app`
+- `frontend/index.html`: minimal HTML shell for Parcel
+- `frontend/book.js`: boots the compiled ElmBook app into `#app`
+- `frontend/book.html`: minimal HTML shell for the ElmBook catalogue
+- `frontend/package.json`: frontend JS, Elm, Parcel, ElmBook, and review tooling
+- `backend/package.json`: backend Stack and codegen commands
+- `aws/package.json`: AWS deploy, publish, and Pages redirect commands
+- `package.json`: root orchestration across workspaces
 
 ## Project Rules
 
 - Keep this project minimal and easy to iterate on.
 - Preserve compilability at all times when possible.
-- `index.js` should continue to initialise `Elm.Main`.
-- The app mounts into `<div id="app"></div>` in `index.html`.
-- `book.js` should continue to initialise `Elm.Book`.
-- The ElmBook catalogue mounts into `<div id="app"></div>` in `book.html`.
+- `frontend/index.js` should continue to initialise `Elm.Main`.
+- The app mounts into `<div id="app"></div>` in `frontend/index.html`.
+- `frontend/book.js` should continue to initialise `Elm.Book`.
+- The ElmBook catalogue mounts into `<div id="app"></div>` in `frontend/book.html`.
 - If Elm dependencies are added later, keep them intentional and minimal.
 - Keep the Elm frontend and Haskell backend in sync.
   When changing backend routes, JSON payloads, or API assumptions, update the Elm client, decoders, tests, and relevant docs in the same change.
 - Keep the ElmBook catalogue visually aligned with the same palette and calm presentation used by the main app.
 - When creating a new project-local skill under `./.agents/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
-- When creating or updating a project-local skill, use the local `skill-authoring` skill.
+- When creating or updating a project-local skill, use the shared `skill-authoring` skill.
 - Project-local `SKILL.md` files should follow this section order: title, when to use, when not to use, workflow, fixing guidance, final checks.
 - Project-local `SKILL.md` files should not use YAML frontmatter; keep skill metadata only in `agents/openai.yaml`.
+- Keep shared workflow skills shared when possible. If a project-local skill duplicates a shared skill, keep only the repo-specific delta locally or remove the local fork.
 - When a task clearly matches a repo-local skill, reference that skill by name in the prompt rather than rewriting its workflow inline.
 - When the user asks to implement a change, prefer the local `implementation` skill as the default workflow and combine it with narrower domain skills only when needed.
 - When the user asks to fix a bug, address a finding, or correct a regression, prefer the local `fixing` skill as the default workflow and combine it with narrower domain skills only when needed.
 - When the user asks for a review, prefer the local `ui-review` skill for UI-focused review requests and findings-first review workflows.
-- When the user asks for a refactor, prefer the local `refactor-step` skill for bounded behavior-preserving cleanup work.
+- When the user asks for a refactor, prefer the shared `refactoring` skill unless the task clearly needs a repo-specific local skill instead.
 - When using the task plan tool, prefer short user-visible milestones.
 - Update the plan as work progresses, not only at the end.
 - Do not keep an inspection or analysis step in progress after the relevant files have been read.
@@ -88,15 +92,16 @@ Prefer reproducing issues before editing.
 - If Nix is used, treat it as an explicit choice for pinned-environment validation rather than a routine prerequisite for local work.
 - Install JS dependencies: `npm install`
 - Start dev server: `npm run dev`
-- Start ElmBook catalogue: `npm run book`
-- Build production bundle: `npm run build`
-- Build ElmBook catalogue: `npm run book:build`
+- Start ElmBook catalogue: `npm run -w frontend book`
+- Build production bundle: `npm run -w frontend build`
+- Build ElmBook catalogue: `npm run -w frontend book:build`
 - Run full verification: `npm run verify`
-- Run tests: `npm test`
-- Run review checks: `npm run review`
-- Apply review autofixes: `npm run review:fix`
-- Run deploy prechecks and build: `npm run predeploy`
-- Publish `dist/` to GitHub Pages: `npm run deploy`
+- Run frontend tests: `npm run -w frontend test`
+- Run frontend review checks: `npm run -w frontend review`
+- Apply review autofixes: `npm run -w frontend review:fix`
+- Validate AWS infra and local image build: `npm run -w aws build`
+- Build the GitHub Pages redirect bundle: `npm run -w aws build:pages`
+- Deploy AWS and publish the GitHub Pages redirect: `npm run -w aws deploy`
 
 ## UI Style Guide
 
@@ -222,6 +227,7 @@ Before finishing:
 3. Before making a repo commit for new work, create or switch to a branch whose name starts with `codex/` unless the user explicitly asks to stay on the current branch.
 4. After the task is complete, commit the changes.
 5. Treat `main` as PR-only. Do not plan to land changes by committing directly on `main`; push a branch and open a PR instead.
+6. When opening a PR, default to a ready PR unless the user explicitly asks for a draft PR.
 
 ## Skills
 
@@ -229,7 +235,6 @@ Before finishing:
 
 - `implementation`: Default workflow for directed implementation tasks in this repo, keeping prompt overhead low and coordinating narrower skills when needed.
 - `fixing`: Default workflow for targeted bug fixes, review findings, and regression corrections in this repo, favouring the smallest defensible change.
-- `refactor-step`: Incremental architecture or codebase cleanup workflow that preserves behaviour and keeps docs/tests aligned.
 
 ### Elm and UI work
 
@@ -254,6 +259,4 @@ Before finishing:
 
 ### Documentation and repo maintenance
 
-- `skill-authoring`: Canonical format and workflow guidance for creating or revising repo-local skills.
 - `readme-sync`: Keep `README.md` aligned with app behavior and commands.
-- `git`: Git status, diff review, branch naming, and commit message guidance.
