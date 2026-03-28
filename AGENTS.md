@@ -8,7 +8,7 @@
 
 This file defines repo-specific rules for `fitzbeach`.
 Use repo-local skills for project-specific domains such as Elm, the Haskell backend, AWS static and Lambda deployment, `elm-review`, `elm-ui`, ElmBook, Nix-verified frontend workflow, Parcel app, and UI review.
-For generic workflow skills such as git guidance, refactoring, README maintenance, skill authoring, and GitHub Pages static app guidance, prefer the shared user-level skills unless this repo has an intentional local override.
+For generic workflow guidance such as implementation, fixing, refactoring, README maintenance, skill authoring, git usage, and GitHub Pages guidance, keep repository instructions self-contained rather than assuming external skill availability.
 
 ## Structure
 
@@ -41,15 +41,15 @@ For generic workflow skills such as git guidance, refactoring, README maintenanc
 - Keep the GitHub Pages redirect flow separate from the CloudFront frontend build:
   `frontend/redirect.html` is the template, `npm run -w aws build:pages` builds the redirect output into `frontend/dist`, and `npm run -w aws deploy` publishes it after the deployed CloudFront URL is known.
 - When creating a new project-local skill under `./.agents/skills/`, also create `agents/openai.yaml` for that skill so local skills stay consistent and discoverable.
-- When creating or updating a project-local skill, use the shared `skill-authoring` skill.
+- When creating or updating a project-local skill, follow the skill-authoring rules in this file and keep the result self-contained within the repository.
 - Project-local `SKILL.md` files should follow this section order: title, when to use, when not to use, workflow, fixing guidance, final checks.
 - Project-local `SKILL.md` files should not use YAML frontmatter; keep skill metadata only in `agents/openai.yaml`.
 - Keep shared workflow skills shared when possible. If a project-local skill duplicates a shared skill, keep only the repo-specific delta locally or remove the local fork.
 - When a task clearly matches a repo-local skill, reference that skill by name in the prompt rather than rewriting its workflow inline.
-- When the user asks to implement a change, prefer the shared `implementation` skill as the default workflow and combine it with narrower repo-specific skills only when needed.
-- When the user asks to fix a bug, address a finding, or correct a regression, prefer the shared `fixing` skill as the default workflow and combine it with narrower repo-specific skills only when needed.
+- When the user asks to implement a change, prefer a direct implementation workflow and combine it with narrower repo-specific skills only when needed.
+- When the user asks to fix a bug, address a finding, or correct a regression, prefer a narrow corrective workflow and combine it with narrower repo-specific skills only when needed.
 - When the user asks for a review, prefer the local `ui-review` skill for UI-focused review requests and findings-first review workflows.
-- When the user asks for a refactor, prefer the shared `refactoring` skill unless the task clearly needs a repo-specific local skill instead.
+- When the user asks for a refactor, prefer a bounded behavior-preserving refactor workflow unless the task clearly needs a more specialized repo-local skill instead.
 - When using the task plan tool, prefer short user-visible milestones.
 - Update the plan as work progresses, not only at the end.
 - Do not keep an inspection or analysis step in progress after the relevant files have been read.
@@ -237,8 +237,8 @@ Before finishing:
 
 ### Workflow defaults
 
-- Shared `implementation`: Default workflow for directed implementation tasks in this repo, combined with narrower repo-specific skills when needed.
-- Shared `fixing`: Default workflow for targeted bug fixes, review findings, and regression corrections in this repo, combined with narrower repo-specific skills when needed.
+- Directed implementation work should follow a narrow implementation workflow and pull in repo-specific skills only when needed.
+- Bug fixes, review findings, and regressions should follow a narrow corrective workflow and pull in repo-specific skills only when needed.
 
 ### Elm and UI work
 
@@ -261,4 +261,4 @@ Before finishing:
 
 ### Documentation and repo maintenance
 
-- Shared `readme-sync`: Keep `README.md` aligned with app behavior and commands.
+- Keep `README.md` aligned with app behavior and commands.

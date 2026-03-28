@@ -8,7 +8,7 @@
 - Document how contributors should use a flake dev shell, `direnv`, or pinned verification commands.
 
 Use alongside framework-specific skills when application code is changing.
-Use alongside the shared `readme-sync` skill when setup, verification, or contributor workflow changes.
+Use alongside a README update pass when setup, verification, or contributor workflow changes.
 
 ## When not to use
 - When the repository does not use Nix flakes or dev shells and the task does not introduce them.
