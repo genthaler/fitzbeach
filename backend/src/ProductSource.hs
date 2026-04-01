@@ -11,34 +11,90 @@ allProducts :: [Product]
 allProducts =
     [ Product
         { id = 1
-        , name = "Transit Helmet Bag"
-        , category = "Moto Travel"
-        , priceCents = 18900
+        , name = "Saffron Sprint 125"
+        , category = "City Scooter"
+        , priceCents = 429900
         , currency = "USD"
-        , imageUrl = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80"
+        , imageUrl = "https://unsplash.com/photos/s2dz23qouqQ/download?force=true&w=900"
         }
     , Product
         { id = 2
-        , name = "Contour Tank Sling"
-        , category = "Daily Carry"
-        , priceCents = 12900
+        , name = "Coastline Rally 650"
+        , category = "Open Road"
+        , priceCents = 869900
         , currency = "USD"
-        , imageUrl = "https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=900&q=80"
+        , imageUrl = "https://unsplash.com/photos/PdGdU9zMkRY/download?force=true&w=900"
         }
     , Product
         { id = 3
-        , name = "Summit Roll Pack"
-        , category = "Weekend Ride"
-        , priceCents = 24900
+        , name = "Drift Textile Rider Jacket"
+        , category = "Rider Apparel"
+        , priceCents = 21900
         , currency = "USD"
-        , imageUrl = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
+        , imageUrl = "https://unsplash.com/photos/Fu7HrrSaUIE/download?force=true&w=900"
         }
     , Product
         { id = 4
-        , name = "Range Utility Pouch"
-        , category = "Organisation"
-        , priceCents = 6900
+        , name = "Sunline Cruiser 200"
+        , category = "Weekend Escape"
+        , priceCents = 519900
         , currency = "USD"
-        , imageUrl = "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=900&q=80"
+        , imageUrl = "https://unsplash.com/photos/7D9QdFY2jUk/download?force=true&w=900"
+        }
+    , Product
+        { id = 5
+        , name = "Ridge Leather Saddlebag"
+        , category = "Moto Travel"
+        , priceCents = 18900
+        , currency = "USD"
+        , imageUrl = "https://unsplash.com/photos/pFU2KqC7qp8/download?force=true&w=900"
+        }
+    , Product
+        { id = 6
+        , name = "Granite Touring Twin"
+        , category = "Adventure Bike"
+        , priceCents = 1129900
+        , currency = "USD"
+        , imageUrl = "https://unsplash.com/photos/n5yE3QCYiAY/download?force=true&w=900"
+        }
+    , Product
+        { id = 7
+        , name = "Marigold Lane 150"
+        , category = "Scooter"
+        , priceCents = 449900
+        , currency = "USD"
+        , imageUrl = "https://unsplash.com/photos/ssa5tbPhVcM/download?force=true&w=900"
+        }
+    , Product
+        { id = 8
+        , name = "Metro Lane Riding Gloves"
+        , category = "Daily Carry"
+        , priceCents = 7900
+        , currency = "USD"
+        , imageUrl = "https://unsplash.com/photos/kPfwWyUWubA/download?force=true&w=900"
+        }
+    , Product
+        { id = 9
+        , name = "Summit Roll Duffel"
+        , category = "Weekend Ride"
+        , priceCents = 24900
+        , currency = "USD"
+        , imageUrl = "https://unsplash.com/photos/zBfE2FaPJ2o/download?force=true&w=900"
+        }
+    , Product
+        { id = 10
+        , name = "Heritage Twin Pannier Set"
+        , category = "Organisation"
+        , priceCents = 32900
+        , currency = "USD"
+        , imageUrl = "https://unsplash.com/photos/dp0r1MkhKNg/download?force=true&w=900"
+        }
+    , Product
+        { id = 11
+        , name = "Harbor City Commuter Pack"
+        , category = "Daily Carry"
+        , priceCents = 11900
+        , currency = "USD"
+        , imageUrl = "https://unsplash.com/photos/aMl7QzpzYdA/download?force=true&w=900"
         }
     ]
