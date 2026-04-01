@@ -26,9 +26,9 @@ chapter =
 samplePanel : Product
 samplePanel =
     { id = 1
-    , name = "Transit Helmet Bag"
+    , name = "Ridge Leather Saddlebag"
     , category = "Moto Travel"
     , priceCents = 18900
     , currency = "USD"
-    , imageUrl = "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80"
+    , imageUrl = "https://unsplash.com/photos/pFU2KqC7qp8/download?force=true&w=900"
     }
