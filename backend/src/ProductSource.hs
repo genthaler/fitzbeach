@@ -35,14 +35,6 @@ allProducts =
         }
     , Product
         { id = 4
-        , name = "Mercer Step-Through Helmet"
-        , category = "Urban Essentials"
-        , priceCents = 14900
-        , currency = "USD"
-        , imageUrl = "https://unsplash.com/photos/anj7FI0AvPY/download?force=true&w=900"
-        }
-    , Product
-        { id = 5
         , name = "Sunline Cruiser 200"
         , category = "Weekend Escape"
         , priceCents = 519900
@@ -50,7 +42,7 @@ allProducts =
         , imageUrl = "https://unsplash.com/photos/7D9QdFY2jUk/download?force=true&w=900"
         }
     , Product
-        { id = 6
+        { id = 5
         , name = "Ridge Leather Saddlebag"
         , category = "Moto Travel"
         , priceCents = 18900
@@ -58,7 +50,7 @@ allProducts =
         , imageUrl = "https://unsplash.com/photos/pFU2KqC7qp8/download?force=true&w=900"
         }
     , Product
-        { id = 7
+        { id = 6
         , name = "Granite Touring Twin"
         , category = "Adventure Bike"
         , priceCents = 1129900
@@ -66,7 +58,7 @@ allProducts =
         , imageUrl = "https://unsplash.com/photos/n5yE3QCYiAY/download?force=true&w=900"
         }
     , Product
-        { id = 8
+        { id = 7
         , name = "Marigold Lane 150"
         , category = "Scooter"
         , priceCents = 449900
@@ -74,7 +66,7 @@ allProducts =
         , imageUrl = "https://unsplash.com/photos/ssa5tbPhVcM/download?force=true&w=900"
         }
     , Product
-        { id = 9
+        { id = 8
         , name = "Metro Lane Riding Gloves"
         , category = "Daily Carry"
         , priceCents = 7900
@@ -82,7 +74,7 @@ allProducts =
         , imageUrl = "https://unsplash.com/photos/kPfwWyUWubA/download?force=true&w=900"
         }
     , Product
-        { id = 10
+        { id = 9
         , name = "Summit Roll Duffel"
         , category = "Weekend Ride"
         , priceCents = 24900
@@ -90,7 +82,7 @@ allProducts =
         , imageUrl = "https://unsplash.com/photos/zBfE2FaPJ2o/download?force=true&w=900"
         }
     , Product
-        { id = 11
+        { id = 10
         , name = "Heritage Twin Pannier Set"
         , category = "Organisation"
         , priceCents = 32900
@@ -98,7 +90,7 @@ allProducts =
         , imageUrl = "https://unsplash.com/photos/dp0r1MkhKNg/download?force=true&w=900"
         }
     , Product
-        { id = 12
+        { id = 11
         , name = "Harbor City Commuter Pack"
         , category = "Daily Carry"
         , priceCents = 11900
