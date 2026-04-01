@@ -43,8 +43,8 @@ allProducts =
         }
     , Product
         { id = 5
-        , name = "Ridge Leather Saddlebag"
-        , category = "Moto Travel"
+        , name = "Ranch Road Saddlebag"
+        , category = "Heritage Carry"
         , priceCents = 18900
         , currency = "USD"
         , imageUrl = "https://unsplash.com/photos/pFU2KqC7qp8/download?force=true&w=900"
@@ -75,24 +75,24 @@ allProducts =
         }
     , Product
         { id = 9
-        , name = "Summit Roll Duffel"
-        , category = "Weekend Ride"
+        , name = "Overnighter Roll Duffel"
+        , category = "Road Trip Kit"
         , priceCents = 24900
         , currency = "USD"
         , imageUrl = "https://unsplash.com/photos/zBfE2FaPJ2o/download?force=true&w=900"
         }
     , Product
         { id = 10
-        , name = "Heritage Twin Pannier Set"
-        , category = "Organisation"
+        , name = "Copper State Pannier Pair"
+        , category = "Cruiser Touring"
         , priceCents = 32900
         , currency = "USD"
         , imageUrl = "https://unsplash.com/photos/dp0r1MkhKNg/download?force=true&w=900"
         }
     , Product
         { id = 11
-        , name = "Harbor City Commuter Pack"
-        , category = "Daily Carry"
+        , name = "Lane Split Commuter Pack"
+        , category = "City Carry"
         , priceCents = 11900
         , currency = "USD"
         , imageUrl = "https://unsplash.com/photos/aMl7QzpzYdA/download?force=true&w=900"

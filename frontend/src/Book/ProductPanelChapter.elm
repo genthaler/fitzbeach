@@ -26,8 +26,8 @@ chapter =
 samplePanel : Product
 samplePanel =
     { id = 1
-    , name = "Ridge Leather Saddlebag"
-    , category = "Moto Travel"
+    , name = "Ranch Road Saddlebag"
+    , category = "Heritage Carry"
     , priceCents = 18900
     , currency = "USD"
     , imageUrl = "https://unsplash.com/photos/pFU2KqC7qp8/download?force=true&w=900"
