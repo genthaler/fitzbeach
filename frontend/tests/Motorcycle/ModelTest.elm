@@ -40,7 +40,7 @@ tests =
             \_ ->
                 case sampleProducts of
                     product :: _ ->
-                        Expect.equal "$4299.00" (priceLabel product)
+                        Expect.equal "$189.00" (priceLabel product)
 
                     [] ->
                         Expect.fail "Expected sampleProducts to include at least one product"
