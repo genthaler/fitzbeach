@@ -1,10 +1,12 @@
 module Motorcycle exposing (productPanel, view)
 
-import Element exposing (Element, alignBottom, clip, column, el, fill, height, image, padding, paragraph, px, spacing, text, width, wrappedRow)
+import Element exposing (Element, alignBottom, clip, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Generated.Api.Product exposing (Product)
+import Html
+import Html.Attributes as HtmlAttributes
 import Motorcycle.Model as MotorcycleModel exposing (ProductState(..))
 import ServiceHealth exposing (ServiceHealth(..))
 import String
@@ -146,13 +148,18 @@ productPanel compactLayout colors panel =
             , clip
             , Border.rounded 18
             ]
-            (image
-                [ width fill
-                , height fill
-                ]
-                { src = panel.imageUrl
-                , description = panel.name
-                }
+            (Element.html
+                (Html.img
+                    [ HtmlAttributes.src panel.imageUrl
+                    , HtmlAttributes.alt panel.name
+                    , HtmlAttributes.style "width" "100%"
+                    , HtmlAttributes.style "height" "100%"
+                    , HtmlAttributes.style "display" "block"
+                    , HtmlAttributes.style "object-fit" "cover"
+                    , HtmlAttributes.style "object-position" "center"
+                    ]
+                    []
+                )
             )
         , el
             [ Font.size 13
