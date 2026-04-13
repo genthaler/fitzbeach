@@ -1,6 +1,6 @@
 module Motorcycle.View exposing (productPanel, view)
 
-import Element exposing (Element, alignBottom, clip, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
+import Element exposing (Element, clip, column, el, fill, height, padding, paragraph, px, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -180,10 +180,4 @@ productPanel compactLayout colors panel =
             , Element.spacing 6
             ]
             [ text (MotorcycleModel.priceLabel panel) ]
-        , el
-            [ alignBottom
-            , Font.size 13
-            , Font.color colors.detailText
-            ]
-            (text ("Product #" ++ String.fromInt panel.id))
         ]
