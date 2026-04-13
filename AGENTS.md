@@ -31,6 +31,7 @@ Important frontend entrypoints:
   When backend routes, JSON payloads, or API assumptions change, update the Elm client, decoders, tests, and relevant docs in the same change.
 - Keep Elm tests in the matching namespace under `frontend/tests/`.
   The test for a module should be in the same namespace as the tested module.
+- Any Elm function that returns an `Element` should live in a module under a `View` namespace.
 - Keep the ElmBook catalogue visually aligned with the same calm presentation as the main app.
 
 ## Deploy And Verification

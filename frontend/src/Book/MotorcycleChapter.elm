@@ -2,8 +2,8 @@ module Book.MotorcycleChapter exposing (SharedState, chapter)
 
 import ElmBook.Chapter exposing (renderStatefulComponent)
 import ElmBook.ElmUI exposing (Chapter)
-import Motorcycle
 import Motorcycle.Model
+import Motorcycle.View
 import ServiceHealth
 import View.Theme as Theme
 
@@ -17,7 +17,7 @@ chapter =
     ElmBook.Chapter.chapter "Motorcycle Panels"
         |> renderStatefulComponent
             (\state ->
-                Motorcycle.view
+                Motorcycle.View.view
                     False
                     (Theme.palette state.themeMode)
                     (ServiceHealth.Available "healthy")

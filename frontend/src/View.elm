@@ -1,8 +1,8 @@
 module View exposing (Page(..), page)
 
 import Element exposing (Element)
-import Motorcycle
 import Motorcycle.Model as Motorcycle
+import Motorcycle.View
 import Robot
 import Robot.View
 import ServiceHealth
@@ -28,7 +28,7 @@ page :
 page model colors compactLayout robotControls =
     case model.currentPage of
         MotorcyclePage ->
-            Motorcycle.view
+            Motorcycle.View.view
                 compactLayout
                 colors
                 model.serviceHealth
